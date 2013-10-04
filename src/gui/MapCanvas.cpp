@@ -23,16 +23,12 @@
 #include "BinaryMapHandler.hpp"
 #include "ResourceManager.hpp"
 
-/** MapCanvas
-  *
-  * Constructor
-  */
 MapCanvas::MapCanvas(wxWindow* Parent, wxWindowID Id, const wxPoint& Position, const wxSize& Size, long Style) :
 wxScrolledSFMLWindow(Parent, Id, Position, Size, Style)
 {
     /// TODO REMOVE
     static BinaryMapHandler handler;
-    handler.load("complete2.map", map);
+    handler.load("complete.map", map);
 #if 1
     AnimatedTile t("", 25, Animation::Normal, -1);
     AnimatedTile t1("", 25, Animation::Reverse, -1);
@@ -57,27 +53,22 @@ wxScrolledSFMLWindow(Parent, Id, Position, Size, Style)
     map.getLayer(0)[3] = 0x80000003;
     map.getLayer(0)[4] = 0x80000004;
     map.getBackground(0).setFilename("003-StarlitSky01.png");
+    map.getBackground(0).setMode(Background::Autoscroll | Background::Repeating);
+    map.getBackground(0).setSpeed(-3, -5);
 #endif
     handler.save("complete2.map", map);
 
     bool hi;
     image = ResourceManager().loadImage(map.getFilename(), hi);
+    onMapChanged();
     updateTiles();
 }
 
-/** ~MapCanvas
-  *
-  * Destructor
-  */
- MapCanvas::~MapCanvas()
+MapCanvas::~MapCanvas()
 {
 
 }
 
-/** GetViewableCoords
-  *
-  * Gets the viewable tile coordinates.
-  */
 void MapCanvas::getViewableCoords(int& vxi, int& vyi, int& vxf, int& vyf)
 {
     // TODO Reimplement when scrolling after resize tiles bug fixed
@@ -86,10 +77,6 @@ void MapCanvas::getViewableCoords(int& vxi, int& vyi, int& vxf, int& vyf)
     transformScreenToTile(size.x + map.getTileWidth(), size.y + map.getTileHeight(), vxf, vyf);
 }
 
-/** TransformScreenToTile
-  *
-  * Transforms screen coordinates into tile coordinates
-  */
 void MapCanvas::transformScreenToTile(int x, int y, int& outx, int& outy, bool bounds, bool neg1)
 {
     int ox, oy;
@@ -111,11 +98,28 @@ void MapCanvas::transformScreenToTile(int x, int y, int& outx, int& outy, bool b
 
 }
 
-/** OnUpdate
-  *
-  * Called to update the contents of this window
-  */
+void MapCanvas::onMapChanged()
+{
+    // Update Backgrounds
+    backgrounds.clear();
+
+    for (const Background& background : map.getBackgrounds())
+        backgrounds.push_back(ParallaxBackground(background));
+}
+
 void MapCanvas::onUpdate()
+{
+    updateFrame();
+    renderFrame();
+}
+
+void MapCanvas::updateFrame()
+{
+    for (ParallaxBackground& background : backgrounds)
+        background.update(*this);
+}
+
+void MapCanvas::renderFrame()
 {
     // Clear with the background color
     clear(sf::Color(0, 0, 255));
@@ -124,7 +128,8 @@ void MapCanvas::onUpdate()
     //drawBorder();
 
     // Draw all backgrounds
-    //drawBackgrounds();
+    for (const ParallaxBackground& background : backgrounds)
+        draw(background);
 
     // Get Viewable Coordinates of our Canvas
     int vxi, vyi, vxf, vyf;
@@ -154,14 +159,9 @@ void MapCanvas::onUpdate()
 
     // Draw Selection
     //drawSelection();
-
     clock++;
 }
 
-/** DrawLayer
-  *
-  * Draws a layer.
-  */
 void MapCanvas::drawLayer(int sxi, int syi, int sxf, int syf, int id)
 {
     Layer& layer = map.getLayer(id);
@@ -177,6 +177,7 @@ void MapCanvas::drawLayer(int sxi, int syi, int sxf, int syf, int id)
             if (tile == -1) continue;
             if (tile < -1)
             {
+                //printf("%x %d \n", tile, tiles.size());
                 tile &= ~(1 << 31);
                 assert(tile < (int)map.getNumAnimatedTiles());
                 AnimatedTile& anim = map.getAnimatedTile(tile);
@@ -184,7 +185,8 @@ void MapCanvas::drawLayer(int sxi, int syi, int sxf, int syf, int id)
 
                 if (tile == -1) continue;
             }
-            assert(tile < tiles.size());
+            //printf("%x %d \n", tile, tiles.size());
+            assert((unsigned int) tile < tiles.size());
             sf::Sprite& obj = tiles[tile];
             //obj.setScale(zoomx, zoomy);
             obj.setPosition(x, y);
@@ -193,10 +195,6 @@ void MapCanvas::drawLayer(int sxi, int syi, int sxf, int syf, int id)
     }
 }
 
-/** UpdateTiles
-  *
-  * Updates tile images.
-  */
 void MapCanvas::updateTiles()
 {
     setActive(true);

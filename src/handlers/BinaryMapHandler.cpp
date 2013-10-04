@@ -43,36 +43,14 @@
 
 const char magic[14] = {0x54, 0x52, 0x49, 0x43, 0x4b, 0x53, 0x54, 0x45, 0x52, 0x47, 0x55, 0x59, 0x38, 0x37};
 
-
-/** BinaryMapHandler
-  *
-  * Constructor
-  */
 BinaryMapHandler::BinaryMapHandler() : BaseMapHandler("Official Map Format V1.0", "map", "Basic format this program recognizes")
 {
 }
 
-/** ~BinaryMapHandler
-  *
-  * Destructor
-  */
 BinaryMapHandler::~BinaryMapHandler()
 {
 }
 
-/** init
-  *
-  * Initializes the handler
-  */
-int BinaryMapHandler::init()
-{
-    return 0;
-}
-
-/** load
-  *
-  * Loads a .map file
-  */
 int BinaryMapHandler::load(const std::string& mapfile, Map& map)
 {
     int32_t num_layers = -1;
@@ -159,10 +137,6 @@ int BinaryMapHandler::load(const std::string& mapfile, Map& map)
     return error ? -1 : 0;
 }
 
-/** save
-  *
-  *
-  */
 int BinaryMapHandler::save(const std::string& mapfile, Map& map)
 {
     std::ofstream file(mapfile.c_str(), std::ios::binary);
@@ -209,10 +183,6 @@ int BinaryMapHandler::save(const std::string& mapfile, Map& map)
     return 0;
 }
 
-/** readChunkName
-  *
-  * Reads the chunk name.
-  */
 int BinaryMapHandler::readChunkName(std::ifstream& file, std::string& name, uint32_t& size)
 {
     char chunk[5];
@@ -230,10 +200,6 @@ int BinaryMapHandler::readChunkName(std::ifstream& file, std::string& name, uint
     return 0;
 }
 
-/** readHEAD
-  *
-  * Reads the HEADer chunk information.
-  */
 int BinaryMapHandler::readHEAD(std::ifstream& file, Map& map)
 {
     char major;
@@ -256,10 +222,6 @@ int BinaryMapHandler::readHEAD(std::ifstream& file, Map& map)
     return 0;
 }
 
-/** readMAPP
-  *
-  * Reads the MAP Properties chunk.
-  */
 int BinaryMapHandler::readMAPP(std::ifstream& file, Map& map, int32_t& num_layers, int32_t& num_backgrounds)
 {
     uint32_t tile_width;
@@ -311,10 +273,6 @@ int BinaryMapHandler::readMAPP(std::ifstream& file, Map& map, int32_t& num_layer
     return 0;
 }
 
-/** readLYRS
-  *
-  * Reads the LaYeRS chunk
-  */
 int BinaryMapHandler::readLYRS(std::ifstream& file, Map& map, int32_t& num_layers)
 {
     uint32_t texture_size;
@@ -345,10 +303,6 @@ int BinaryMapHandler::readLYRS(std::ifstream& file, Map& map, int32_t& num_layer
     return 0;
 }
 
-/** readBGDS
-  *
-  * Reads the BackGrounDS chunk
-  */
 int BinaryMapHandler::readBGDS(std::ifstream& file, Map& map, int32_t& num_backgrounds)
 {
     uint32_t texture_size;
@@ -389,7 +343,7 @@ int BinaryMapHandler::readBGDS(std::ifstream& file, Map& map, int32_t& num_backg
         convert.i = iy;
         y = convert.f;
 
-        map.add(ParallaxBackground(name, filename, mode, x, y));
+        map.add(Background(name, filename, mode, x, y));
     }
 
     if (file.fail()) return -1;
@@ -397,10 +351,6 @@ int BinaryMapHandler::readBGDS(std::ifstream& file, Map& map, int32_t& num_backg
     return 0;
 }
 
-/** readMTCL
-  *
-  * Reads the Map defined Tile based Collision Layer chunk
-  */
 int BinaryMapHandler::readMTCL(std::ifstream& file, Map& map)
 {
     uint32_t width = map.getWidth();
@@ -417,10 +367,6 @@ int BinaryMapHandler::readMTCL(std::ifstream& file, Map& map)
     return 0;
 }
 
-/** readMDCL
-  *
-  * Reads the Map defined Direction based Collision Layer chunk
-  */
 int BinaryMapHandler::readMDCL(std::ifstream& file, Map& map)
 {
     uint32_t width = map.getWidth();
@@ -437,10 +383,6 @@ int BinaryMapHandler::readMDCL(std::ifstream& file, Map& map)
     return 0;
 }
 
-/** readMPCL
-  *
-  * Reads the Map defined Pixel based Collision Layer chunk
-  */
 int BinaryMapHandler::readMPCL(std::ifstream& file, Map& map)
 {
     int32_t numrects;
@@ -471,37 +413,21 @@ int BinaryMapHandler::readMPCL(std::ifstream& file, Map& map)
     return 0;
 }
 
-/** readTTCI
-  *
-  * Reads the Tile defined Pixel based Collision Layer chunk
-  */
 int BinaryMapHandler::readTTCI(std::ifstream& file, Map& map)
 {
     return -1;
 }
 
-/** readTDCI
-  *
-  * Reads the Tile defined Direction based Collision Layer chunk
-  */
 int BinaryMapHandler::readTDCI(std::ifstream& file, Map& map)
 {
     return -1;
 }
 
-/** readTPCI
-  *
-  * Reads the Tile defined Pixel based Collision Layer chunk
-  */
 int BinaryMapHandler::readTPCI(std::ifstream& file, Map& map)
 {
     return -1;
 }
 
-/** readANIM
-  *
-  * Reads the Animation chunk
-  */
 int BinaryMapHandler::readANIM(std::ifstream& file, Map& map)
 {
     uint32_t numanimations;
@@ -550,10 +476,6 @@ int BinaryMapHandler::readANIM(std::ifstream& file, Map& map)
     return 0;
 }
 
-/** writeHEAD
-  *
-  * Write the HEADer chunk
-  */
 int BinaryMapHandler::writeHEAD(std::ofstream& file, Map& map)
 {
     char major = MAJOR;
@@ -573,10 +495,6 @@ int BinaryMapHandler::writeHEAD(std::ofstream& file, Map& map)
     return 0;
 }
 
-/** writeMAPP
-  *
-  * Writes the MAP Properties chunk
-  */
 int BinaryMapHandler::writeMAPP(std::ofstream& file, Map& map)
 {
     // 8 ints + two strings.
@@ -615,10 +533,6 @@ int BinaryMapHandler::writeMAPP(std::ofstream& file, Map& map)
     return 0;
 }
 
-/** writeLYRS
-  *
-  * Writes the LaYeRS chunk
-  */
 int BinaryMapHandler::writeLYRS(std::ofstream& file, Map& map)
 {
     const std::string& chunk = "LYRS";
@@ -662,10 +576,6 @@ int BinaryMapHandler::writeLYRS(std::ofstream& file, Map& map)
     return 0;
 }
 
-/** writeBGDS
-  *
-  * Writes the BackGrounDS chunk
-  */
 int BinaryMapHandler::writeBGDS(std::ofstream& file, Map& map)
 {
     uint32_t size = 0;
@@ -673,7 +583,7 @@ int BinaryMapHandler::writeBGDS(std::ofstream& file, Map& map)
 
     for (uint32_t i = 0; i < map.getNumBackgrounds(); i++)
     {
-        ParallaxBackground& back = map.getBackground(i);
+        Background& back = map.getBackground(i);
         size += (back.getName().length() + 1) * sizeof(char);
         size += (back.getFilename().length() + 1) * sizeof(char);
         size += 5 * sizeof(int32_t);
@@ -688,7 +598,7 @@ int BinaryMapHandler::writeBGDS(std::ofstream& file, Map& map)
 
     for (uint32_t i = 0; i < map.getNumBackgrounds(); i++)
     {
-        ParallaxBackground back = map.getBackground(i);
+        Background back = map.getBackground(i);
         float x, y;
         int32_t ix, iy;
         uint32_t mode = htonl(back.getMode());
@@ -719,10 +629,6 @@ int BinaryMapHandler::writeBGDS(std::ofstream& file, Map& map)
     return 0;
 }
 
-/** writeMTCL
-  *
-  * Write the Map defined Tile Based Collision Layer chunk
-  */
 int BinaryMapHandler::writeMTCL(std::ofstream& file, Map& map)
 {
     uint32_t width = map.getWidth();
@@ -748,10 +654,6 @@ int BinaryMapHandler::writeMTCL(std::ofstream& file, Map& map)
     return 0;
 }
 
-/** writeMDCL
-  *
-  * Write the Map defined Direction based Collision Layer chunk
-  */
 int BinaryMapHandler::writeMDCL(std::ofstream& file, Map& map)
 {
     uint32_t width = map.getWidth();
@@ -777,10 +679,6 @@ int BinaryMapHandler::writeMDCL(std::ofstream& file, Map& map)
     return 0;
 }
 
-/** writeMPCL
-  *
-  * Write the Map defined Pixel based Collision Layer chunk
-  */
 int BinaryMapHandler::writeMPCL(std::ofstream& file, Map& map)
 {
     PixelBasedCollisionLayer* layer = dynamic_cast<PixelBasedCollisionLayer*>(map.getCollisionLayer());
@@ -816,37 +714,21 @@ int BinaryMapHandler::writeMPCL(std::ofstream& file, Map& map)
     return 0;
 }
 
-/** writeTTCI
-  *
-  * Write the Tile defined Tile based Collision Layer chunk
-  */
 int BinaryMapHandler::writeTTCI(std::ofstream& file, Map& map)
 {
     return -1;
 }
 
-/** writeTDCI
-  *
-  * Write the Tile defined Direction based Collision Layer chunk
-  */
 int BinaryMapHandler::writeTDCI(std::ofstream& file, Map& map)
 {
     return -1;
 }
 
-/** writeTPCI
-  *
-  * Write the Tile defined Pixel based Collision Layer chunk
-  */
 int BinaryMapHandler::writeTPCI(std::ofstream& file, Map& map)
 {
     return -1;
 }
 
-/** writeANIM
-  *
-  * Write the Animation chunk
-  */
 int BinaryMapHandler::writeANIM(std::ofstream& file, Map& map)
 {
     uint32_t size = sizeof(int32_t);

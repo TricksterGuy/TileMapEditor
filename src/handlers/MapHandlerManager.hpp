@@ -26,6 +26,9 @@
 #include <list>
 #include "BaseMapHandler.hpp"
 
+/** This class is responsible for keeping track of all of the handlers loaded.
+  * And is able to tell you which handler to use to save a file given its extension.
+  */
 class MapHandlerManager
 {
 	public:
@@ -36,14 +39,52 @@ class MapHandlerManager
         }
 		~MapHandlerManager();
 
+        /** Handles saving a map to the filesystem.
+          * First the filename is scanned for its extension and then if a handler was not passed
+          * in it will find the main handler handling that file type.  If a handler was passed in
+          * then it will use that one instead.  The handler will then save the file.
+          * @param filename Filepath to save to.
+          * @param map Map to save.
+          * @param handler Optional handler to use to save the file.
+          * @return -1 on failure 0 on success.
+          */
 		int save(const std::string& filename, Map& map, BaseMapHandler* handler = NULL);
+		/** Handles loading a map from the filesystem.
+		  * @see save for a description of how its loaded.
+          * @param filename Filepath to load from.
+          * @param map Map to load.
+          * @param handler Optional handler to use to load the file.
+          * @return -1 on failure 0 on success.
+          */
 		int load(const std::string& filename, Map& map, BaseMapHandler* handler = NULL);
+		/** Registers a handler with MapHandlerManager.
+          * If two handlers handle the same main extension then the one that is added first will be used.
+          * @param handler Handler to add.
+          * @return -1 on failure 0 on success.
+          */
 		int add(BaseMapHandler* handler);
+		/** Unregisters a handler with MapHandlerManager.
+          * @param handler Handler to remove.
+          * @return -1 on failure 0 on success.
+          */
 		int remove(BaseMapHandler* handler);
+		/** Finds handler that handles the given extension.
+		  * @param extension The extension you want the handler for.
+		  * @return The handler or NULL if not found.
+		  */
 		BaseMapHandler* findHandler(const std::string& extension);
+		/** Gets all of the handlers able to load files
+		  * @return The list of readable handlers.
+		  */
 		std::list<BaseMapHandler*> getReadableHandlers();
+		/** Gets all of the handlers able to save files
+		  * @return The list of writeable handlers.
+		  */
 		std::list<BaseMapHandler*> getWriteableHandlers();
-		std::list<BaseMapHandler*> getHandlers() const;
+		/** Gets all of the handlers
+		  * @return The list of all handlers.
+		  */
+		std::list<BaseMapHandler*>& getHandlers() {return handlers;}
 
 	private:
         std::list<BaseMapHandler*> handlers;

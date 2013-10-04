@@ -110,7 +110,7 @@ void Map::add(const Layer& layer)
     layers.push_back(layer);
 }
 
-void Map::add(const ParallaxBackground& back)
+void Map::add(const Background& back)
 {
     backgrounds.push_back(back);
 }

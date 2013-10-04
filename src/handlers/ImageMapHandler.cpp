@@ -26,54 +26,26 @@ using namespace Magick;
 
 //extern const std::string& RESOURCE_POOL;
 
-/** ImageMapHandler
-  *
-  * Constructor
-  */
- ImageMapHandler::ImageMapHandler() : BaseMapHandler("Map Image Writer", "png", "Exports the map as an image")
+ImageMapHandler::ImageMapHandler() : BaseMapHandler("Map Image Writer", "png", "Exports the map as an image", false)
 {
     alternatives.insert("bmp");
     alternatives.insert("jpg");
-    readable = false;
 }
 
-/** ~ImageMapHandler
-  *
-  * Destructor
-  */
- ImageMapHandler::~ImageMapHandler()
+ImageMapHandler::~ImageMapHandler()
 {
-
 }
 
-/** init
-  *
-  * Initializes the Handler
-  */
 int ImageMapHandler::init()
 {
     InitializeMagick(NULL);
     return 0;
 }
 
-/** load
-  *
-  * Not supported
-  */
-int ImageMapHandler::load(const std::string& filename, Map& map)
-{
-    return -1;
-}
-
-/** save
-  *
-  * Saves map to an image file
-  */
 int ImageMapHandler::save(const std::string& filename, Map& map)
 {
     Image image;
     if (HandlerUtils::mapToImage(map, image)) return -1;
     image.write(filename);
-
     return 0;
 }

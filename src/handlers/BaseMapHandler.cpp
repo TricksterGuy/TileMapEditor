@@ -21,127 +21,28 @@
 
 #include "BaseMapHandler.hpp"
 
-/** BaseMapHandler
-  *
-  * Constructor
-  */
-BaseMapHandler::BaseMapHandler(const std::string& _name, const std::string& _extension, const std::string& _description) :
-name(_name), extension(_extension), description(_description), readable(true), writeable(true)
+BaseMapHandler::BaseMapHandler(const std::string& _name, const std::string& _extension, const std::string& _description,
+                               bool _readable, bool _writeable, const std::set<std::string> _alternatives) :
+name(_name), extension(_extension), description(_description),
+readable(_readable), writeable(_writeable), alternatives(_alternatives)
 {
 }
 
-/** ~BaseMapHandler
-  *
-  * Destructor
-  */
 BaseMapHandler::~BaseMapHandler()
 {
 }
 
-/** init
-  *
-  * Handles initialization of handler return -1 to indicate failure
-  * @return 0 on success -1 on failure
-  */
 int BaseMapHandler::init()
 {
     return 0;
 }
 
-/** load
-  *
-  * Handles loading of a map from file
-  * @param filename path of map to load
-  * @param map reference to map
-  * @return 0 on success -1 on failure
-  */
 int BaseMapHandler::load(const std::string& filename, Map& map)
 {
     return -1;
 }
 
-/** save
-  *
-  * Handles saving of a map to file
-  * @param filename path of map to load
-  * @param map reference to map
-  * @return 0 on success -1 on failure
-  */
 int BaseMapHandler::save(const std::string& filename, Map& map)
 {
     return -1;
-}
-
-/** canRead
-  *
-  * Can this handler load?
-  */
-bool BaseMapHandler::canRead() const
-{
-    return readable;
-}
-
-/** canWrite
-  *
-  * Can this handler save?
-  */
-bool BaseMapHandler::canWrite() const
-{
-    return writeable;
-}
-
-/** getExtension
-  */
-const std::string& BaseMapHandler::getExtension() const
-{
-    return extension;
-}
-
-/** getAltExtensions
-  */
-const std::set<std::string> BaseMapHandler::getAltExtensions() const
-{
-    return alternatives;
-}
-
-/** getName
-  */
-const std::string& BaseMapHandler::getName() const
-{
-    return name;
-}
-
-/** getDescription
-  */
-const std::string& BaseMapHandler::getDescription() const
-{
-    return description;
-}
-
-/** setExtension
-  */
-void BaseMapHandler::setExtension(const std::string& extension)
-{
-    this->extension = extension;
-}
-
-/** setAltExtensions
-  */
-void BaseMapHandler::setAltExtensions(std::set<std::string> alts)
-{
-    alternatives = alts;
-}
-
-/** setName
-  */
-void BaseMapHandler::setName(const std::string& name)
-{
-    this->name = name;
-}
-
-/** setDescription
-  */
-void BaseMapHandler::setDescription(const std::string& description)
-{
-    this->description = description;
 }

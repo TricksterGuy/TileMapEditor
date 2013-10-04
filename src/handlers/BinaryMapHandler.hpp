@@ -24,14 +24,18 @@
 
 #include "BaseMapHandler.hpp"
 
+/** Handler for .map files
+  * My own map format that saves to a binary file
+  */
 class BinaryMapHandler : public BaseMapHandler
 {
 	public:
 		BinaryMapHandler();
 		~BinaryMapHandler();
 
-        virtual int init();
+        /** See BaseMapHandler::load */
         virtual int load(const std::string& filename, Map& map);
+        /** See BaseMapHandler::save */
         virtual int save(const std::string& filename, Map& map);
 
 	private:

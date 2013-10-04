@@ -25,13 +25,14 @@
 #include <Magick++.h>
 #include "BaseMapHandler.hpp"
 
+/** Saves each layer of the map as a background appropriate for gba modes 0-2 */
 class GBAMapHandler : public BaseMapHandler
 {
 	public:
 		GBAMapHandler();
 		~GBAMapHandler();
 
-        virtual int load(const std::string& filename, Map& map);
+        /** See BaseMapHandler::save */
         virtual int save(const std::string& filename, Map& map);
 
 	private:

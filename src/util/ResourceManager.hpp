@@ -41,7 +41,16 @@ class ResourceManager
             return singleton;
         }
         ~ResourceManager();
+        /** Loads an image to an sf::Texture.
+          * @param filename Filename of the image to load.
+          * @param error Error out parameter true if an error occurred.
+          * @return an sf::Texture.
+          */
         sf::Texture& loadImage(const std::string& filename, bool& error);
+        /** Releases the image call when image is no longer needed
+          * @param filename Filename of the image to release.
+          * @return true on success false on error.
+          */
         bool releaseImage(const std::string& filename);
         /*sf::Music& LoadMusic(const std::string& filename, bool& error);
         bool releaseMusic(const std::string& filename);

@@ -28,39 +28,18 @@
 
 extern const std::string& RESOURCE_POOL;
 
-/** GBAMapHandler
-  *
-  * Constructor
-  */
-GBAMapHandler::GBAMapHandler() : BaseMapHandler("GBA Map Export", "c", "Exports the map in GBA modes (0-2) format")
+GBAMapHandler::GBAMapHandler() : BaseMapHandler("GBA Map Export", "c", "Exports the map in GBA modes (0-2) format", false, false)
 {
-    // Not implemented so disable
+    /// TODO Not implemented so disable
     readable = false;
     writeable = false;
 }
 
-/** ~GBAMapHandler
-  *
-  * Destructor
-  */
 GBAMapHandler::~GBAMapHandler()
 {
 
 }
 
-/** load
-  *
-  * Not supported
-  */
-int GBAMapHandler::load(const std::string& filename, Map& map)
-{
-    return -1;
-}
-
-/** save
-  *
-  * Saves map to GBA mode (0-2) format
-  */
 int GBAMapHandler::save(const std::string& filename, Map& map)
 {
     wxString warnings = "";
@@ -96,10 +75,6 @@ int GBAMapHandler::save(const std::string& filename, Map& map)
     return 0;
 }
 
-/** WriteC
-  *
-  * Writes Map out to file
-  */
 int GBAMapHandler::writeC(const std::string& filename, Map& map, const Magick::IndexPacket* pixels, std::vector<Magick::Image> tiles)
 {
 //    ofstream file_c, file_h;

@@ -7,7 +7,7 @@
 #include <boost/scoped_ptr.hpp>
 #include "Layer.hpp"
 #include "CollisionLayer.hpp"
-#include "ParallaxBackground.hpp"
+#include "Background.hpp"
 #include "AnimatedTile.hpp"
 
 /** The main datstructure of the program.
@@ -49,7 +49,7 @@ class Map
 		void resize(uint32_t width, uint32_t height, bool copy = true);
 
         void add(const Layer& layer);
-        void add(const ParallaxBackground& back);
+        void add(const Background& back);
         void deleteLayer(const uint32_t index);
         void deleteBackground(const uint32_t index);
 
@@ -64,10 +64,10 @@ class Map
         uint32_t getNumAnimatedTiles() const {return animatedTiles.size();}
 
         std::vector<Layer>& getLayers() {return layers;}
-        std::vector<ParallaxBackground>& getBackgrounds() {return backgrounds;}
+        std::vector<Background>& getBackgrounds() {return backgrounds;}
         std::vector<AnimatedTile>& getAnimatedTiles() {return animatedTiles;}
         Layer& getLayer(const uint32_t index) {return layers[index];}
-        ParallaxBackground& getBackground(const uint32_t index) {return backgrounds[index];}
+        Background& getBackground(const uint32_t index) {return backgrounds[index];}
         AnimatedTile& getAnimatedTile(const uint32_t index) {return animatedTiles[index];}
 
         CollisionLayer* getCollisionLayer() const {return collisionLayer.get();}
@@ -76,7 +76,7 @@ class Map
         void setFilename(const std::string& _filename) {filename = _filename;}
         void setName(const std::string& _name) {name = _name;}
         void setLayers(const std::vector<Layer>& newLayers) {layers = newLayers;}
-        void setBackgrounds(const std::vector<ParallaxBackground>& newBackgrounds) {backgrounds = newBackgrounds;}
+        void setBackgrounds(const std::vector<Background>& newBackgrounds) {backgrounds = newBackgrounds;}
         void setAnimatedTiles(const std::vector<AnimatedTile>& tiles) {animatedTiles = tiles;}
         void setTileDimensions(uint32_t width, uint32_t height);
         void setCollisionLayer(CollisionLayer* layer);
@@ -88,7 +88,7 @@ class Map
         uint32_t tile_width, tile_height;
         std::vector<Layer> layers;
         std::vector<AnimatedTile> animatedTiles;
-        std::vector<ParallaxBackground> backgrounds;
+        std::vector<Background> backgrounds;
         boost::scoped_ptr<CollisionLayer> collisionLayer;
 };
 #endif

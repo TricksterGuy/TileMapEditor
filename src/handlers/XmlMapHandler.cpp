@@ -34,31 +34,16 @@
 
 using namespace std;
 
-/** XmlMapHandler
-  *
-  * Constructor
-  */
 XmlMapHandler::XmlMapHandler() : BaseMapHandler("Xml Format", "xml")
 {
     description = "Exports the map as an xml file";
 }
 
-/** ~XmlMapHandler
-  *
-  * Destructor
-  */
 XmlMapHandler::~XmlMapHandler()
 {
 
 }
 
-/** Load
-  *
-  * Load an XML formatted file into the program.
-  * filename: The location of the .xml file
-  * map: the map you want the data to be loaded into
-  * Note: A properly formatted .xml file must have one tag per line, or one set of open/close tags per line.
-  */
 int XmlMapHandler::load(const std::string& filename, Map& map)
 {
     wxXmlDocument doc;
@@ -98,12 +83,6 @@ int XmlMapHandler::load(const std::string& filename, Map& map)
     return 0;
 }
 
-/** XML format: Save
-  *
-  * Save an XML formatted file.
-  * filename: The location to save the file to.
-  * map: the map you want the data to be saved.
-  */
 int XmlMapHandler::save(const std::string& filename, Map& map)
 {
     wxXmlNode* root = new wxXmlNode(wxXML_ELEMENT_NODE, "Map");
@@ -123,10 +102,6 @@ int XmlMapHandler::save(const std::string& filename, Map& map)
     return ret ? 0 : -1;
 }
 
-/** ReadProperties
-  *
-  *
-  */
 int XmlMapHandler::readProperties(wxXmlNode* root, Map& map)
 {
     wxXmlNode* child = root->GetChildren();
@@ -191,10 +166,6 @@ int XmlMapHandler::readProperties(wxXmlNode* root, Map& map)
     return 0;
 }
 
-/** ReadLayer
-  *
-  *
-  */
 int XmlMapHandler::readLayer(wxXmlNode* root, Map& map)
 {
     wxXmlNode* child = root->GetChildren();
@@ -236,15 +207,11 @@ int XmlMapHandler::readLayer(wxXmlNode* root, Map& map)
     return 0;
 }
 
-/** ReadBackground
-  *
-  *
-  */
 int XmlMapHandler::readBackground(wxXmlNode* root, Map& map)
 {
     wxXmlNode* child = root->GetChildren();
 
-    ParallaxBackground background;
+    Background background;
 
     float speedx = 0, speedy = 0;
 
@@ -271,10 +238,6 @@ int XmlMapHandler::readBackground(wxXmlNode* root, Map& map)
     return 0;
 }
 
-/** ReadCollision
-  *
-  *
-  */
 int XmlMapHandler::readCollision(wxXmlNode* root, Map& map)
 {
     wxXmlNode* child = root->GetChildren();
@@ -319,10 +282,6 @@ int XmlMapHandler::readCollision(wxXmlNode* root, Map& map)
     return 0;
 }
 
-/** WriteProperties
-  *
-  *
-  */
 int XmlMapHandler::writeProperties(wxXmlNode* root, Map& map)
 {
     wxXmlNode* properties = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Properties");
@@ -348,10 +307,6 @@ int XmlMapHandler::writeProperties(wxXmlNode* root, Map& map)
     return 0;
 }
 
-/** WriteLayer
-  *
-  *
-  */
 int XmlMapHandler::writeLayer(wxXmlNode* root, Map& map, unsigned int i)
 {
     Layer& layer = map.getLayer(i);
@@ -376,13 +331,9 @@ int XmlMapHandler::writeLayer(wxXmlNode* root, Map& map, unsigned int i)
     return 0;
 }
 
-/** WriteBackground
-  *
-  *
-  */
 int XmlMapHandler::writeBackground(wxXmlNode* root, Map& map, unsigned int i)
 {
-    ParallaxBackground& background = map.getBackground(i);
+    Background& background = map.getBackground(i);
     float x, y;
     background.getSpeed(x, y);
     wxXmlNode* back = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Background");
@@ -402,10 +353,6 @@ int XmlMapHandler::writeBackground(wxXmlNode* root, Map& map, unsigned int i)
     return 0;
 }
 
-/** WriteCollision
-  *
-  *
-  */
 int XmlMapHandler::writeCollision(wxXmlNode* root, Map& map)
 {
     TileBasedCollisionLayer* layer = dynamic_cast<TileBasedCollisionLayer*>(map.getCollisionLayer());
@@ -428,4 +375,3 @@ int XmlMapHandler::writeCollision(wxXmlNode* root, Map& map)
 
     return 0;
 }
-

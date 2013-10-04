@@ -28,45 +28,14 @@
 
 //extern const std::string& RESOURCE_POOL;
 
-/** GBAImageHandler
-  *
-  * Constructor
-  */
-GBAImageHandler::GBAImageHandler() : BaseMapHandler("GBA Image Export", "c", "Exports the map's image in GBA format modes (3-5)")
+GBAImageHandler::GBAImageHandler() : BaseMapHandler("GBA Image Export", "c", "Exports the map's image in GBA format modes (3-5)", false)
 {
-    readable = false;
 }
 
-/** ~GBAImageHandler
-  *
-  * Desctructor
-  */
 GBAImageHandler::~GBAImageHandler()
 {
 }
 
-/** init
-  *
-  * Initializes Handler
-  */
-int GBAImageHandler::init()
-{
-    return 0;
-}
-
-/** load
-  *
-  * Not supported.
-  */
-int GBAImageHandler::load(const std::string& filename, Map& map)
-{
-    return -1;
-}
-
-/** save
-  *
-  * Saves map to a .c file for GBA
-  */
 int GBAImageHandler::save(const std::string& filename, Map& map)
 {
     int mode;
@@ -103,10 +72,6 @@ int GBAImageHandler::save(const std::string& filename, Map& map)
         return writeCMode4(filename, image);
 }
 
-/** WriteCMode3
-  *
-  * Writes Image to a C file in mode3 format
-  */
 int GBAImageHandler::writeCMode3(const std::string& filename, Magick::Image& image)
 {
     /// TODO update this code.
@@ -172,10 +137,6 @@ int GBAImageHandler::writeCMode3(const std::string& filename, Magick::Image& ima
     return 0;
 }
 
-/** WriteCMode4
-  *
-  * Writes map to C file in mode 4 format
-  */
 int GBAImageHandler::writeCMode4(const std::string& filename, Magick::Image& image)
 {
     /// TODO update this too.

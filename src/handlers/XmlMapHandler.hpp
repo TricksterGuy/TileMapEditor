@@ -25,12 +25,15 @@
 #include <wx/xml/xml.h>
 #include "BaseMapHandler.hpp"
 
+/** Saves the map as an xml file see documentation for format */
 class XmlMapHandler : public BaseMapHandler
 {
 	public:
 		XmlMapHandler();
 		~XmlMapHandler();
+		/** @see BaseMapHandler::load */
         virtual int load(const std::string& filename, Map& map);
+        /** @see BaseMapHandler::save */
         virtual int save(const std::string& filename, Map& map);
 	private:
         int readProperties(wxXmlNode* root, Map& map);

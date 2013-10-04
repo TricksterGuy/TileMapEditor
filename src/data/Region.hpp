@@ -113,5 +113,4 @@ class Region
         void doAdd(const Rectangle& r);
 };
 
-
 #endif

@@ -25,14 +25,14 @@
 #include <Magick++.h>
 #include "BaseMapHandler.hpp"
 
+/** GBA Image Handler saves the entire map to a .c file */
 class GBAImageHandler : public BaseMapHandler
 {
 	public:
 		GBAImageHandler();
 		~GBAImageHandler();
 
-        virtual int init();
-        virtual int load(const std::string& filename, Map& map);
+        /** See BaseMapHandler::save */
         virtual int save(const std::string& filename, Map& map);
 
 	private:

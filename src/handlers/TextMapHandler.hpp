@@ -26,12 +26,15 @@
 #include <fstream>
 #include "BaseMapHandler.hpp"
 
+/** Saves the map as a text file */
 class TextMapHandler : public BaseMapHandler
 {
 	public:
 		TextMapHandler();
 		~TextMapHandler();
+		/** @see BaseMapHandler::load */
         virtual int load(const std::string& filename, Map& map);
+        /** @see BaseMapHandler::save */
         virtual int save(const std::string& filename, Map& map);
 	private:
         int readProperties(std::ifstream& file, Map& map);

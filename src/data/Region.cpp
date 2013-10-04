@@ -46,12 +46,10 @@ bool Region::contains(int32_t x, int32_t y) const
     return false;
 }
 
-/** contains
-  *
-  * Returns true if the rectangle is contained
-  */
+
 bool Region::contains(const Rectangle& r) const
 {
+    printf("CONTAINS CALLED\n");
     std::set<Rectangle> intersectSet;
     for (const Rectangle& inr : rectangles)
     {
@@ -181,7 +179,7 @@ void Region::move(int32_t x, int32_t y)
 void Region::add(const Rectangle& r)
 {
     if (!contains(r))
-        add(r);
+        doAdd(r);
 }
 
 void Region::add(const Region& r)

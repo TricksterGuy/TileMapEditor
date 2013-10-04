@@ -27,10 +27,6 @@
 
 using namespace std;
 
-/** ~MapHandlerManager
-  *
-  * Destructor
-  */
  MapHandlerManager::~MapHandlerManager()
 {
     list<BaseMapHandler*>::iterator it;
@@ -42,30 +38,18 @@ using namespace std;
 	handlers.clear();
 }
 
-/** add
-  *
-  * Adds the handler to the system
-  */
 int MapHandlerManager::add(BaseMapHandler* handler)
 {
     handlers.push_back(handler);
 	return 0;
 }
 
-/** remove
-  *
-  * Removes the given handler
-  */
 int MapHandlerManager::remove(BaseMapHandler* handler)
 {
     handlers.remove(handler);
     return 0;
 }
 
-/** load
-  *
-  * Loads map from a file
-  */
 int MapHandlerManager::load(const std::string& file, Map& map, BaseMapHandler* handler)
 {
     std::string::size_type idx;
@@ -81,10 +65,6 @@ int MapHandlerManager::load(const std::string& file, Map& map, BaseMapHandler* h
     return handler->load(filename, map);
 }
 
-/** save
-  *
-  * Saves map to a file
-  */
 int MapHandlerManager::save(const std::string& file, Map& map, BaseMapHandler* handler)
 {
     std::string::size_type idx;
@@ -98,10 +78,6 @@ int MapHandlerManager::save(const std::string& file, Map& map, BaseMapHandler* h
     return handler->save(filename, map);
 }
 
-/** findHandler
-  *
-  * Finds a handler that handles the extension
-  */
 BaseMapHandler* MapHandlerManager::findHandler(const std::string& extension)
 {
     // Check all main extensions
@@ -126,19 +102,6 @@ BaseMapHandler* MapHandlerManager::findHandler(const std::string& extension)
     return NULL;
 }
 
-/** getHandlers
-  *
-  * Gets all Handlers in the system
-  */
-std::list<BaseMapHandler*> MapHandlerManager::getHandlers() const
-{
-    return handlers;
-}
-
-/** getWriteableHandlers
-  *
-  * Gets teh list of writeable handlers
-  */
 std::list<BaseMapHandler*> MapHandlerManager::getWriteableHandlers()
 {
     std::list<BaseMapHandler*> writeable;
@@ -154,10 +117,6 @@ std::list<BaseMapHandler*> MapHandlerManager::getWriteableHandlers()
     return writeable;
 }
 
-/** getReadableHandlers
-  *
-  * Gets the list of readable handlers
-  */
 std::list<BaseMapHandler*> MapHandlerManager::getReadableHandlers()
 {
     std::list<BaseMapHandler*> readable;
@@ -173,10 +132,6 @@ std::list<BaseMapHandler*> MapHandlerManager::getReadableHandlers()
     return readable;
 }
 
-/** getExtension
-  *
-  * Gets the extension associated with the filename
-  */
 const std::string MapHandlerManager::getExtension(const std::string& filename, std::string::size_type& idx)
 {
     idx = filename.rfind('.');
@@ -192,10 +147,6 @@ const std::string MapHandlerManager::getExtension(const std::string& filename, s
     return extension;
 }
 
-/** convertFilename
-  *
-  * Converts a filename to system format
-  */
 const string MapHandlerManager::convertFilename(const std::string& filename)
 {
     //boost::filesystem::path pathFrom = boost::filesystem::path(filename);

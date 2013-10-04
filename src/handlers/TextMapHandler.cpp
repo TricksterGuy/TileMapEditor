@@ -28,30 +28,15 @@
 #include "TextMapHandler.hpp"
 #include "TileBasedCollisionLayer.hpp"
 
-/**TextMapHandler
-  *
-  * Constructor
-  */
 TextMapHandler::TextMapHandler() : BaseMapHandler("Text Format", "txt", "Export the map as a text file")
 {
 }
 
-/** TextMapHandler
-  *
-  * Destructor
-  */
 TextMapHandler::~TextMapHandler()
 {
 
 }
 
-/** Load
-  *
-  * Loads a map from a text file.
-  * @param filename The filename of the text representation of the map.
-  * @param map The Map object that the text map will be loaded to.
-  * @return -1 on failure 0 on success
-  */
 int TextMapHandler::load(const std::string& filename, Map& map)
 {
     std::ifstream file(filename.c_str());
@@ -93,10 +78,6 @@ int TextMapHandler::load(const std::string& filename, Map& map)
     return 0;
 }
 
-/** ReadProperties
-  *
-  * Reads map properties
-  */
 int TextMapHandler::readProperties(std::ifstream& file, Map& map)
 {
     std::string mapdim, tiledim, name, filename;
@@ -124,10 +105,6 @@ int TextMapHandler::readProperties(std::ifstream& file, Map& map)
     return 0;
 }
 
-/** ReadLayers
-  *
-  * Reads layers
-  */
 int TextMapHandler::readLayers(std::ifstream& file, Map& map)
 {
     while (1)
@@ -176,10 +153,6 @@ int TextMapHandler::readLayers(std::ifstream& file, Map& map)
     return 0;
 }
 
-/** ReadBackgrounds
-  *
-  * Reads backgrounds from file
-  */
 int TextMapHandler::readBackgrounds(std::ifstream& file, Map& map)
 {
     while (1)
@@ -204,17 +177,13 @@ int TextMapHandler::readBackgrounds(std::ifstream& file, Map& map)
         speedx = wxAtof(scanner.GetNextToken());
         speedy = wxAtof(scanner.GetNextToken());
 
-        ParallaxBackground back(name, filename, mode, speedx, speedy);
+        Background back(name, filename, mode, speedx, speedy);
         map.add(back);
     }
 
     return 0;
 }
 
-/** ReadCollision
-  *
-  * Reads Collision layer information
-  */
 int TextMapHandler::readCollision(std::ifstream& file, Map& map)
 {
     std::string type;
@@ -262,13 +231,6 @@ int TextMapHandler::readCollision(std::ifstream& file, Map& map)
     return 0;
 }
 
-/** Save
-  *
-  * Saves the map to a text file
-  * @param filename The name of the file to save the map to.
-  * @param map The Map object that is being saved to text.
-  * @return -1 on failure 0 on success
-  */
 int TextMapHandler::save(const std::string& filename, Map& map)
 {
     // Checking to see if the file can be saved to.
@@ -305,7 +267,7 @@ int TextMapHandler::save(const std::string& filename, Map& map)
     if (map.getNumBackgrounds() > 0) file << "Backgrounds\n";
     for (unsigned int k = 0; k < map.getNumBackgrounds(); k++)
     {
-        ParallaxBackground& background = map.getBackground(k);
+        Background& background = map.getBackground(k);
         float x, y;
         background.getSpeed(x, y);
         file << background.getName() << "\n";

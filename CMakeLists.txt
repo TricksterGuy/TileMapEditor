@@ -30,10 +30,10 @@ option(TEST_MODE "Build for testing" OFF)
 # Source files definition
 set(SRC_TILEMAPEDITOR
     src/data/AnimatedTile.cpp
+    src/data/Background.cpp
     src/data/CollisionLayer.cpp
     src/data/Layer.cpp
     src/data/Map.cpp
-    src/data/ParallaxBackground.cpp
     src/data/PixelBasedCollisionLayer.cpp
     src/data/Rectangle.cpp
     src/data/Region.cpp
@@ -43,6 +43,7 @@ set(SRC_TILEMAPEDITOR
 
     src/gui/Clock.cpp
     src/gui/MapCanvas.cpp
+    src/gui/ParallaxBackground.cpp
     src/gui/TilemapEditorApp.cpp
     src/gui/TilemapEditorFrame.cpp
     src/gui/wxScrolledSFMLWindow.cpp

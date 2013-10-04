@@ -25,14 +25,16 @@
 #include <Magick++.h>
 #include "BaseMapHandler.hpp"
 
+/** Saves the entire map as an image */
 class ImageMapHandler : public BaseMapHandler
 {
 	public:
 		ImageMapHandler();
 		~ImageMapHandler();
 
+        /** See BaseMapHandler::init */
         virtual int init();
-        virtual int load(const std::string& filename, Map& map);
+        /** See BaseMapHandler::save */
         virtual int save(const std::string& filename, Map& map);
 };
 

@@ -21,10 +21,6 @@
 
 #include "ResourceManager.hpp"
 
-/** ~ResourceManager
-  *
-  * Destructor
-  */
 ResourceManager::~ResourceManager()
 {
 	std::map<const std::string, sf::Texture*>::iterator i;
@@ -43,10 +39,6 @@ ResourceManager::~ResourceManager()
 	//musics.clear();
 }
 
-/** LoadImage
-  *
-  * Loads an image into the Resource Manager
-  */
 sf::Texture& ResourceManager::loadImage(const std::string& filename, bool& error)
 {
 	std::map<const std::string, sf::Texture*>::iterator i;
@@ -65,10 +57,6 @@ sf::Texture& ResourceManager::loadImage(const std::string& filename, bool& error
     return *image;
 }
 
-/** ReleaseImage
-  *
-  * Releases an image from the manager
-  */
 bool ResourceManager::releaseImage(const std::string& filename)
 {
     std::map<const std::string, sf::Texture*>::iterator i;

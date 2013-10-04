@@ -32,16 +32,35 @@
 class MapCanvas : public wxScrolledSFMLWindow
 {
 	public:
+	    /** Creates a map canvas. */
 		MapCanvas(wxWindow* Parent = NULL, wxWindowID Id = wxID_ANY, const wxPoint& Position = wxDefaultPosition, const wxSize& Size = wxDefaultSize, long Style = wxVSCROLL);
 		~MapCanvas();
+		/** Gets the viewable tile coordinates.
+		  * @param vxi Out parameter initial viewable x coordinate.
+		  * @param vyi Out parameter initial viewable y coordinate.
+		  * @param vxf Out parameter final viewable x coordinate.
+		  * @param vyf Out parameter final viewable y coordinate.
+		  */
 		void getViewableCoords(int& vxi, int& vyi, int& vxf, int& vyf);
+		/** Transforms a screen coordinate to a tile coordinate.
+		  * @param x X coordinate.
+		  * @param y Y coordinate.
+		  * @param outx Out parameter X tile coordinate.
+		  * @param outy Out parameter Y tile coordinate.
+		  * @param bounds If true clamp to viewable tile coordinates.
+		  * @param neg1 If outside bounds (> width/height) make result -1.
+		  */
 		void transformScreenToTile(int x, int y, int& outx, int& outy, bool bounds = true, bool neg1 = false);
+		/** Called when the map has changed */
+		void onMapChanged();
 	private:
 	    Map map;
         std::vector<ParallaxBackground> backgrounds;
         std::vector<sf::Sprite> tiles;
         sf::Texture image;
         void onUpdate();
+        void updateFrame();
+        void renderFrame();
 	    void drawLayer(int sxi, int syi, int sxf, int syf, int id);
 	    void updateTiles();
 	    unsigned long clock;

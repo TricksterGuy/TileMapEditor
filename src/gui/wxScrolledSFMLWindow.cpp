@@ -36,7 +36,7 @@ wxScrolledCanvas(Parent, Id, Position, Size, Style)
         sf::RenderWindow::create(GDK_WINDOW_XWINDOW(widget->window));
     #else
         // Tested under Windows XP only (should work with X11 and other Windows versions - no idea about MacOS)
-        sf::RenderWindow::create(GetHandle());
+        sf::RenderWindow::create(GetSystemHandle());
     #endif
 }
 
