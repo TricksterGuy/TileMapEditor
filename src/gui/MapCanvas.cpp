@@ -54,7 +54,7 @@ wxScrolledSFMLWindow(Parent, Id, Position, Size, Style)
     map.getLayer(0)[4] = 0x80000004;
     map.getBackground(0).setFilename("003-StarlitSky01.png");
     map.getBackground(0).setMode(Background::Autoscroll | Background::Repeating);
-    map.getBackground(0).setSpeed(-3, -5);
+    map.getBackground(0).setSpeed(1,1);//-3, -5);
 #endif
     handler.save("complete2.map", map);
 
