@@ -22,14 +22,15 @@
 #ifndef MAPCANVAS_HPP
 #define MAPCANVAS_HPP
 
-#include "wxScrolledSFMLWindow.hpp"
+#include <wx/scrolwin.h>
+#include <wx/dcgraph.h>
 #include "Map.hpp"
 #include "ParallaxBackground.hpp"
 
 /**
   * This class represents a view of the map.  The user is allowed to click inside of this widget and place tiles using Tools.
   */
-class MapCanvas : public wxScrolledSFMLWindow
+class MapCanvas : public wxScrolledCanvas
 {
 	public:
 	    /** Creates a map canvas. */
@@ -51,29 +52,24 @@ class MapCanvas : public wxScrolledSFMLWindow
 		  * @param neg1 If outside bounds (> width/height) make result -1.
 		  */
 		void transformScreenToTile(int x, int y, int& outx, int& outy, bool bounds = true, bool neg1 = false);
+		/** Called on repaint */
+		void OnDraw(wxDC& dc);
+		/** Called when the background needs repainting */
+		void OnEraseBackground(wxEraseEvent& event);
 		/** Called when the map has changed */
 		void onMapChanged();
 	private:
+        DECLARE_EVENT_TABLE()
 	    Map map;
-        std::vector<ParallaxBackground> backgrounds;
-        std::vector<sf::Sprite> tiles;
-        sf::Texture image;
-        void onUpdate();
-        void updateFrame();
-        void renderFrame();
-	    void drawLayer(int sxi, int syi, int sxf, int syf, int id);
+	    void drawLayer(wxGCDC& dc, int id, int sxi, int syi, int sxf, int syf);
 	    void updateTiles();
 	    unsigned long clock;
+	    wxBitmap image;
+	    std::vector<wxBitmap> tiles;
+	    std::vector<ParallaxBackground> backgrounds;
 
-        inline float tileHeight() const
-        {
-            return map.getTileHeight();
-        }
-
-        inline float tileWidth() const
-        {
-            return map.getTileWidth();
-        }
+        inline float tileHeight() const {return map.getTileHeight();}
+        inline float tileWidth() const {return map.getTileWidth();}
 };
 
 

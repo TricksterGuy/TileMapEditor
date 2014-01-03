@@ -20,28 +20,29 @@
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
 
+#include <vector>
+#include <wx/dcgraph.h>
+#include <wx/dcgraph.h>
+#include <wx/dc.h>
+#include <wx/bitmap.h>
+
 #ifndef PARALLAXBACKGROUND_HPP
 #define PARALLAXBACKGROUND_HPP
 
-#include <SFML/Graphics.hpp>
-#include <vector>
 #include "Background.hpp"
 
-class ParallaxBackground : public sf::Drawable, public sf::Transformable
+class ParallaxBackground
 {
     public:
         /** Creates a ParallaxBackground from the background passed in */
         ParallaxBackground(const Background& background);
         ~ParallaxBackground();
-
-        /** SFML - Draws the background onto the screen
-          * @see Drawable::draw in SFML docs
-          */
-        void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        /** Draws the background onto the screen */
+        void Draw(wxGCDC& dc);
         /** Updates the background repositioning if necessary
           * Called every frame
           */
-        void update(const sf::RenderTarget& target);
+        void Update(wxGCDC& dc);
     private:
         /**
           * Loads the image used for the background
@@ -50,12 +51,11 @@ class ParallaxBackground : public sf::Drawable, public sf::Transformable
         std::string name;
         std::string filename;
         int mode;
+        float speedx, speedy;
         float x, y;
-
         bool needUpdateImage;
         void updateImage();
-        mutable sf::Sprite sprite;
-        sf::Texture image;
+        wxBitmap image;
 };
 
 #endif

@@ -109,9 +109,9 @@ int XmlMapHandler::readProperties(wxXmlNode* root, Map& map)
     while(child)
     {
         if (child->GetName() == "Name")
-            map.setName(child->GetNodeContent());
+            map.setName(child->GetNodeContent().ToStdString());
         else if (child->GetName() == "Filename")
-            map.setFilename(child->GetNodeContent());
+            map.setFilename(child->GetNodeContent().ToStdString());
         else if (child->GetName() == "Dimensions")
         {
             int width = -1, height = -1;
@@ -175,7 +175,7 @@ int XmlMapHandler::readLayer(wxXmlNode* root, Map& map)
     while(child)
     {
         if (child->GetName() == "Name")
-            layer.setName(child->GetNodeContent());
+            layer.setName(child->GetNodeContent().ToStdString());
         else if (child->GetName() == "Data")
         {
             wxString data = child->GetNodeContent();
@@ -218,9 +218,9 @@ int XmlMapHandler::readBackground(wxXmlNode* root, Map& map)
     while(child)
     {
         if (child->GetName() == "Name")
-            background.setName(child->GetNodeContent());
+            background.setName(child->GetNodeContent().ToStdString());
         else if (child->GetName() == "Filename")
-            background.setFilename(child->GetNodeContent());
+            background.setFilename(child->GetNodeContent().ToStdString());
         else if (child->GetName() == "Mode")
             background.setMode(wxAtoi(child->GetNodeContent()));
         else if (child->GetName() == "SpeedX")

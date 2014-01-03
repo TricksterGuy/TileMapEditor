@@ -21,11 +21,13 @@
 
 #include "TilemapEditorApp.hpp"
 #include "TilemapEditorFrame.hpp"
+#include <wx/image.h>
 
 IMPLEMENT_APP(TilemapEditorApp);
 
 bool TilemapEditorApp::OnInit()
 {
+    wxInitAllImageHandlers();
     TilemapEditorFrame* frame = new TilemapEditorFrame(0L);
     frame->Show();
 

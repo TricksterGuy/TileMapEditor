@@ -20,11 +20,12 @@
  ******************************************************************************************************/
 
 #include "MapCanvas.hpp"
+#include <wx/graphics.h>
 #include "BinaryMapHandler.hpp"
-#include "ResourceManager.hpp"
+
 
 MapCanvas::MapCanvas(wxWindow* Parent, wxWindowID Id, const wxPoint& Position, const wxSize& Size, long Style) :
-wxScrolledSFMLWindow(Parent, Id, Position, Size, Style)
+wxScrolledCanvas(Parent, Id, Position, Size, Style)
 {
     /// TODO REMOVE
     static BinaryMapHandler handler;
@@ -53,15 +54,13 @@ wxScrolledSFMLWindow(Parent, Id, Position, Size, Style)
     map.getLayer(0)[3] = 0x80000003;
     map.getLayer(0)[4] = 0x80000004;
     map.getBackground(0).setFilename("003-StarlitSky01.png");
-    map.getBackground(0).setMode(Background::Autoscroll | Background::Repeating);
-    map.getBackground(0).setSpeed(1,1);//-3, -5);
+    map.getBackground(0).setMode(Background::Stationary | Background::Repeating);
+    map.getBackground(0).setSpeed(1, 1);//-3, -5);
 #endif
-    handler.save("complete2.map", map);
 
     bool hi;
-    image = ResourceManager().loadImage(map.getFilename(), hi);
+    clock = 0;
     onMapChanged();
-    updateTiles();
 }
 
 MapCanvas::~MapCanvas()
@@ -72,20 +71,16 @@ MapCanvas::~MapCanvas()
 void MapCanvas::getViewableCoords(int& vxi, int& vyi, int& vxf, int& vyf)
 {
     // TODO Reimplement when scrolling after resize tiles bug fixed
-    sf::Vector2u size = getSize();
+    int w, h;
+    GetSize(&w, &h);
     transformScreenToTile(0, 0, vxi, vyi);
-    transformScreenToTile(size.x + map.getTileWidth(), size.y + map.getTileHeight(), vxf, vyf);
+    transformScreenToTile(w + map.getTileWidth(), h + map.getTileHeight(), vxf, vyf);
 }
 
 void MapCanvas::transformScreenToTile(int x, int y, int& outx, int& outy, bool bounds, bool neg1)
 {
-    int ox, oy;
-    sf::Vector2f vector = mapPixelToCoords(sf::Vector2i(x, y));
-    ox = int(vector.x);
-    oy = int(vector.y);
-
-    outx = int(ox / (tileWidth()));
-    outy = int(oy / (tileHeight()));
+    outx = static_cast<int>(x / tileWidth());
+    outy = static_cast<int>(y / tileHeight());
 
     if (bounds)
     {
@@ -95,7 +90,6 @@ void MapCanvas::transformScreenToTile(int x, int y, int& outx, int& outy, bool b
         if ((unsigned int) outx >= map.getWidth()) outx = neg1 ? -1 : map.getWidth() - 1;
         if ((unsigned int) outy >= map.getHeight()) outy = neg1 ? -1 : map.getHeight() - 1;
     }
-
 }
 
 void MapCanvas::onMapChanged()
@@ -105,31 +99,40 @@ void MapCanvas::onMapChanged()
 
     for (const Background& background : map.getBackgrounds())
         backgrounds.push_back(ParallaxBackground(background));
+
+    image.LoadFile(map.getFilename());
+    updateTiles();
 }
 
-void MapCanvas::onUpdate()
-{
-    updateFrame();
-    renderFrame();
-}
 
-void MapCanvas::updateFrame()
+void MapCanvas::OnDraw(wxDC& dc)
 {
-    for (ParallaxBackground& background : backgrounds)
-        background.update(*this);
-}
+    wxGraphicsContext* gc = wxGraphicsContext::Create(this);
+    if (!gc) return;
 
-void MapCanvas::renderFrame()
-{
+    wxGCDC gcdc(gc);
     // Clear with the background color
-    clear(sf::Color(0, 0, 255));
+    //clear(sf::Color(0, 0, 255));
 
     // Draw Border
     //drawBorder();
 
+    int sx, sy, sw, sh;
+    CalcUnscrolledPosition(0, 0, &sx, &sy);
+    GetClientSize(&sw, &sh);
+    printf("%d %d %d %d\n", sx, sy, sw, sh);
+    dc.DestroyClippingRegion();
+    dc.SetClippingRegion(sx, sy, sw, sh);
+    dc.GetClippingBox(&sx, &sy, &sw, &sh);
+    printf("%d %d %d %d\n", sx, sy, sw, sh);
+
+
     // Draw all backgrounds
-    for (const ParallaxBackground& background : backgrounds)
-        draw(background);
+    for (ParallaxBackground& background : backgrounds)
+    {
+        background.Update(gcdc);
+        background.Draw(gcdc);
+    }
 
     // Get Viewable Coordinates of our Canvas
     int vxi, vyi, vxf, vyf;
@@ -148,7 +151,7 @@ void MapCanvas::renderFrame()
     for (unsigned int k = 0; k < map.getNumLayers(); k++)
     {
         /*if (!viewLayer[k]) continue;*/
-        drawLayer(vxi, vyi, vxf, vyf, k);
+        drawLayer(gcdc, k, vxi, vyi, vxf, vyf);
     }
 
     // Draw Collision Layer
@@ -162,7 +165,12 @@ void MapCanvas::renderFrame()
     clock++;
 }
 
-void MapCanvas::drawLayer(int sxi, int syi, int sxf, int syf, int id)
+void MapCanvas::OnEraseBackground(wxEraseEvent& event)
+{
+
+}
+
+void MapCanvas::drawLayer(wxGCDC& dc, int id, int sxi, int syi, int sxf, int syf)
 {
     Layer& layer = map.getLayer(id);
 
@@ -177,7 +185,6 @@ void MapCanvas::drawLayer(int sxi, int syi, int sxf, int syf, int id)
             if (tile == -1) continue;
             if (tile < -1)
             {
-                //printf("%x %d \n", tile, tiles.size());
                 tile &= ~(1 << 31);
                 assert(tile < (int)map.getNumAnimatedTiles());
                 AnimatedTile& anim = map.getAnimatedTile(tile);
@@ -185,22 +192,18 @@ void MapCanvas::drawLayer(int sxi, int syi, int sxf, int syf, int id)
 
                 if (tile == -1) continue;
             }
-            //printf("%x %d \n", tile, tiles.size());
             assert((unsigned int) tile < tiles.size());
-            sf::Sprite& obj = tiles[tile];
-            //obj.setScale(zoomx, zoomy);
-            obj.setPosition(x, y);
-            draw(obj);
+            wxBitmap& obj = tiles[tile];
+            dc.DrawBitmap(obj, x, y);
         }
     }
 }
 
 void MapCanvas::updateTiles()
 {
-    setActive(true);
-    sf::Vector2u size = image.getSize();
-    int numTilesX = size.x / map.getTileWidth();
-    int numTilesY = size.y / map.getTileHeight();
+    wxSize size = image.GetSize();
+    int numTilesX = size.GetWidth() / map.getTileWidth();
+    int numTilesY = size.GetHeight() / map.getTileHeight();
     unsigned int totalTiles = numTilesX * numTilesY;
     if (totalTiles != tiles.size())
     {
@@ -212,7 +215,7 @@ void MapCanvas::updateTiles()
     {
         int sx = i % numTilesX * map.getTileWidth();
         int sy = i / numTilesX * map.getTileHeight();
-        tiles[i].setTexture(image);
-        tiles[i].setTextureRect(sf::IntRect(sx, sy, map.getTileWidth(), map.getTileHeight()));
+
+        tiles[i] = image.GetSubBitmap(wxRect(sx, sy, map.getTileWidth(), map.getTileHeight()));
     }
 }

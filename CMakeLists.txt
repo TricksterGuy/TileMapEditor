@@ -46,7 +46,6 @@ set(SRC_TILEMAPEDITOR
     src/gui/ParallaxBackground.cpp
     src/gui/TilemapEditorApp.cpp
     src/gui/TilemapEditorFrame.cpp
-    src/gui/wxScrolledSFMLWindow.cpp
 
     src/handlers/BaseMapHandler.cpp
     src/handlers/BinaryMapHandler.cpp
@@ -57,24 +56,20 @@ set(SRC_TILEMAPEDITOR
     src/handlers/MapHandlerManager.cpp
     src/handlers/TextMapHandler.cpp
     src/handlers/XmlMapHandler.cpp
-
-    src/util/ResourceManager.cpp
 )
-
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 set(wxWidgets_USE_LIBS xrc xml html adv gl net core base)
 find_package(wxWidgets REQUIRED)
 find_package(ImageMagick COMPONENTS Magick++)
-find_package(SFML COMPONENTS graphics window system)
 find_package(GTK2 REQUIRED gtk)
-find_package( Boost 1.48 REQUIRED )
+find_package(Boost 1.54 REQUIRED)
 #execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --cxxflags)
 
 IF(DEBUG_MODE)
-    set(CMAKE_CXX_FLAGS "-g -Wall -std=c++0x")
+    set(CMAKE_CXX_FLAGS "-g -Wall -std=c++0x -DwxUSE_GRAPHICS_CONTEXT=1")
 ELSE()
-    set(CMAKE_CXX_FLAGS "-O3 -s -Wall -std=c++0x")
+    set(CMAKE_CXX_FLAGS "-O3 -s -Wall -std=c++0x -DwxUSE_GRAPHICS_CONTEXT=1")
 ENDIF(DEBUG_MODE)
 
 set(CMAKE_SKIP_RPATH TRUE)
@@ -85,7 +80,6 @@ include_directories(${tilemapeditor_SOURCE_DIR}/src/gen)
 include_directories(${tilemapeditor_SOURCE_DIR}/src/gui)
 include_directories(${tilemapeditor_SOURCE_DIR}/src/handlers)
 include_directories(${tilemapeditor_SOURCE_DIR}/src/util)
-message(${ImageMagick_INCLUDE_DIRS})
 include_directories(${ImageMagick_INCLUDE_DIRS})
 include_directories(${SFML_INCLUDE_DIR})
 include_directories(${GTK2_INCLUDE_DIRS})
