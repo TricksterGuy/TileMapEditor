@@ -110,7 +110,6 @@ class AnimatedTile
 		int32_t delay;
 		int32_t type;
 		int32_t times;
-		mutable int32_t cachedFrame;
 		std::vector<int32_t> frames;
 };
 

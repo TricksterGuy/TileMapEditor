@@ -25,9 +25,12 @@
 #include <vector>
 #include <wx/timer.h>
 #include <wx/wx.h>
+#include <wx/docview.h>
+
+#include "MapViewUpdate.hpp"
 
 /**
-  * This class is a clock that runs code to update windows contents based on a framerate.
+  * This class is a clock that runs code to update views contents based on a framerate.
   * When creating an instance of this class be sure to call run after creating one.
   */
 class Clock : public wxTimer
@@ -36,8 +39,8 @@ class Clock : public wxTimer
         Clock(unsigned int rate = 1);
         ~Clock();
 
-        void add(wxWindow* owner);
-        void remove(wxWindow* owner);
+        void add(wxView* owner);
+        void remove(wxView* owner);
         void pause();
         void run();
         bool isPaused();
@@ -49,7 +52,8 @@ class Clock : public wxTimer
     private:
         unsigned int framerate;
         bool paused;
-        std::vector<wxWindow*> owners;
+        std::vector<wxView*> owners;
+        MapViewUpdate update;
 };
 
 #endif

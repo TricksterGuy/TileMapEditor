@@ -24,11 +24,11 @@
 
 //extern const std::string& RESOURCE_POOL;
 
-ParallaxBackground::ParallaxBackground(const Background& back)
+ParallaxBackground::ParallaxBackground(const wxString& filename, const Background& back)
 {
     name = back.getName();
-    filename = back.getFilename();
-    mode = back.getMode();
+    this->filename = filename.ToStdString();
+    mode = (Background::Autoscroll | Background::Repeating);//back.getMode();
     back.getSpeed(speedx, speedy);
     //updateImage();
     needUpdateImage = true;
@@ -80,7 +80,6 @@ void ParallaxBackground::Draw(wxGCDC& dc)
     wxSize isize = image.GetSize();
     iw = isize.GetWidth();
     ih = isize.GetHeight();
-
     if (mode == (Background::Stationary | Background::Once))
     {
         dc.DrawBitmap(image, vx, vy);
@@ -92,7 +91,6 @@ void ParallaxBackground::Draw(wxGCDC& dc)
         syi = vy / ih;
         sxf = (vx + vw) / iw;
         syf = (vy + vh) / ih;
-        printf("%d %d %d %d %d %d => %d %d %d %d\n", vx, vy, vw, vh, iw, ih, sxi, syi, sxf, syf);
         for (int i = syi; i <= syf; i++)
         {
             for (int j = sxi; j <= sxf; j++)
@@ -143,10 +141,10 @@ void ParallaxBackground::Draw(wxGCDC& dc)
 
 void ParallaxBackground::updateImage()
 {
-    if (image.LoadFile(filename))
+    if (!image.LoadFile(filename))
     {
-        //fprintf(stdout, "ParallaxBackground: %s not found\n", filename.c_str());
-        //image.Create(640, 480);
+        fprintf(stderr, "ParallaxBackground: %s not found\n", filename.c_str());
+        image.Create(640, 480);
     }
     needUpdateImage = false;
 }

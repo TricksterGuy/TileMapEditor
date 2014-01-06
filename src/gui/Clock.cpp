@@ -26,8 +26,9 @@
   * Constructor
   * @param rate Framerate.
   */
-Clock::Clock(unsigned int rate) : framerate(rate), paused(true)
+Clock::Clock(unsigned int rate) : framerate(rate), paused(true), update()
 {
+    update.SetNeedRefresh(true);
 }
 
 /** ~Clock
@@ -44,7 +45,7 @@ Clock::~Clock()
   * Adds a window to the list of refreshed windows.
   * @param owner window to add
   */
-void Clock::add(wxWindow* owner)
+void Clock::add(wxView* owner)
 {
     owners.push_back(owner);
 }
@@ -101,7 +102,6 @@ void Clock::Notify()
 {
     for (unsigned int i = 0; i < owners.size(); i++)
     {
-        if (owners[i]->IsEnabled())
-            owners[i]->Refresh(false);
+        owners[i]->OnUpdate(NULL, &update);
     }
 }

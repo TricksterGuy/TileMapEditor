@@ -22,12 +22,12 @@
 #include "AnimatedTile.hpp"
 
 AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times) :
-name(_name), delay(_delay), type(_type), times(_times)
+name(_name), delay(_delay), type(_type), times(_times)//, cachedFrame(0)
 {
 }
 
 AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times, const std::vector<int32_t>& _frames) :
-name(_name), delay(_delay), type(_type), times(_times), frames(_frames)
+name(_name), delay(_delay), type(_type), times(_times)//, frames(_frames), cachedFrame(0)
 {
 }
 
@@ -56,8 +56,6 @@ void AnimatedTile::add(int32_t frame)
 
 int32_t AnimatedTile::getCurrentFrame(int clock) const
 {
-    if (clock % delay != 0) return cachedFrame;
-
     int timestep = clock / delay;
     unsigned int numFrames = frames.size();
     int frame;
@@ -91,7 +89,5 @@ int32_t AnimatedTile::getCurrentFrame(int clock) const
             frame = -1;
     }
 
-    cachedFrame = frames[frame];
-
-    return cachedFrame;
+    return frames[frame];
 }

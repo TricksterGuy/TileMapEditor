@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version Jan  4 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -10,8 +10,6 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
-class MapCanvas;
-
 #include <wx/string.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -21,42 +19,54 @@ class MapCanvas;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/scrolwin.h>
-#include <wx/sizer.h>
 #include <wx/statusbr.h>
-#include <wx/frame.h>
+#include <wx/docmdi.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define idMenuQuit 1000
-#define idMenuAbout 1001
+#define ID_IMPORT_TEXT 1000
+#define ID_IMPORT_XML 1001
+#define ID_IMPORT 1002
+#define ID_EXPORT_TEXT 1003
+#define ID_EXPORT_XML 1004
+#define ID_EXPORT_AS_IMAGE 1005
+#define ID_EXPORT_LAYERS_AS_IMAGES 1006
+#define ID_EXPORT 1007
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class TilemapEditorGUI
 ///////////////////////////////////////////////////////////////////////////////
-class TilemapEditorGUI : public wxFrame
+class TilemapEditorGUI : public wxDocMDIParentFrame 
 {
 	private:
-
+	
 	protected:
 		wxMenuBar* menubar;
 		wxMenu* fileMenu;
+		wxMenu* menuRecent;
+		wxMenu* editMenu;
 		wxMenu* helpMenu;
-		MapCanvas* mapCanvas;
 		wxStatusBar* statusBar;
-
+		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void onClose( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onAbout( wxCommandEvent& event ) { event.Skip(); }
-
-
+		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnImportText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnImportXml( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnImport( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExportText( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExportXml( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExportAsImage( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExportLayersAsImages( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
+		
+	
 	public:
-
-		TilemapEditorGUI( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("TileMapEditor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 481,466 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-
+		
+		TilemapEditorGUI( wxDocManager* manager, wxFrame* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("wxWidgets Application Template"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 481,466 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		
 		~TilemapEditorGUI();
-
+	
 };
 
 #endif //__TILEMAPEDITORGUI_H__

@@ -20,16 +20,38 @@
  ******************************************************************************************************/
 
 #include "TilemapEditorApp.hpp"
-#include "TilemapEditorFrame.hpp"
 #include <wx/image.h>
+
+#include "Handlers.hpp"
+#include "TilemapEditorFrame.hpp"
 
 IMPLEMENT_APP(TilemapEditorApp);
 
 bool TilemapEditorApp::OnInit()
 {
     wxInitAllImageHandlers();
-    TilemapEditorFrame* frame = new TilemapEditorFrame(0L);
+
+    MapHandlerManager().add(new BinaryMapHandler());
+    MapHandlerManager().add(new TextMapHandler());
+    MapHandlerManager().add(new ImageMapHandler());
+    MapHandlerManager().add(new GBAImageHandler());
+    MapHandlerManager().add(new GBAMapHandler());
+    MapHandlerManager().add(new XmlMapHandler());
+
+    // Fill in the application information fields before creating wxConfig.
+    SetVendorName("wxWidgets");
+    SetAppName("wx_docview_sample");
+    SetAppDisplayName("wxWidgets DocView Sample");
+
+    frame = new TilemapEditorFrame(NULL);
+    SetTopWindow(frame);
+    frame->Centre();
     frame->Show();
 
     return true;
+}
+
+wxFrame* TilemapEditorApp::CreateChildFrame(wxView* view)
+{
+    return frame->CreateChildFrame(view);
 }

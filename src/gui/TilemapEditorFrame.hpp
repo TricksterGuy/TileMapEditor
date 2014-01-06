@@ -22,6 +22,8 @@
 #ifndef TILEMAPEDITORFRAME_HPP
 #define TILEMAPEDITORFRAME_HPP
 
+#include <wx/docview.h>
+
 #include "TilemapEditorFrame.hpp"
 #include "TilemapEditorGUI.h"
 #include "Clock.hpp"
@@ -30,15 +32,25 @@
 /**
   *  Represents the main class of the application
   */
-class TilemapEditorFrame : public TilemapEditorGUI
+class TilemapEditorFrame : public wxDocManager, public TilemapEditorGUI
 {
     public:
         TilemapEditorFrame(wxFrame *frame);
         ~TilemapEditorFrame();
+        wxFrame* CreateChildFrame(wxView* doc);
     private:
-        virtual void onClose(wxCloseEvent& event);
-        virtual void onClose(wxCommandEvent& event);
-        virtual void onAbout(wxCommandEvent& event);
+        // File Menu
+		virtual void OnImportText(wxCommandEvent& event);
+		virtual void OnImportXml(wxCommandEvent& event);
+		virtual void OnImport(wxCommandEvent& event);
+		virtual void OnExportText(wxCommandEvent& event);
+		virtual void OnExportXml(wxCommandEvent& event);
+		virtual void OnExportAsImage(wxCommandEvent& event);
+		virtual void OnExportLayersAsImages(wxCommandEvent& event);
+		virtual void OnExport(wxCommandEvent& event);
+		virtual void OnClose(wxCloseEvent& event);
+		// Help menu
+        virtual void OnAbout(wxCommandEvent& event);
         Clock clock;
 };
 

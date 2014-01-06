@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="tilemapeditor" />
+		<Option makefile_is_custom="1" />
+		<Option execution_dir="build" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="build/tilemapeditor" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="build" />
+				<Option object_output="/drive/projects/TileMapEditor/.objs" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+				<MakeCommands>
+					<Build command="$make -f $makefile all" />
+					<CompileFile command="$make -f $makefile $file" />
+					<Clean command="$make -f $makefile clean" />
+					<DistClean command="$make -f $makefile distclean$target" />
+					<AskRebuildNeeded command="$make -q -f $makefile all" />
+					<SilentBuild command="$make -f $makefile all &gt; $(CMD_NULL)" />
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="CMakeLists.txt" />
+		<Unit filename="build/Makefile" />
+		<Unit filename="src/data/AnimatedTile.cpp" />
+		<Unit filename="src/data/AnimatedTile.hpp" />
+		<Unit filename="src/data/Background.cpp" />
+		<Unit filename="src/data/Background.hpp" />
+		<Unit filename="src/data/CollisionLayer.cpp" />
+		<Unit filename="src/data/CollisionLayer.hpp" />
+		<Unit filename="src/data/Layer.cpp" />
+		<Unit filename="src/data/Layer.hpp" />
+		<Unit filename="src/data/Map.cpp" />
+		<Unit filename="src/data/Map.hpp" />
+		<Unit filename="src/data/PixelBasedCollisionLayer.cpp" />
+		<Unit filename="src/data/PixelBasedCollisionLayer.hpp" />
+		<Unit filename="src/data/Rectangle.cpp" />
+		<Unit filename="src/data/Rectangle.hpp" />
+		<Unit filename="src/data/Region.cpp" />
+		<Unit filename="src/data/Region.hpp" />
+		<Unit filename="src/data/TileBasedCollisionLayer.cpp" />
+		<Unit filename="src/data/TileBasedCollisionLayer.hpp" />
+		<Unit filename="src/gen/MapNotebookGUI.cpp" />
+		<Unit filename="src/gen/MapNotebookGUI.h" />
+		<Unit filename="src/gen/TilemapEditorGUI.cpp" />
+		<Unit filename="src/gen/TilemapEditorGUI.h" />
+		<Unit filename="src/gui/Clock.cpp" />
+		<Unit filename="src/gui/Clock.hpp" />
+		<Unit filename="src/gui/MapCanvas.cpp" />
+		<Unit filename="src/gui/MapCanvas.hpp" />
+		<Unit filename="src/gui/MapDocument.cpp" />
+		<Unit filename="src/gui/MapDocument.hpp" />
+		<Unit filename="src/gui/MapView.cpp" />
+		<Unit filename="src/gui/MapView.hpp" />
+		<Unit filename="src/gui/ParallaxBackground.cpp" />
+		<Unit filename="src/gui/ParallaxBackground.hpp" />
+		<Unit filename="src/gui/TilemapEditorApp.cpp" />
+		<Unit filename="src/gui/TilemapEditorApp.hpp" />
+		<Unit filename="src/gui/TilemapEditorFrame.cpp" />
+		<Unit filename="src/gui/TilemapEditorFrame.hpp" />
+		<Unit filename="src/handlers/BaseMapHandler.cpp" />
+		<Unit filename="src/handlers/BaseMapHandler.hpp" />
+		<Unit filename="src/handlers/BinaryMapHandler.cpp" />
+		<Unit filename="src/handlers/BinaryMapHandler.hpp" />
+		<Unit filename="src/handlers/GBAImageHandler.cpp" />
+		<Unit filename="src/handlers/GBAImageHandler.hpp" />
+		<Unit filename="src/handlers/GBAMapHandler.cpp" />
+		<Unit filename="src/handlers/GBAMapHandler.hpp" />
+		<Unit filename="src/handlers/HandlerUtils.cpp" />
+		<Unit filename="src/handlers/HandlerUtils.hpp" />
+		<Unit filename="src/handlers/Handlers.hpp" />
+		<Unit filename="src/handlers/ImageMapHandler.cpp" />
+		<Unit filename="src/handlers/ImageMapHandler.hpp" />
+		<Unit filename="src/handlers/MapHandlerManager.cpp" />
+		<Unit filename="src/handlers/MapHandlerManager.hpp" />
+		<Unit filename="src/handlers/TextMapHandler.cpp" />
+		<Unit filename="src/handlers/TextMapHandler.hpp" />
+		<Unit filename="src/handlers/XmlMapHandler.cpp" />
+		<Unit filename="src/handlers/XmlMapHandler.hpp" />
+		<Unit filename="src/util/ResourceManager.cpp" />
+		<Unit filename="src/util/ResourceManager.hpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

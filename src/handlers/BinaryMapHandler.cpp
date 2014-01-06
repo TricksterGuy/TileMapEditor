@@ -59,7 +59,7 @@ int BinaryMapHandler::load(const std::string& mapfile, Map& map)
     std::ifstream file(mapfile.c_str(), std::ios::binary);
     bool error = false;
 
-    if (!file.good()) return -1;
+    if (!file.good()) throw "Could not open file";
 
     while (!file.eof() || !error)
     {
@@ -141,7 +141,7 @@ int BinaryMapHandler::save(const std::string& mapfile, Map& map)
 {
     std::ofstream file(mapfile.c_str(), std::ios::binary);
 
-    if (!file.good()) return -1;
+    if (!file.good()) throw "Could not open file";
 
     if (writeHEAD(file, map)) return -1;
     if (writeMAPP(file, map)) return -1;
@@ -195,7 +195,7 @@ int BinaryMapHandler::readChunkName(std::ifstream& file, std::string& name, uint
 
     name = chunk;
 
-    if (file.fail()) return -1;
+    if (file.fail()) throw "Failed to read chunk name";
 
     return 0;
 }
@@ -211,13 +211,13 @@ int BinaryMapHandler::readHEAD(std::ifstream& file, Map& map)
     file.read(filemagic, sizeof(char) * 14);
 
     // We don't support newer formatted files than MAJOR.MINOR
-    if (major > MAJOR) return -1;
-    if (minor > MINOR && major == MAJOR) return -1;
+    if (major > MAJOR) throw "Major version not accepted";
+    if (minor > MINOR && major == MAJOR) throw "Minor version not accepted";
 
     // Check if magic numbers are equal.
-    if (memcmp(magic, filemagic, sizeof(char) * 14) != 0) return -1;
+    if (memcmp(magic, filemagic, sizeof(char) * 14) != 0) throw "Not a .map file";
 
-    if (file.fail()) return -1;
+    if (file.fail()) throw "Failed to read HEAD chunk";
 
     return 0;
 }
@@ -260,15 +260,15 @@ int BinaryMapHandler::readMAPP(std::ifstream& file, Map& map, int32_t& num_layer
     filename = temp;
     delete[] temp;
 
-    if (file.fail()) return -1;
-    if (num_layers == -1 || num_backgrounds == -1) return -1;
+    if (file.fail()) throw "Failed to read the MAPP chunk";
+    if (num_layers <= -1 || num_backgrounds <= -1) throw "Invalid number of layers or backgrounds";
 
     map.setTileDimensions(tile_width, tile_height);
     map.resize(width, height);
     map.setName(name);
     map.setFilename(filename);
 
-    if (file.fail()) return -1;
+    if (file.fail()) throw "Failed to read the MAPP chunk";
 
     return 0;
 }
@@ -298,7 +298,7 @@ int BinaryMapHandler::readLYRS(std::ifstream& file, Map& map, int32_t& num_layer
     }
 
     delete[] data;
-    if (file.fail()) return -1;
+    if (file.fail()) throw "Failed to read the LYRS chunk";
 
     return 0;
 }
@@ -346,7 +346,7 @@ int BinaryMapHandler::readBGDS(std::ifstream& file, Map& map, int32_t& num_backg
         map.add(Background(name, filename, mode, x, y));
     }
 
-    if (file.fail()) return -1;
+    if (file.fail()) throw "Failed to read the BGDS chunk";
 
     return 0;
 }
@@ -362,7 +362,7 @@ int BinaryMapHandler::readMTCL(std::ifstream& file, Map& map)
     map.setCollisionLayer(collisionLayer);
 
     delete[] data;
-    if (file.fail()) return -1;
+    if (file.fail()) throw "Failed to read the MTCL chunk";
 
     return 0;
 }
@@ -378,7 +378,7 @@ int BinaryMapHandler::readMDCL(std::ifstream& file, Map& map)
     map.setCollisionLayer(collisionLayer);
 
     delete[] data;
-    if (file.fail()) return -1;
+    if (file.fail()) throw "Failed to read the MDCL chunk";
 
     return 0;
 }
@@ -408,23 +408,26 @@ int BinaryMapHandler::readMPCL(std::ifstream& file, Map& map)
     }
     map.setCollisionLayer(new PixelBasedCollisionLayer(rectangles));
 
-    if (file.fail()) return -1;
+    if (file.fail()) throw "Failed to read the MPCL chunk";
 
     return 0;
 }
 
 int BinaryMapHandler::readTTCI(std::ifstream& file, Map& map)
 {
+    throw "Failed to read the TTCI chunk";
     return -1;
 }
 
 int BinaryMapHandler::readTDCI(std::ifstream& file, Map& map)
 {
+    throw "Failed to read the TDCI chunk";
     return -1;
 }
 
 int BinaryMapHandler::readTPCI(std::ifstream& file, Map& map)
 {
+    throw "Failed to read the TPCI chunk";
     return -1;
 }
 
@@ -471,7 +474,7 @@ int BinaryMapHandler::readANIM(std::ifstream& file, Map& map)
     }
     map.setAnimatedTiles(tiles);
 
-    if (file.fail()) return -1;
+    if (file.fail()) throw "Failed to read the ANIM chunk";
 
     return 0;
 }

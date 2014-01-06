@@ -40,9 +40,13 @@ set(SRC_TILEMAPEDITOR
     src/data/TileBasedCollisionLayer.cpp
 
     src/gen/TilemapEditorGUI.cpp
+    src/gen/MapNotebookGUI.cpp
 
     src/gui/Clock.cpp
     src/gui/MapCanvas.cpp
+    src/gui/MapDocument.cpp
+    src/gui/MapView.cpp
+    src/gui/MapViewUpdate.cpp
     src/gui/ParallaxBackground.cpp
     src/gui/TilemapEditorApp.cpp
     src/gui/TilemapEditorFrame.cpp
@@ -56,6 +60,15 @@ set(SRC_TILEMAPEDITOR
     src/handlers/MapHandlerManager.cpp
     src/handlers/TextMapHandler.cpp
     src/handlers/XmlMapHandler.cpp
+)
+
+set(SRC_wxFlatNotebook
+    lib/wxFlatNotebook/fnb_customize_dlg.cpp
+    lib/wxFlatNotebook/fnb_resources.cpp
+    lib/wxFlatNotebook/popup_dlg.cpp
+    lib/wxFlatNotebook/renderer.cpp
+    lib/wxFlatNotebook/wxFlatNotebook.cpp
+    lib/wxFlatNotebook/xh_fnb.cpp
 )
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
@@ -80,6 +93,7 @@ include_directories(${tilemapeditor_SOURCE_DIR}/src/gen)
 include_directories(${tilemapeditor_SOURCE_DIR}/src/gui)
 include_directories(${tilemapeditor_SOURCE_DIR}/src/handlers)
 include_directories(${tilemapeditor_SOURCE_DIR}/src/util)
+include_directories(${tilemapeditor_SOURCE_DIR}/lib/wxFlatNotebook)
 include_directories(${ImageMagick_INCLUDE_DIRS})
 include_directories(${SFML_INCLUDE_DIR})
 include_directories(${GTK2_INCLUDE_DIRS})
@@ -90,8 +104,15 @@ add_executable(
     ${SRC_TILEMAPEDITOR}
 )
 
+add_library(
+	wxFlatNotebook
+	STATIC
+	${SRC_wxFlatNotebook}
+)
+
 target_link_libraries(
 	tilemapeditor
+	wxFlatNotebook
    	${wxWidgets_LIBRARIES}
     ${ImageMagick_LIBRARIES}
     ${SFML_LIBRARIES}

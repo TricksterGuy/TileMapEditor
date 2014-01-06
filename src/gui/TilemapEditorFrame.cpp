@@ -20,15 +20,24 @@
  ******************************************************************************************************/
 
 #include "TilemapEditorFrame.hpp"
+#include "MapDocument.hpp"
+#include "MapView.hpp"
+#include <wx/config.h>
+#include <wx/cmdproc.h>
+#include <wx/docview.h>
+#include <wx/docmdi.h>
 #include <wx/msgdlg.h>
 
-/** TilemapEditorFrame
-  *
-  * Constructor
-  */
-TilemapEditorFrame::TilemapEditorFrame(wxFrame *frame) : TilemapEditorGUI(frame)
+TilemapEditorFrame::TilemapEditorFrame(wxFrame* window) : wxDocManager(), TilemapEditorGUI(this, window)
 {
-    clock.add(mapCanvas);
+    new wxDocTemplate(this, "Map", "*.map", ".", "map", "Map Doc", "Map Canvas",
+                      CLASSINFO(MapDocument), CLASSINFO(MapView));
+
+    FileHistoryLoad(*wxConfig::Get());
+    FileHistoryUseMenu(menuRecent);
+    FileHistoryAddFilesToMenu();
+
+    //clock.add(mapCanvas);
     clock.setFramerate(60);
     clock.run();
 
@@ -36,38 +45,72 @@ TilemapEditorFrame::TilemapEditorFrame(wxFrame *frame) : TilemapEditorGUI(frame)
     statusBar->SetStatusText("", 1);
 }
 
-/** ~TilemapEditorFrame
-  *
-  * Destructor
-  */
+
 TilemapEditorFrame::~TilemapEditorFrame()
 {
+    FileHistorySave(*wxConfig::Get());
 }
 
-/** OnClose
-  *
-  * Called when the frame is about to close.
-  */
-void TilemapEditorFrame::onClose(wxCloseEvent& event)
+wxFrame* TilemapEditorFrame::CreateChildFrame(wxView* view)
+{
+    // create a child frame of appropriate class for the current mode
+    wxFrame *subframe;
+    wxDocument *doc = view->GetDocument();
+    subframe = new wxDocMDIChildFrame(doc, view, this, wxID_ANY, "Child Frame", wxDefaultPosition, wxSize(300, 300));
+
+    clock.add(view);
+    //doc->GetCommandProcessor()->SetEditMenu(editMenu);
+    //doc->GetCommandProcessor()->Initialize();
+
+    return subframe;
+}
+
+void TilemapEditorFrame::OnImportText(wxCommandEvent& event)
+{
+
+}
+
+void TilemapEditorFrame::OnImportXml(wxCommandEvent& event)
+{
+
+}
+
+void TilemapEditorFrame::OnImport(wxCommandEvent& event)
+{
+
+}
+
+void TilemapEditorFrame::OnExportText(wxCommandEvent& event)
+{
+
+}
+
+void TilemapEditorFrame::OnExportXml(wxCommandEvent& event)
+{
+
+}
+
+void TilemapEditorFrame::OnExportAsImage(wxCommandEvent& event)
+{
+
+}
+
+void TilemapEditorFrame::OnExportLayersAsImages(wxCommandEvent& event)
+{
+
+}
+
+void TilemapEditorFrame::OnExport(wxCommandEvent& event)
+{
+
+}
+
+void TilemapEditorFrame::OnClose(wxCloseEvent& event)
 {
     Destroy();
 }
 
-/** OnClose
-  *
-  * Called when the frame is about to close.
-  */
-void TilemapEditorFrame::onClose(wxCommandEvent& event)
-{
-    Destroy();
-}
-
-
-/** TilemapEditorFrame
-  *
-  * Called when the user selectes the about menu.
-  */
-void TilemapEditorFrame::onAbout(wxCommandEvent& event)
+void TilemapEditorFrame::OnAbout(wxCommandEvent& event)
 {
     wxString msg = "";
     wxMessageBox(msg, "Welcome to...");

@@ -35,7 +35,7 @@ class ParallaxBackground
 {
     public:
         /** Creates a ParallaxBackground from the background passed in */
-        ParallaxBackground(const Background& background);
+        ParallaxBackground(const wxString& filename, const Background& background);
         ~ParallaxBackground();
         /** Draws the background onto the screen */
         void Draw(wxGCDC& dc);

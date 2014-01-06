@@ -23,11 +23,17 @@
 #define TILEMAPEDITORAPP_HPP
 
 #include <wx/app.h>
+#include "TilemapEditorFrame.hpp"
 
 class TilemapEditorApp : public wxApp
 {
     public:
         virtual bool OnInit();
+        wxFrame* CreateChildFrame(wxView* view);
+    private:
+        TilemapEditorFrame* frame;
 };
+
+DECLARE_APP(TilemapEditorApp);
 
 #endif
