@@ -1,8 +1,8 @@
 1. Map System
     + Ability to load/save maps
     / Ability to export maps
-		/ 1) GBA 
-		+ 2) txt
+        / 1) GBA 
+        + 2) txt
         - 3) code 
         - 4) rmxp/vx/ace?
         + 5) xml
@@ -15,12 +15,13 @@
         - 4) X where X is another tile map editor program
     / Map types
         + 1) rectangular
-		- 2) isometric
-		- 3) hexagonal
+        - 2) isometric
+        - 3) hexagonal
     / Maps are editable by layer (and can have infinite layers)
     / Map backgrounds are editable (and may be animated)
     + Support for animated tiles
     - Support for "auto tiles"
+    - Support for multiple tilesets
     + Backgrounds can 
         + a) not scroll
         + b) scroll with camera
@@ -36,21 +37,6 @@
             - Collision based on each pixel for each tile in tileset
             - Direction based collision info per tile in tileset
 2. GUI System
-    + provides wysiwyg editor
-    - tools: 
-        - 1) pencil
-        - 2) eraser
-        - 3) line
-        - 4) rectangle
-        - 5) circle
-        - 6) fill
-        - 7) replace tile
-        - 8) select
-    - Viewing operators
-        - 1) zooming 
-        - 2) layer visibility
-        - 3) grid lines 
-        - 4) dim lower layers
     + File: 
         + 1) new
         + 2) save
@@ -65,6 +51,20 @@
         - 5) Select All
         - 6) Cut
         - 7) Clear
+    - Viewing operators
+        - 1) zooming (map and tileset)
+        - 2) layer visibility
+        - 3) grid lines 
+        - 4) dim lower layers
+    - Tools: 
+        - 1) pencil
+        - 2) eraser
+        - 3) line
+        - 4) rectangle
+        - 5) circle
+        - 6) fill
+        - 7) replace tile
+        - 8) select
     - Ability to edit 
         - 1) map properties
         - 2) layer
@@ -72,6 +72,10 @@
         - 4) collision layer info
         - 5) animated tiles
     + Can view multiple maps simultaneously without seperate instances of the program.
+    - Ability to playtest the map
+    - Ability to select tiles from tileset and place on map
+    - Ability to create brushes from tiles in the tileset.
+
 
 -------------------------------------------------------------------------------------------
 3. Plugin System
