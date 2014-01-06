@@ -1,5 +1,6 @@
 #include "MapDocument.hpp"
 #include "MapHandlerManager.hpp"
+#include <wx/msgdlg.h>
 
 IMPLEMENT_DYNAMIC_CLASS(MapDocument, wxDocument)
 
@@ -11,11 +12,28 @@ bool MapDocument::DeleteContents()
 
 bool MapDocument::DoSaveDocument(const wxString& file)
 {
-    return MapHandlerManager().save(file.ToStdString(), map) == 0;
+    try
+    {
+        MapHandlerManager().save(file.ToStdString(), map);
+    }
+    catch (const char* str)
+    {
+        wxMessageBox(str, _("Error"));
+        return false;
+    }
+    return true;
 }
 
 bool MapDocument::DoOpenDocument(const wxString& file)
 {
-    int ret = MapHandlerManager().load(file.ToStdString(), map);
-    return ret == 0;
+    try
+    {
+        MapHandlerManager().load(file.ToStdString(), map);
+    }
+    catch (const char* str)
+    {
+        wxMessageBox(str, _("Error"));
+        return false;
+    }
+    return true;
 }

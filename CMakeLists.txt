@@ -95,7 +95,6 @@ include_directories(${tilemapeditor_SOURCE_DIR}/src/handlers)
 include_directories(${tilemapeditor_SOURCE_DIR}/src/util)
 include_directories(${tilemapeditor_SOURCE_DIR}/lib/wxFlatNotebook)
 include_directories(${ImageMagick_INCLUDE_DIRS})
-include_directories(${SFML_INCLUDE_DIR})
 include_directories(${GTK2_INCLUDE_DIRS})
 include_directories(${Boost_INCLUDE_DIR})
 
@@ -115,7 +114,6 @@ target_link_libraries(
 	wxFlatNotebook
    	${wxWidgets_LIBRARIES}
     ${ImageMagick_LIBRARIES}
-    ${SFML_LIBRARIES}
     ${GTK2_LIBRARIES}
     ${Boost_LIBRARIES}
 )

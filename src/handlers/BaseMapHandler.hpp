@@ -50,22 +50,20 @@ class BaseMapHandler
 		virtual ~BaseMapHandler();
 
         /** Initializes the handler. Called by MapHandlerManager
-          * If -1 is returned the handler will not be able to be used.
-          * @return -1 on failure 0 on success.
+          * If nonzero is returned the handler will not be able to be used.
+          * @return 0 on success.
           */
         virtual int init();
         /** Loads a map given a filename
           * @param filename Path to the file to load
           * @param map Map object to load the map to.
-          * @return -1 on failure 0 on success.
           */
-        virtual int load(const std::string& filename, Map& map);
+        virtual void load(const std::string& filename, Map& map);
         /** Saves a map given a filename
           * @param filename Path to the file to save to.
           * @param map Map object to save.
-          * @return -1 on failure 0 on success.
           */
-        virtual int save(const std::string& filename, Map& map);
+        virtual void save(const std::string& filename, Map& map);
 
         const std::string& getName() const {return name;}
         const std::string& getExtension() const {return extension;}

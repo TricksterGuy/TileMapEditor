@@ -33,14 +33,14 @@ class TextMapHandler : public BaseMapHandler
 		TextMapHandler();
 		~TextMapHandler();
 		/** @see BaseMapHandler::load */
-        virtual int load(const std::string& filename, Map& map);
+        virtual void load(const std::string& filename, Map& map);
         /** @see BaseMapHandler::save */
-        virtual int save(const std::string& filename, Map& map);
+        virtual void save(const std::string& filename, Map& map);
 	private:
-        int readProperties(std::ifstream& file, Map& map);
-        int readLayers(std::ifstream& file, Map& map);
-        int readBackgrounds(std::ifstream& file, Map& map);
-        int readCollision(std::ifstream& file, Map& map);
+        void readProperties(std::ifstream& file, Map& map);
+        void readLayers(std::ifstream& file, Map& map);
+        void readBackgrounds(std::ifstream& file, Map& map);
+        void readCollision(std::ifstream& file, Map& map);
 };
 
 #endif

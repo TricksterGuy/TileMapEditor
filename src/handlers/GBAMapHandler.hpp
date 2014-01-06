@@ -33,10 +33,10 @@ class GBAMapHandler : public BaseMapHandler
 		~GBAMapHandler();
 
         /** See BaseMapHandler::save */
-        virtual int save(const std::string& filename, Map& map);
+        virtual void save(const std::string& filename, Map& map);
 
 	private:
-        int writeC(const std::string& filename, Map& map, const Magick::IndexPacket* pixels, std::vector<Magick::Image> tiles);
+        void writeC(const std::string& filename, Map& map, const Magick::IndexPacket* pixels, std::vector<Magick::Image> tiles);
 };
 
 #endif

@@ -24,7 +24,7 @@
 
 using namespace Magick;
 
-//extern const std::string& RESOURCE_POOL;
+/// TODO consider rewritting class using only wxWidgets.  Is Imagemagick really necessary to use here?
 
 ImageMapHandler::ImageMapHandler() : BaseMapHandler("Map Image Writer", "png", "Exports the map as an image", false)
 {
@@ -42,10 +42,10 @@ int ImageMapHandler::init()
     return 0;
 }
 
-int ImageMapHandler::save(const std::string& filename, Map& map)
+void ImageMapHandler::save(const std::string& filename, Map& map)
 {
     Image image;
-    if (HandlerUtils::mapToImage(map, image)) return -1;
+    if (HandlerUtils::mapToImage(map, image))
+        throw "Failed to convert map to an image";
     image.write(filename);
-    return 0;
 }

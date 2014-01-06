@@ -35,7 +35,7 @@ class ImageMapHandler : public BaseMapHandler
         /** See BaseMapHandler::init */
         virtual int init();
         /** See BaseMapHandler::save */
-        virtual int save(const std::string& filename, Map& map);
+        virtual void save(const std::string& filename, Map& map);
 };
 
 #endif

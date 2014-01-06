@@ -34,35 +34,35 @@ class BinaryMapHandler : public BaseMapHandler
 		~BinaryMapHandler();
 
         /** See BaseMapHandler::load */
-        virtual int load(const std::string& filename, Map& map);
+        virtual void load(const std::string& filename, Map& map);
         /** See BaseMapHandler::save */
-        virtual int save(const std::string& filename, Map& map);
+        virtual void save(const std::string& filename, Map& map);
 
 	private:
-        int readChunkName(std::ifstream& file, std::string& name, uint32_t& size);
-        int readHEAD(std::ifstream& file, Map& map);
-        int readMAPP(std::ifstream& file, Map& map, int32_t& num_layers, int32_t& num_backgrounds);
-        int readLYRS(std::ifstream& file, Map& map, int32_t& num_layers);
-        int readBGDS(std::ifstream& file, Map& map, int32_t& num_backgrounds);
-        int readMTCL(std::ifstream& file, Map& map);
-        int readMDCL(std::ifstream& file, Map& map);
-        int readMPCL(std::ifstream& file, Map& map);
-        int readTTCI(std::ifstream& file, Map& map);
-        int readTDCI(std::ifstream& file, Map& map);
-        int readTPCI(std::ifstream& file, Map& map);
-        int readANIM(std::ifstream& file, Map& map);
+        void readChunkName(std::ifstream& file, std::string& name, uint32_t& size);
+        void readHEAD(std::ifstream& file, Map& map);
+        void readMAPP(std::ifstream& file, Map& map, int32_t& num_layers, int32_t& num_backgrounds);
+        void readLYRS(std::ifstream& file, Map& map, int32_t& num_layers);
+        void readBGDS(std::ifstream& file, Map& map, int32_t& num_backgrounds);
+        void readMTCL(std::ifstream& file, Map& map);
+        void readMDCL(std::ifstream& file, Map& map);
+        void readMPCL(std::ifstream& file, Map& map);
+        void readTTCI(std::ifstream& file, Map& map);
+        void readTDCI(std::ifstream& file, Map& map);
+        void readTPCI(std::ifstream& file, Map& map);
+        void readANIM(std::ifstream& file, Map& map);
 
-        int writeHEAD(std::ofstream& file, Map& map);
-        int writeMAPP(std::ofstream& file, Map& map);
-        int writeLYRS(std::ofstream& file, Map& map);
-        int writeBGDS(std::ofstream& file, Map& map);
-        int writeMTCL(std::ofstream& file, Map& map);
-        int writeMDCL(std::ofstream& file, Map& map);
-        int writeMPCL(std::ofstream& file, Map& map);
-        int writeTTCI(std::ofstream& file, Map& map);
-        int writeTDCI(std::ofstream& file, Map& map);
-        int writeTPCI(std::ofstream& file, Map& map);
-        int writeANIM(std::ofstream& file, Map& map);
+        void writeHEAD(std::ofstream& file, Map& map);
+        void writeMAPP(std::ofstream& file, Map& map);
+        void writeLYRS(std::ofstream& file, Map& map);
+        void writeBGDS(std::ofstream& file, Map& map);
+        void writeMTCL(std::ofstream& file, Map& map);
+        void writeMDCL(std::ofstream& file, Map& map);
+        void writeMPCL(std::ofstream& file, Map& map);
+        void writeTTCI(std::ofstream& file, Map& map);
+        void writeTDCI(std::ofstream& file, Map& map);
+        void writeTPCI(std::ofstream& file, Map& map);
+        void writeANIM(std::ofstream& file, Map& map);
 };
 
 #endif

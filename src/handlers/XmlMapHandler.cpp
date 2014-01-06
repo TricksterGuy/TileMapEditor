@@ -44,46 +44,31 @@ XmlMapHandler::~XmlMapHandler()
 
 }
 
-int XmlMapHandler::load(const std::string& filename, Map& map)
+void XmlMapHandler::load(const std::string& filename, Map& map)
 {
     wxXmlDocument doc;
-    if (!doc.Load(filename.c_str())) return -1;
+    if (!doc.Load(filename.c_str()))
+        throw "Could not open XML file";
 
     wxXmlNode* child = doc.GetRoot()->GetChildren();
 
     // Ensure that the first Node in the XML file is the Properties Node
     if (child != NULL && child->GetName() != "Properties")
-    {
-        wxMessageBox("Properties must be the first node in the XML file", "Error");
-        return -1;
-    }
+        throw "Properties must be the first node in the XML file";
 
-    while (child)
+    readProperties(child, map);
+    while (child = child->GetNext())
     {
-        if (child->GetName() == "Properties")
-        {
-            if (readProperties(child, map)) return -1;
-        }
-        else if (child->GetName() == "Layer")
-        {
-            if (readLayer(child, map)) return -1;
-        }
+        if (child->GetName() == "Layer")
+            readLayer(child, map);
         else if (child->GetName() == "Background")
-        {
-            if (readBackground(child, map)) return -1;
-        }
+            readBackground(child, map);
         else if (child->GetName() == "Collision")
-        {
-            if (readCollision(child, map)) return -1;
-        }
-
-        child = child->GetNext();
+            readCollision(child, map);
     }
-
-    return 0;
 }
 
-int XmlMapHandler::save(const std::string& filename, Map& map)
+void XmlMapHandler::save(const std::string& filename, Map& map)
 {
     wxXmlNode* root = new wxXmlNode(wxXML_ELEMENT_NODE, "Map");
 
@@ -97,12 +82,12 @@ int XmlMapHandler::save(const std::string& filename, Map& map)
 
     wxXmlDocument doc;
     doc.SetRoot(root);
-    bool ret = doc.Save(filename, 4);
 
-    return ret ? 0 : -1;
+    if (!doc.Save(filename, 4))
+        throw "Failed to save XML file";
 }
 
-int XmlMapHandler::readProperties(wxXmlNode* root, Map& map)
+void XmlMapHandler::readProperties(wxXmlNode* root, Map& map)
 {
     wxXmlNode* child = root->GetChildren();
 
@@ -126,10 +111,7 @@ int XmlMapHandler::readProperties(wxXmlNode* root, Map& map)
             }
 
             if (width <= 0 || height <= 0)
-            {
-                wxMessageBox("Width and Height are incorrect", "Error");
-                return -1;
-            }
+                throw "Map Dimensions are incorrect or not set";
 
             width = max(min(width, 1024), 1);
             height = max(min(height, 1024), 1);
@@ -150,10 +132,7 @@ int XmlMapHandler::readProperties(wxXmlNode* root, Map& map)
             }
 
             if (width <= 0 || height <= 0)
-            {
-                wxMessageBox("Width and Height are incorrect", "Error");
-                return -1;
-            }
+                throw "Tile Dimensions are incorrect or not set";
 
             width = max(min(width, 128), 8);
             height = max(min(height, 128), 8);
@@ -162,11 +141,9 @@ int XmlMapHandler::readProperties(wxXmlNode* root, Map& map)
         }
         child = child->GetNext();
     }
-
-    return 0;
 }
 
-int XmlMapHandler::readLayer(wxXmlNode* root, Map& map)
+void XmlMapHandler::readLayer(wxXmlNode* root, Map& map)
 {
     wxXmlNode* child = root->GetChildren();
 
@@ -193,21 +170,16 @@ int XmlMapHandler::readLayer(wxXmlNode* root, Map& map)
             }
 
             if (i != layer.getWidth() * layer.getHeight())
-            {
-                wxMessageBox("Not enough / Too Many tile entries for layer", "Error");
-                return -1;
-            }
+                throw "Incorrect number of tile entries for layer";
         }
 
         child = child->GetNext();
     }
 
     map.add(layer);
-
-    return 0;
 }
 
-int XmlMapHandler::readBackground(wxXmlNode* root, Map& map)
+void XmlMapHandler::readBackground(wxXmlNode* root, Map& map)
 {
     wxXmlNode* child = root->GetChildren();
 
@@ -232,13 +204,10 @@ int XmlMapHandler::readBackground(wxXmlNode* root, Map& map)
     }
 
     background.setSpeed(speedx, speedy);
-
     map.add(background);
-
-    return 0;
 }
 
-int XmlMapHandler::readCollision(wxXmlNode* root, Map& map)
+void XmlMapHandler::readCollision(wxXmlNode* root, Map& map)
 {
     wxXmlNode* child = root->GetChildren();
 
@@ -267,10 +236,7 @@ int XmlMapHandler::readCollision(wxXmlNode* root, Map& map)
             }
 
             if (i != map.getWidth() * map.getHeight())
-            {
-                wxMessageBox("Not enough collision entries for collision layer", "Error");
-                return -1;
-            }
+                throw "Incorrect number of collision entries for collision layer";
         }
 
         child = child->GetNext();
@@ -278,11 +244,9 @@ int XmlMapHandler::readCollision(wxXmlNode* root, Map& map)
 
     TileBasedCollisionLayer* clayer = new TileBasedCollisionLayer(map.getWidth(), map.getHeight(), collision);
     map.setCollisionLayer(clayer);
-
-    return 0;
 }
 
-int XmlMapHandler::writeProperties(wxXmlNode* root, Map& map)
+void XmlMapHandler::writeProperties(wxXmlNode* root, Map& map)
 {
     wxXmlNode* properties = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Properties");
 
@@ -303,11 +267,9 @@ int XmlMapHandler::writeProperties(wxXmlNode* root, Map& map)
     wxXmlNode* mheight = new wxXmlNode(dimensions, wxXML_ELEMENT_NODE, "Height");
     new wxXmlNode(mwidth, wxXML_TEXT_NODE, "Width", wxString::Format("%i", map.getWidth()));
     new wxXmlNode(mheight, wxXML_TEXT_NODE, "Height", wxString::Format("%i", map.getHeight()));
-
-    return 0;
 }
 
-int XmlMapHandler::writeLayer(wxXmlNode* root, Map& map, unsigned int i)
+void XmlMapHandler::writeLayer(wxXmlNode* root, Map& map, unsigned int i)
 {
     Layer& layer = map.getLayer(i);
 
@@ -327,11 +289,9 @@ int XmlMapHandler::writeLayer(wxXmlNode* root, Map& map, unsigned int i)
 
     wxXmlNode* name = new wxXmlNode(layern, wxXML_ELEMENT_NODE, "Name");
     new wxXmlNode(name, wxXML_TEXT_NODE, "Name", layer.getName());
-
-    return 0;
 }
 
-int XmlMapHandler::writeBackground(wxXmlNode* root, Map& map, unsigned int i)
+void XmlMapHandler::writeBackground(wxXmlNode* root, Map& map, unsigned int i)
 {
     Background& background = map.getBackground(i);
     float x, y;
@@ -349,11 +309,9 @@ int XmlMapHandler::writeBackground(wxXmlNode* root, Map& map, unsigned int i)
     new wxXmlNode(speedx, wxXML_TEXT_NODE, "SpeedX", wxString::Format("%f", x));
     new wxXmlNode(mode, wxXML_TEXT_NODE, "Mode", wxString::Format("%i", background.getMode()));
     new wxXmlNode(name, wxXML_TEXT_NODE, "Name", background.getName());
-
-    return 0;
 }
 
-int XmlMapHandler::writeCollision(wxXmlNode* root, Map& map)
+void XmlMapHandler::writeCollision(wxXmlNode* root, Map& map)
 {
     TileBasedCollisionLayer* layer = dynamic_cast<TileBasedCollisionLayer*>(map.getCollisionLayer());
     wxXmlNode* layern = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Collision");
@@ -372,6 +330,4 @@ int XmlMapHandler::writeCollision(wxXmlNode* root, Map& map)
 
     wxXmlNode* mode = new wxXmlNode(layern, wxXML_ELEMENT_NODE, "Mode");
     new wxXmlNode(mode, wxXML_TEXT_NODE, "Mode", wxString::Format("%i", layer->getType()));
-
-    return 0;
 }

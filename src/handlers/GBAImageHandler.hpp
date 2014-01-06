@@ -33,11 +33,11 @@ class GBAImageHandler : public BaseMapHandler
 		~GBAImageHandler();
 
         /** See BaseMapHandler::save */
-        virtual int save(const std::string& filename, Map& map);
+        virtual void save(const std::string& filename, Map& map);
 
 	private:
-        int writeCMode3(const std::string& filename, Magick::Image& image);
-        int writeCMode4(const std::string& filename, Magick::Image& image);
+        void writeCMode3(const std::string& filename, Magick::Image& image);
+        void writeCMode4(const std::string& filename, Magick::Image& image);
 };
 
 #endif

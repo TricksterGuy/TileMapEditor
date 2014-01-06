@@ -38,44 +38,46 @@ using namespace std;
 	handlers.clear();
 }
 
-int MapHandlerManager::add(BaseMapHandler* handler)
+void MapHandlerManager::add(BaseMapHandler* handler)
 {
     handlers.push_back(handler);
-	return 0;
 }
 
-int MapHandlerManager::remove(BaseMapHandler* handler)
+void MapHandlerManager::remove(BaseMapHandler* handler)
 {
     handlers.remove(handler);
-    return 0;
 }
 
-int MapHandlerManager::load(const std::string& file, Map& map, BaseMapHandler* handler)
+void MapHandlerManager::load(const std::string& file, Map& map, BaseMapHandler* handler)
 {
     std::string::size_type idx;
     std::string filename = convertFilename(file);
     std::string extension = getExtension(filename, idx);
     transform(filename.begin() + idx, filename.end(), filename.begin() + idx, (int(*)(int)) std::tolower);
-    if (!handler) handler = findHandler(extension);
+    if (!handler)
+        handler = findHandler(extension);
 
-    if (!handler) return -1;
+    if (!handler)
+        throw "Handler not found for extension";
 
     map.destroy();
-
-    return handler->load(filename, map);
+    handler->load(filename, map);
 }
 
-int MapHandlerManager::save(const std::string& file, Map& map, BaseMapHandler* handler)
+void MapHandlerManager::save(const std::string& file, Map& map, BaseMapHandler* handler)
 {
     std::string::size_type idx;
     std::string filename = convertFilename(file);
     std::string extension = getExtension(filename, idx);
     transform(filename.begin() + idx, filename.end(), filename.begin() + idx, (int(*)(int)) std::tolower);
-    if (!handler) handler = findHandler(extension);
 
-    if (!handler) return -1;
+    if (!handler)
+        handler = findHandler(extension);
 
-    return handler->save(filename, map);
+    if (!handler)
+        throw "Handler not found for extension";
+
+    handler->save(filename, map);
 }
 
 BaseMapHandler* MapHandlerManager::findHandler(const std::string& extension)

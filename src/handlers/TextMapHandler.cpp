@@ -37,48 +37,35 @@ TextMapHandler::~TextMapHandler()
 
 }
 
-int TextMapHandler::load(const std::string& filename, Map& map)
+void TextMapHandler::load(const std::string& filename, Map& map)
 {
     std::ifstream file(filename.c_str());
-    if (!file.good()) return -1;
+    if (!file.good())
+        throw "Could not open file for reading";
 
     std::string line;
 
     std::getline(file, line);
 
     if (line == "Properties")
-    {
-        if (readProperties(file, map)) return -1;
-    }
+        readProperties(file, map);
     else
-    {
-        return -1;
-    }
+        throw "Properties must come first in txt file";
 
     while (std::getline(file, line))
     {
         if (line == "Layers")
-        {
-            if (readLayers(file, map)) return -1;
-        }
+            readLayers(file, map);
         else if (line == "Backgrounds")
-        {
-            if (readBackgrounds(file, map)) return -1;
-        }
+            readBackgrounds(file, map);
         else if (line == "Collision")
-        {
-            if (readCollision(file, map)) return -1;
-        }
+            readCollision(file, map);
         else if (!line.empty())
-        {
-            return -1;
-        }
+            throw "Unknown type found in file";
     }
-
-    return 0;
 }
 
-int TextMapHandler::readProperties(std::ifstream& file, Map& map)
+void TextMapHandler::readProperties(std::ifstream& file, Map& map)
 {
     std::string mapdim, tiledim, name, filename;
     int width, height, tile_width, tile_height;
@@ -101,11 +88,9 @@ int TextMapHandler::readProperties(std::ifstream& file, Map& map)
     map.setTileDimensions(tile_width, tile_height);
     map.setName(name);
     map.setFilename(filename);
-
-    return 0;
 }
 
-int TextMapHandler::readLayers(std::ifstream& file, Map& map)
+void TextMapHandler::readLayers(std::ifstream& file, Map& map)
 {
     while (1)
     {
@@ -139,21 +124,16 @@ int TextMapHandler::readLayers(std::ifstream& file, Map& map)
         }
 
         if (i != map.getWidth() * map.getHeight())
-        {
-            wxMessageBox("Not enough / Too Many tile entries for layer", "Error");
-            return -1;
-        }
+            throw "Incorrect number of tile entries for layer";
 
         Layer layer(name, map.getWidth(), map.getHeight(), data);
         map.add(layer);
 
         std::getline(file, line);
     }
-
-    return 0;
 }
 
-int TextMapHandler::readBackgrounds(std::ifstream& file, Map& map)
+void TextMapHandler::readBackgrounds(std::ifstream& file, Map& map)
 {
     while (1)
     {
@@ -180,11 +160,9 @@ int TextMapHandler::readBackgrounds(std::ifstream& file, Map& map)
         Background back(name, filename, mode, speedx, speedy);
         map.add(back);
     }
-
-    return 0;
 }
 
-int TextMapHandler::readCollision(std::ifstream& file, Map& map)
+void TextMapHandler::readCollision(std::ifstream& file, Map& map)
 {
     std::string type;
     std::string buffer;
@@ -219,23 +197,19 @@ int TextMapHandler::readCollision(std::ifstream& file, Map& map)
     }
 
     if (i != map.getWidth() * map.getHeight())
-    {
-        wxMessageBox("Not enough / Too Many tile entries for layer", "Error");
-        return -1;
-    }
+        throw "Incorrect number of tile entries for layer";
 
     CollisionLayer* layer = new TileBasedCollisionLayer(map.getWidth(), map.getHeight(), data);
 
     map.setCollisionLayer(layer);
-
-    return 0;
 }
 
-int TextMapHandler::save(const std::string& filename, Map& map)
+void TextMapHandler::save(const std::string& filename, Map& map)
 {
     // Checking to see if the file can be saved to.
     std::ofstream file(filename.c_str());
-    if (!file.good()) return -1;
+    if (!file.good())
+        throw "Could not open file for writing";
 
     // Takes the map dimensions, tile dimensions, name, filename, and layer count and writes it to the file.
     file << "Properties\n";
@@ -297,6 +271,4 @@ int TextMapHandler::save(const std::string& filename, Map& map)
     }
 
     file.close();
-
-    return 0;
 }

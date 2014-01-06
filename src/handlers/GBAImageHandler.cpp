@@ -26,7 +26,7 @@
 #include "GBAImageHandler.hpp"
 #include "HandlerUtils.hpp"
 
-//extern const std::string& RESOURCE_POOL;
+/// TODO Rewrite this class hint brandontools
 
 GBAImageHandler::GBAImageHandler() : BaseMapHandler("GBA Image Export", "c", "Exports the map's image in GBA format modes (3-5)", false)
 {
@@ -36,22 +36,24 @@ GBAImageHandler::~GBAImageHandler()
 {
 }
 
-int GBAImageHandler::save(const std::string& filename, Map& map)
+void GBAImageHandler::save(const std::string& filename, Map& map)
 {
     int mode;
     wxArrayString choices;
     choices.Add("Mode 3");
     choices.Add("Mode 4");
-    choices.Add("Mode 5");
     mode = wxGetSingleChoiceIndex("Which mode do you want the image to be usable for?", "GBA Image Export", choices, 0);
 
-    if (mode == -1) return -1;
+    if (mode == -1)
+        throw "No GBA Mode Selected";
+
     mode += 3;
 
 
     Magick::Image image;
 
-    if (HandlerUtils::mapToImage(map, image)) return -1;
+    if (HandlerUtils::mapToImage(map, image))
+        throw "Could not convert map to image";
 
     // GBA colors are 16bit ubbbbbgggggrrrrr
     // u = unused
@@ -67,12 +69,12 @@ int GBAImageHandler::save(const std::string& filename, Map& map)
     }
 
     if (mode != 4)
-        return writeCMode3(filename, image);
+        writeCMode3(filename, image);
     else
-        return writeCMode4(filename, image);
+        writeCMode4(filename, image);
 }
 
-int GBAImageHandler::writeCMode3(const std::string& filename, Magick::Image& image)
+void GBAImageHandler::writeCMode3(const std::string& filename, Magick::Image& image)
 {
     /// TODO update this code.
     std::ofstream file_c, file_h;
@@ -89,7 +91,7 @@ int GBAImageHandler::writeCMode3(const std::string& filename, Magick::Image& ima
     file_h.open(filename_h.c_str());
 
     if (!file_c.good() || !file_h.good())
-        return -1;
+        throw "Could not open files";
 
     int num_pixels = image.rows() * image.columns();
 
@@ -133,11 +135,9 @@ int GBAImageHandler::writeCMode3(const std::string& filename, Magick::Image& ima
     file_h.close();
 
     delete[] pixels;
-
-    return 0;
 }
 
-int GBAImageHandler::writeCMode4(const std::string& filename, Magick::Image& image)
+void GBAImageHandler::writeCMode4(const std::string& filename, Magick::Image& image)
 {
     /// TODO update this too.
     std::ofstream file_c, file_h;
@@ -155,7 +155,7 @@ int GBAImageHandler::writeCMode4(const std::string& filename, Magick::Image& ima
     file_h.open(filename_h.c_str());
 
     if (!file_c.good() || !file_h.good())
-        return -1;
+        throw "Could not open files for writing";
 
     int num_pixels = image.rows() * image.columns();
     int size = (num_pixels / 2) + ((num_pixels % 2) != 0);
@@ -225,5 +225,4 @@ int GBAImageHandler::writeCMode4(const std::string& filename, Magick::Image& ima
 
     file_c.close();
     file_h.close();
-    return 0;
 }
