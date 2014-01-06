@@ -65,6 +65,8 @@
 		<Unit filename="src/gui/MapDocument.hpp" />
 		<Unit filename="src/gui/MapView.cpp" />
 		<Unit filename="src/gui/MapView.hpp" />
+		<Unit filename="src/gui/MapViewUpdate.cpp" />
+		<Unit filename="src/gui/MapViewUpdate.hpp" />
 		<Unit filename="src/gui/ParallaxBackground.cpp" />
 		<Unit filename="src/gui/ParallaxBackground.hpp" />
 		<Unit filename="src/gui/TilemapEditorApp.cpp" />
