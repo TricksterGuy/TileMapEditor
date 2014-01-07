@@ -32,17 +32,17 @@ BaseMapHandler::~BaseMapHandler()
 {
 }
 
-int BaseMapHandler::init()
+int BaseMapHandler::Init()
 {
     return 0;
 }
 
-void BaseMapHandler::load(const std::string& filename, Map& map)
+void BaseMapHandler::Load(const std::string& filename, Map& map)
 {
     throw "Load is not defined for this handler";
 }
 
-void BaseMapHandler::save(const std::string& filename, Map& map)
+void BaseMapHandler::Save(const std::string& filename, Map& map)
 {
     throw "Save is not defined for this handler";
 }

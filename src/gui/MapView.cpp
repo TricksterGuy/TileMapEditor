@@ -51,7 +51,7 @@ void MapView::OnDraw(wxDC* dc)
 
     // Get Viewable Coordinates of our Canvas
     int vxi, vyi, vxf, vyf;
-    getViewableCoords(vxi, vyi, vxf, vyf);
+    GetViewableCoords(vxi, vyi, vxf, vyf);
 
     // Draw the lower (possibly dimmed) layers
     //drawLowerLayers(vxi, vyi, vxf, vyf);
@@ -63,10 +63,10 @@ void MapView::OnDraw(wxDC* dc)
 
     // Draw the rest of the layers
     //drawUpperLayers(vxi, vyi, vxf, vyf);
-    for (unsigned int k = 0; k < map.getNumLayers(); k++)
+    for (unsigned int k = 0; k < map.GetNumLayers(); k++)
     {
         /*if (!viewLayer[k]) continue;*/
-        drawLayer(gcdc, k, vxi, vyi, vxf, vyf);
+        DrawLayer(gcdc, k, vxi, vyi, vxf, vyf);
     }
 
     // Draw Collision Layer
@@ -106,27 +106,27 @@ void MapView::OnUpdate(wxView* sender, wxObject* hint)
     {
         // Update Backgrounds
         backgrounds.clear();
-        for (const Background& background : map.getBackgrounds())
+        for (const Background& background : map.GetBackgrounds())
         {
             wxFileName bg_file(GetDocument()->GetFilename());
-            bg_file.SetFullName(background.getFilename());
+            bg_file.SetFullName(background.GetFilename());
             backgrounds.push_back(ParallaxBackground(bg_file.GetFullPath(), background));
         }
     }
 
     if (!update || update->GetUpdateTileset() || update->GetUpdateMap())
     {
-        if (map.getFilename().empty()) return;
+        if (map.GetFilename().empty()) return;
 
         wxFileName image_file(GetDocument()->GetFilename());
-        image_file.SetFullName(map.getFilename());
+        image_file.SetFullName(map.GetFilename());
         if (!image.LoadFile(image_file.GetFullPath()))
         {
             wxPrintf("Could not load image %s\n", image_file.GetFullPath());
             return;
         }
 
-        updateTiles();
+        UpdateTiles();
     }
 
     if (!update || update->GetNeedRefresh() || update->GetUpdateMap())
@@ -141,51 +141,51 @@ MapDocument* MapView::GetDocument()
     return wxStaticCast(wxView::GetDocument(), MapDocument);
 }
 
-void MapView::getViewableCoords(int& vxi, int& vyi, int& vxf, int& vyf)
+void MapView::GetViewableCoords(int& vxi, int& vyi, int& vxf, int& vyf)
 {
     const Map& map = GetMap();
     // TODO Reimplement when scrolling after resize tiles bug fixed
     int w, h;
     mapCanvas->GetSize(&w, &h);
-    transformScreenToTile(0, 0, vxi, vyi);
-    transformScreenToTile(w + map.getTileWidth(), h + map.getTileHeight(), vxf, vyf);
+    TransformScreenToTile(0, 0, vxi, vyi);
+    TransformScreenToTile(w + map.GetTileWidth(), h + map.GetTileHeight(), vxf, vyf);
 }
 
-void MapView::transformScreenToTile(int x, int y, int& outx, int& outy, bool bounds, bool neg1)
+void MapView::TransformScreenToTile(int x, int y, int& outx, int& outy, bool bounds, bool neg1)
 {
     const Map& map = GetMap();
-    outx = static_cast<int>(x / map.getTileWidth());
-    outy = static_cast<int>(y / map.getTileHeight());
+    outx = static_cast<int>(x / map.GetTileWidth());
+    outy = static_cast<int>(y / map.GetTileHeight());
 
     if (bounds)
     {
         if (outx < 0) outx = 0;
         if (outy < 0) outy = 0;
 
-        if ((unsigned int) outx >= map.getWidth()) outx = neg1 ? -1 : map.getWidth() - 1;
-        if ((unsigned int) outy >= map.getHeight()) outy = neg1 ? -1 : map.getHeight() - 1;
+        if ((unsigned int) outx >= map.GetWidth()) outx = neg1 ? -1 : map.GetWidth() - 1;
+        if ((unsigned int) outy >= map.GetHeight()) outy = neg1 ? -1 : map.GetHeight() - 1;
     }
 }
 
-void MapView::drawLayer(wxGCDC& dc, int id, int sxi, int syi, int sxf, int syf)
+void MapView::DrawLayer(wxGCDC& dc, int id, int sxi, int syi, int sxf, int syf)
 {
     Map& map = GetMap();
-    Layer& layer = map.getLayer(id);
+    Layer& layer = map.GetLayer(id);
 
     for (int i = syi; i <= syf; i++)
     {
         for (int j = sxi; j <= sxf; j++)
         {
-            int index = i * layer.getWidth() + j;
-            float x = j * map.getTileWidth();
-            float y = i * map.getTileHeight();
+            int index = i * layer.GetWidth() + j;
+            float x = j * map.GetTileWidth();
+            float y = i * map.GetTileHeight();
             int tile = layer[index];
             if (tile < -1)
             {
                 tile &= ~(1 << 31);
-                assert(tile < (int)map.getNumAnimatedTiles());
-                AnimatedTile& anim = map.getAnimatedTile(tile);
-                tile = anim.getCurrentFrame(clock);
+                assert(tile < (int)map.GetNumAnimatedTiles());
+                AnimatedTile& anim = map.GetAnimatedTile(tile);
+                tile = anim.GetCurrentFrame(clock);
             }
             if (tile == -1) continue;
             assert((unsigned int) tile < tiles.size());
@@ -195,12 +195,12 @@ void MapView::drawLayer(wxGCDC& dc, int id, int sxi, int syi, int sxf, int syf)
     }
 }
 
-void MapView::updateTiles()
+void MapView::UpdateTiles()
 {
     Map& map = GetMap();
     wxSize size = image.GetSize();
-    int numTilesX = size.GetWidth() / map.getTileWidth();
-    int numTilesY = size.GetHeight() / map.getTileHeight();
+    int numTilesX = size.GetWidth() / map.GetTileWidth();
+    int numTilesY = size.GetHeight() / map.GetTileHeight();
     unsigned int totalTiles = numTilesX * numTilesY;
     if (totalTiles != tiles.size())
     {
@@ -210,9 +210,9 @@ void MapView::updateTiles()
 
     for (unsigned int i = 0; i < totalTiles; i++)
     {
-        int sx = i % numTilesX * map.getTileWidth();
-        int sy = i / numTilesX * map.getTileHeight();
+        int sx = i % numTilesX * map.GetTileWidth();
+        int sy = i / numTilesX * map.GetTileHeight();
 
-        tiles[i] = image.GetSubBitmap(wxRect(sx, sy, map.getTileWidth(), map.getTileHeight()));
+        tiles[i] = image.GetSubBitmap(wxRect(sx, sy, map.GetTileWidth(), map.GetTileHeight()));
     }
 }

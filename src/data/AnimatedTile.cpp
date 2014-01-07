@@ -49,12 +49,12 @@ AnimatedTile& AnimatedTile::operator=(const AnimatedTile& other)
     return *this;
 }
 
-void AnimatedTile::add(int32_t frame)
+void AnimatedTile::Add(int32_t frame)
 {
     frames.push_back(frame);
 }
 
-int32_t AnimatedTile::getCurrentFrame(int clock) const
+int32_t AnimatedTile::GetCurrentFrame(int clock) const
 {
     int timestep = clock / delay;
     unsigned int numFrames = frames.size();

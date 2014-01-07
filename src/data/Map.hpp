@@ -32,54 +32,54 @@ class Map
         Map& operator=(const Map& map);
 
         /** Clears the map. */
-		void clear();
+		void Clear();
 		/** Destroys the map releasing any resources it owns */
-		void destroy();
+		void Destroy();
         /** Shifts the entire map in any direction a certain number of tiles.
           * @param horizontal amount to move left or right (negative = left).
           * @param vertical amount to move up or down (negative = up).
           * @param wrap if true any rows/columns will wrap around.
           */
-		void shift(int horizontal, int vertical, bool wrap = false);
+		void Shift(int horizontal, int vertical, bool wrap = false);
         /** Resizes the map to fit the new dimensions.
           * @param newwidth the new width of the collision layer in tiles.
           * @param newheight the new height of the collision layer in tiles.
           * @param copy if true then don't destroy the layer in the process if false then clear out the layer.
           */
-		void resize(uint32_t width, uint32_t height, bool copy = true);
+		void Resize(uint32_t width, uint32_t height, bool copy = true);
 
-        void add(const Layer& layer);
-        void add(const Background& back);
-        void deleteLayer(const uint32_t index);
-        void deleteBackground(const uint32_t index);
+        void Add(const Layer& layer);
+        void Add(const Background& back);
+        void DeleteLayer(const uint32_t index);
+        void DeleteBackground(const uint32_t index);
 
-        uint32_t getWidth() const {return width;}
-        uint32_t getHeight() const {return height;}
-        uint32_t getTileWidth() const {return tile_width;}
-        uint32_t getTileHeight() const {return tile_height;}
-        const std::string& getFilename() const {return filename;}
-        const std::string& getName() const {return name;}
-        uint32_t getNumLayers() const {return layers.size();}
-        uint32_t getNumBackgrounds() const {return backgrounds.size();}
-        uint32_t getNumAnimatedTiles() const {return animatedTiles.size();}
+        uint32_t GetWidth() const {return width;}
+        uint32_t GetHeight() const {return height;}
+        uint32_t GetTileWidth() const {return tile_width;}
+        uint32_t GetTileHeight() const {return tile_height;}
+        const std::string& GetFilename() const {return filename;}
+        const std::string& GetName() const {return name;}
+        uint32_t GetNumLayers() const {return layers.size();}
+        uint32_t GetNumBackgrounds() const {return backgrounds.size();}
+        uint32_t GetNumAnimatedTiles() const {return animatedTiles.size();}
 
-        std::vector<Layer>& getLayers() {return layers;}
-        std::vector<Background>& getBackgrounds() {return backgrounds;}
-        std::vector<AnimatedTile>& getAnimatedTiles() {return animatedTiles;}
-        Layer& getLayer(const uint32_t index) {return layers[index];}
-        Background& getBackground(const uint32_t index) {return backgrounds[index];}
-        AnimatedTile& getAnimatedTile(const uint32_t index) {return animatedTiles[index];}
+        std::vector<Layer>& GetLayers() {return layers;}
+        std::vector<Background>& GetBackgrounds() {return backgrounds;}
+        std::vector<AnimatedTile>& GetAnimatedTiles() {return animatedTiles;}
+        Layer& GetLayer(const uint32_t index) {return layers[index];}
+        Background& GetBackground(const uint32_t index) {return backgrounds[index];}
+        AnimatedTile& GetAnimatedTile(const uint32_t index) {return animatedTiles[index];}
 
-        CollisionLayer* getCollisionLayer() const {return collisionLayer.get();}
-        bool hasCollisionLayer() const {return collisionLayer != NULL;}
+        CollisionLayer* GetCollisionLayer() const {return collisionLayer.get();}
+        bool HasCollisionLayer() const {return collisionLayer != NULL;}
 
-        void setFilename(const std::string& _filename) {filename = _filename;}
-        void setName(const std::string& _name) {name = _name;}
-        void setLayers(const std::vector<Layer>& newLayers) {layers = newLayers;}
-        void setBackgrounds(const std::vector<Background>& newBackgrounds) {backgrounds = newBackgrounds;}
-        void setAnimatedTiles(const std::vector<AnimatedTile>& tiles) {animatedTiles = tiles;}
-        void setTileDimensions(uint32_t width, uint32_t height);
-        void setCollisionLayer(CollisionLayer* layer);
+        void SetFilename(const std::string& _filename) {filename = _filename;}
+        void SetName(const std::string& _name) {name = _name;}
+        void SetLayers(const std::vector<Layer>& newLayers) {layers = newLayers;}
+        void SetBackgrounds(const std::vector<Background>& newBackgrounds) {backgrounds = newBackgrounds;}
+        void SetAnimatedTiles(const std::vector<AnimatedTile>& tiles) {animatedTiles = tiles;}
+        void SetTileDimensions(uint32_t width, uint32_t height);
+        void SetCollisionLayer(CollisionLayer* layer);
 
     private:
         std::string name;

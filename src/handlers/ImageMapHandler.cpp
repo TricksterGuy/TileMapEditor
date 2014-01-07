@@ -36,16 +36,16 @@ ImageMapHandler::~ImageMapHandler()
 {
 }
 
-int ImageMapHandler::init()
+int ImageMapHandler::Init()
 {
     InitializeMagick(NULL);
     return 0;
 }
 
-void ImageMapHandler::save(const std::string& filename, Map& map)
+void ImageMapHandler::Save(const std::string& filename, Map& map)
 {
     Image image;
-    if (HandlerUtils::mapToImage(map, image))
+    if (HandlerUtils::MapToImage(map, image))
         throw "Failed to convert map to an image";
     image.write(filename);
 }

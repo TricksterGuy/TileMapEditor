@@ -32,18 +32,18 @@ class XmlMapHandler : public BaseMapHandler
 		XmlMapHandler();
 		~XmlMapHandler();
 		/** @see BaseMapHandler::load */
-        virtual void load(const std::string& filename, Map& map);
+        virtual void Load(const std::string& filename, Map& map);
         /** @see BaseMapHandler::save */
-        virtual void save(const std::string& filename, Map& map);
+        virtual void Save(const std::string& filename, Map& map);
 	private:
-        void readProperties(wxXmlNode* root, Map& map);
-        void readLayer(wxXmlNode* root, Map& map);
-        void readBackground(wxXmlNode* root, Map& map);
-        void readCollision(wxXmlNode* root, Map& map);
-        void writeProperties(wxXmlNode* root, Map& map);
-        void writeLayer(wxXmlNode* root, Map& map, unsigned int i);
-        void writeBackground(wxXmlNode* root, Map& map, unsigned int i);
-        void writeCollision(wxXmlNode* root, Map& map);
+        void ReadProperties(wxXmlNode* root, Map& map);
+        void ReadLayer(wxXmlNode* root, Map& map);
+        void ReadBackground(wxXmlNode* root, Map& map);
+        void ReadCollision(wxXmlNode* root, Map& map);
+        void WriteProperties(wxXmlNode* root, Map& map);
+        void WriteLayer(wxXmlNode* root, Map& map, unsigned int i);
+        void WriteBackground(wxXmlNode* root, Map& map, unsigned int i);
+        void WriteCollision(wxXmlNode* root, Map& map);
 };
 
 #endif

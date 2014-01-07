@@ -78,7 +78,7 @@ bool TileBasedCollisionLayer::operator==(const TileBasedCollisionLayer& other)
     return true;
 }
 
-void TileBasedCollisionLayer::resize(uint32_t newwidth, uint32_t newheight, bool copy)
+void TileBasedCollisionLayer::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
 {
     if (newwidth == width && newheight == height) return;
 
@@ -111,12 +111,12 @@ void TileBasedCollisionLayer::resize(uint32_t newwidth, uint32_t newheight, bool
     height = newheight;
 }
 
-void TileBasedCollisionLayer::clear()
+void TileBasedCollisionLayer::Clear()
 {
     data.assign(width * height, -1);
 }
 
-void TileBasedCollisionLayer::shift(int horizontal, int vertical, bool wrap)
+void TileBasedCollisionLayer::Shift(int horizontal, int vertical, bool wrap)
 {
     /// TODO implement
 }

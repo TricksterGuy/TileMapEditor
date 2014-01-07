@@ -43,32 +43,32 @@ class Rectangle
           * @param width Width of the rectangle.
           * @param height Height of the rectangle.
           */
-        void set(int32_t x, int32_t y, uint32_t width, uint32_t height);
+        void Set(int32_t x, int32_t y, uint32_t width, uint32_t height);
         /** Moves this rectangle.
           * @param xoffset Horizontal offset.
           */
-        void move(int32_t xoffset, int32_t yoffset);
+        void Move(int32_t xoffset, int32_t yoffset);
         /** Returns true if the point given is contained in this rectangle.
           * @param x X Coordinate.
           * @param y Y Coordinate.
           * @return true if the point is contained in the rectangle false otherwise.
           */
-        bool contains(int32_t x, int32_t y) const;
+        bool Contains(int32_t x, int32_t y) const;
         /** Returns true if the rectangle given is fully contained in this rectangle.
           * @param rect Rectangle to test.
           * @return true if the rectangle is contained in the rectangle false otherwise.
           */
-        bool contains(const Rectangle& rect) const;
+        bool Contains(const Rectangle& rect) const;
         /** Returns true if the rectangle given intersects this rectangle.
           * @param rect Rectangle to test.
           * @param overlap variable to write the intersection to.
           * @return true if the rectangles intersect.
           */
-        bool intersects(const Rectangle& rect, Rectangle& overlap) const;
+        bool Intersects(const Rectangle& rect, Rectangle& overlap) const;
         /** Gets the area of this rectangle.
           * @return the area.
           */
-        int64_t area() const;
+        int64_t Area() const;
         int32_t x, y;
         uint32_t width, height;
 };

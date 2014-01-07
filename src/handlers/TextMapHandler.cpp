@@ -37,7 +37,7 @@ TextMapHandler::~TextMapHandler()
 
 }
 
-void TextMapHandler::load(const std::string& filename, Map& map)
+void TextMapHandler::Load(const std::string& filename, Map& map)
 {
     std::ifstream file(filename.c_str());
     if (!file.good())
@@ -48,24 +48,24 @@ void TextMapHandler::load(const std::string& filename, Map& map)
     std::getline(file, line);
 
     if (line == "Properties")
-        readProperties(file, map);
+        ReadProperties(file, map);
     else
         throw "Properties must come first in txt file";
 
     while (std::getline(file, line))
     {
         if (line == "Layers")
-            readLayers(file, map);
+            ReadLayers(file, map);
         else if (line == "Backgrounds")
-            readBackgrounds(file, map);
+            ReadBackgrounds(file, map);
         else if (line == "Collision")
-            readCollision(file, map);
+            ReadCollision(file, map);
         else if (!line.empty())
             throw "Unknown type found in file";
     }
 }
 
-void TextMapHandler::readProperties(std::ifstream& file, Map& map)
+void TextMapHandler::ReadProperties(std::ifstream& file, Map& map)
 {
     std::string mapdim, tiledim, name, filename;
     int width, height, tile_width, tile_height;
@@ -84,13 +84,13 @@ void TextMapHandler::readProperties(std::ifstream& file, Map& map)
     tile_width = std::min(1024, std::max(1, wxAtoi(scanner.GetNextToken())));
     tile_height = std::min(1024, std::max(1, wxAtoi(scanner.GetNextToken())));
 
-    map.resize(width, height);
-    map.setTileDimensions(tile_width, tile_height);
-    map.setName(name);
-    map.setFilename(filename);
+    map.Resize(width, height);
+    map.SetTileDimensions(tile_width, tile_height);
+    map.SetName(name);
+    map.SetFilename(filename);
 }
 
-void TextMapHandler::readLayers(std::ifstream& file, Map& map)
+void TextMapHandler::ReadLayers(std::ifstream& file, Map& map)
 {
     while (1)
     {
@@ -101,7 +101,7 @@ void TextMapHandler::readLayers(std::ifstream& file, Map& map)
         std::getline(file, name);
         if (name.empty()) break;
 
-        for (unsigned int i = 0; i < map.getHeight(); i++)
+        for (unsigned int i = 0; i < map.GetHeight(); i++)
         {
             std::string line;
             std::getline(file, line);
@@ -112,28 +112,28 @@ void TextMapHandler::readLayers(std::ifstream& file, Map& map)
         wxStringTokenizer scanner(buffer);
 
         std::vector<int32_t> data;
-        data.resize(map.getWidth() * map.getHeight());
+        data.resize(map.GetWidth() * map.GetHeight());
         unsigned int i = 0;
         while (scanner.HasMoreTokens())
         {
             wxString token = scanner.GetNextToken();
             int tileid = wxAtoi(token);
-            if (i > map.getWidth() * map.getHeight()) break;
+            if (i > map.GetWidth() * map.GetHeight()) break;
             data[i] = tileid;
             i++;
         }
 
-        if (i != map.getWidth() * map.getHeight())
+        if (i != map.GetWidth() * map.GetHeight())
             throw "Incorrect number of tile entries for layer";
 
-        Layer layer(name, map.getWidth(), map.getHeight(), data);
-        map.add(layer);
+        Layer layer(name, map.GetWidth(), map.GetHeight(), data);
+        map.Add(layer);
 
         std::getline(file, line);
     }
 }
 
-void TextMapHandler::readBackgrounds(std::ifstream& file, Map& map)
+void TextMapHandler::ReadBackgrounds(std::ifstream& file, Map& map)
 {
     while (1)
     {
@@ -158,11 +158,11 @@ void TextMapHandler::readBackgrounds(std::ifstream& file, Map& map)
         speedy = wxAtof(scanner.GetNextToken());
 
         Background back(name, filename, mode, speedx, speedy);
-        map.add(back);
+        map.Add(back);
     }
 }
 
-void TextMapHandler::readCollision(std::ifstream& file, Map& map)
+void TextMapHandler::ReadCollision(std::ifstream& file, Map& map)
 {
     std::string type;
     std::string buffer;
@@ -172,7 +172,7 @@ void TextMapHandler::readCollision(std::ifstream& file, Map& map)
 
     ctype = (Collision::Type) wxAtoi(type);
 
-    for (unsigned int i = 0; i < map.getHeight(); i++)
+    for (unsigned int i = 0; i < map.GetHeight(); i++)
     {
         std::string line;
         std::getline(file, line);
@@ -185,26 +185,26 @@ void TextMapHandler::readCollision(std::ifstream& file, Map& map)
     /// TODO this is correct for now
     // Later when PixelBased and others are implemented change this.
     std::vector<int32_t> data;
-    data.resize(map.getWidth() * map.getHeight());
+    data.resize(map.GetWidth() * map.GetHeight());
     unsigned int i = 0;
     while (scanner.HasMoreTokens())
     {
         wxString token = scanner.GetNextToken();
         int tileid = wxAtoi(token);
-        if (i > map.getWidth() * map.getHeight()) break;
+        if (i > map.GetWidth() * map.GetHeight()) break;
         data[i] = tileid;
         i++;
     }
 
-    if (i != map.getWidth() * map.getHeight())
+    if (i != map.GetWidth() * map.GetHeight())
         throw "Incorrect number of tile entries for layer";
 
-    CollisionLayer* layer = new TileBasedCollisionLayer(map.getWidth(), map.getHeight(), data);
+    CollisionLayer* layer = new TileBasedCollisionLayer(map.GetWidth(), map.GetHeight(), data);
 
-    map.setCollisionLayer(layer);
+    map.SetCollisionLayer(layer);
 }
 
-void TextMapHandler::save(const std::string& filename, Map& map)
+void TextMapHandler::Save(const std::string& filename, Map& map)
 {
     // Checking to see if the file can be saved to.
     std::ofstream file(filename.c_str());
@@ -213,23 +213,23 @@ void TextMapHandler::save(const std::string& filename, Map& map)
 
     // Takes the map dimensions, tile dimensions, name, filename, and layer count and writes it to the file.
     file << "Properties\n";
-    file << map.getWidth() << " " << map.getHeight() << "\n";
-    file << map.getTileWidth() << " " << map.getTileHeight() << "\n";
-    file << map.getName() << "\n";
-    file << map.getFilename() << "\n\n";
+    file << map.GetWidth() << " " << map.GetHeight() << "\n";
+    file << map.GetTileWidth() << " " << map.GetTileHeight() << "\n";
+    file << map.GetName() << "\n";
+    file << map.GetFilename() << "\n\n";
 
     // Sets all the layer data for each layer.
     file << "Layers\n";
-    for (unsigned int k = 0; k < map.getNumLayers(); k++)
+    for (unsigned int k = 0; k < map.GetNumLayers(); k++)
     {
-        Layer& layer = map.getLayer(k);
-        file << layer.getName() << "\n";
-        for (unsigned int i = 0; i < map.getHeight(); i++)
+        Layer& layer = map.GetLayer(k);
+        file << layer.GetName() << "\n";
+        for (unsigned int i = 0; i < map.GetHeight(); i++)
         {
             file << "\t";
-            for (unsigned int j = 0; j < map.getWidth(); j++)
+            for (unsigned int j = 0; j < map.GetWidth(); j++)
             {
-                int tile = layer[i * map.getWidth() + j];
+                int tile = layer[i * map.GetWidth() + j];
                 file << tile << " ";
             }
             file << "\n";
@@ -238,31 +238,31 @@ void TextMapHandler::save(const std::string& filename, Map& map)
     }
 
     // Sets all the background data for each background.
-    if (map.getNumBackgrounds() > 0) file << "Backgrounds\n";
-    for (unsigned int k = 0; k < map.getNumBackgrounds(); k++)
+    if (map.GetNumBackgrounds() > 0) file << "Backgrounds\n";
+    for (unsigned int k = 0; k < map.GetNumBackgrounds(); k++)
     {
-        Background& background = map.getBackground(k);
+        Background& background = map.GetBackground(k);
         float x, y;
-        background.getSpeed(x, y);
-        file << background.getName() << "\n";
-        file << background.getFilename() << "\n";
-        file << background.getMode() << "\n";
+        background.GetSpeed(x, y);
+        file << background.GetName() << "\n";
+        file << background.GetFilename() << "\n";
+        file << background.GetMode() << "\n";
         file << x << " " << y << "\n\n";
     }
 
     // If the map has a collision layer, it will be written to the file as well.
-    if (map.hasCollisionLayer())
+    if (map.HasCollisionLayer())
     {
         file << "Collision\n";
-        TileBasedCollisionLayer* collLayer = dynamic_cast<TileBasedCollisionLayer*>(map.getCollisionLayer());
-        std::vector<int32_t>& collMap = collLayer->getData();
-        file << collLayer->getType() << "\n";
-        for (unsigned int i = 0; i < map.getHeight(); i++)
+        TileBasedCollisionLayer* collLayer = dynamic_cast<TileBasedCollisionLayer*>(map.GetCollisionLayer());
+        std::vector<int32_t>& collMap = collLayer->GetData();
+        file << collLayer->GetType() << "\n";
+        for (unsigned int i = 0; i < map.GetHeight(); i++)
         {
             file << "\t";
-            for (unsigned int j = 0; j < map.getWidth(); j++)
+            for (unsigned int j = 0; j < map.GetWidth(); j++)
             {
-                int tile = collMap[i * map.getWidth() + j];
+                int tile = collMap[i * map.GetWidth() + j];
                 file << tile << " ";
             }
             file << "\n";

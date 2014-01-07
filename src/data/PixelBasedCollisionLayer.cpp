@@ -55,26 +55,26 @@ bool PixelBasedCollisionLayer::operator==(const PixelBasedCollisionLayer& other)
     return true;
 }
 
-void PixelBasedCollisionLayer::clear()
+void PixelBasedCollisionLayer::Clear()
 {
-    data.clear();
+    data.Clear();
 }
 
-void PixelBasedCollisionLayer::shift(int horizontal, int vertical, bool wrap)
+void PixelBasedCollisionLayer::Shift(int horizontal, int vertical, bool wrap)
 {
-    for (int i = 0; i < data.size(); i++)
+    for (int i = 0; i < data.Size(); i++)
     {
         /// TODO handle the case of wrapping.
-        data.move(horizontal, vertical);
+        data.Move(horizontal, vertical);
     }
 }
 
-void PixelBasedCollisionLayer::resize(uint32_t newwidth, uint32_t newheight, bool copy)
+void PixelBasedCollisionLayer::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
 {
     /// TODO implement
 }
 
-void PixelBasedCollisionLayer::add(const Rectangle& rectangle)
+void PixelBasedCollisionLayer::Add(const Rectangle& rectangle)
 {
-    data.add(rectangle);
+    data.Add(rectangle);
 }

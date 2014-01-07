@@ -36,7 +36,7 @@ GBAImageHandler::~GBAImageHandler()
 {
 }
 
-void GBAImageHandler::save(const std::string& filename, Map& map)
+void GBAImageHandler::Save(const std::string& filename, Map& map)
 {
     int mode;
     wxArrayString choices;
@@ -52,7 +52,7 @@ void GBAImageHandler::save(const std::string& filename, Map& map)
 
     Magick::Image image;
 
-    if (HandlerUtils::mapToImage(map, image))
+    if (HandlerUtils::MapToImage(map, image))
         throw "Could not convert map to image";
 
     // GBA colors are 16bit ubbbbbgggggrrrrr
@@ -69,12 +69,12 @@ void GBAImageHandler::save(const std::string& filename, Map& map)
     }
 
     if (mode != 4)
-        writeCMode3(filename, image);
+        WriteCMode3(filename, image);
     else
-        writeCMode4(filename, image);
+        WriteCMode4(filename, image);
 }
 
-void GBAImageHandler::writeCMode3(const std::string& filename, Magick::Image& image)
+void GBAImageHandler::WriteCMode3(const std::string& filename, Magick::Image& image)
 {
     /// TODO update this code.
     std::ofstream file_c, file_h;
@@ -137,7 +137,7 @@ void GBAImageHandler::writeCMode3(const std::string& filename, Magick::Image& im
     delete[] pixels;
 }
 
-void GBAImageHandler::writeCMode4(const std::string& filename, Magick::Image& image)
+void GBAImageHandler::WriteCMode4(const std::string& filename, Magick::Image& image)
 {
     /// TODO update this too.
     std::ofstream file_c, file_h;

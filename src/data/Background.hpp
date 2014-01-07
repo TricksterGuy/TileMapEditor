@@ -69,15 +69,15 @@ class Background
                    float x = 0.f, float y = 0.f);
         ~Background();
 
-        const std::string& getName() const {return name;}
-        const std::string& getFilename() const {return filename;}
-        int getMode() const {return mode;}
-        void setName(const std::string& _name) {name = _name;}
-        void setFilename(const std::string& _filename) {filename = _filename;}
-        void setMode(int _mode) {mode = _mode;}
+        const std::string& GetName() const {return name;}
+        const std::string& GetFilename() const {return filename;}
+        int GetMode() const {return mode;}
+        void SetName(const std::string& _name) {name = _name;}
+        void SetFilename(const std::string& _filename) {filename = _filename;}
+        void SetMode(int _mode) {mode = _mode;}
 
-        void getSpeed(float& x, float& y) const;
-        void setSpeed(float x, float y);
+        void GetSpeed(float& x, float& y) const;
+        void SetSpeed(float x, float y);
     private:
         std::string name;
         std::string filename;

@@ -36,25 +36,25 @@ Region::~Region()
 {
 }
 
-bool Region::contains(int32_t x, int32_t y) const
+bool Region::Contains(int32_t x, int32_t y) const
 {
     for (const Rectangle& rectangle : rectangles)
     {
-        if (rectangle.contains(x, y))
+        if (rectangle.Contains(x, y))
             return true;
     }
     return false;
 }
 
 
-bool Region::contains(const Rectangle& r) const
+bool Region::Contains(const Rectangle& r) const
 {
     printf("CONTAINS CALLED\n");
     std::set<Rectangle> intersectSet;
     for (const Rectangle& inr : rectangles)
     {
         Rectangle overlap;
-        if (r.intersects(inr, overlap))
+        if (r.Intersects(inr, overlap))
             intersectSet.insert(overlap);
     }
 
@@ -64,11 +64,11 @@ bool Region::contains(const Rectangle& r) const
     std::vector<Rectangle> intersect(intersectSet.begin(), intersectSet.end());
     int64_t total = 0;
     for (const Rectangle& inr : intersect)
-        total += inr.area();
+        total += inr.Area();
 
 
     // If the of the inner rectangles is less than the rectangles area then we know it doesn't cover the rectangle
-    if (total < r.area())
+    if (total < r.Area())
         return false;
 
     std::sort(intersect.begin(), intersect.end());
@@ -128,77 +128,77 @@ bool Region::contains(const Rectangle& r) const
         lastevent = event;
     }
 
-    return area == r.area();
+    return area == r.Area();
 }
 
-bool Region::contains(const Region& r) const
+bool Region::Contains(const Region& r) const
 {
     /// TODO Implement
     return false;
 }
 
-Rectangle Region::bounds() const
+Rectangle Region::Bounds() const
 {
     /// TODO Implement
     return Rectangle(0, 0, 0, 0);
 }
 
-void Region::intersect(const Rectangle& r)
+void Region::Intersect(const Rectangle& r)
 {
     std::set<Rectangle> intersect;
     for (const Rectangle& inr : rectangles)
     {
         Rectangle overlap;
-        if (r.intersects(inr, overlap))
+        if (r.Intersects(inr, overlap))
             intersect.insert(overlap);
     }
     rectangles.assign(intersect.begin(), intersect.end());
 }
 
-void Region::intersect(const Region& r)
+void Region::Intersect(const Region& r)
 {
     /// TODO Implement
 }
 
-void Region::subtract(const Rectangle& r)
+void Region::Subtract(const Rectangle& r)
 {
     /// TODO Implement
 }
 
-void Region::subtract(const Region& r)
+void Region::Subtract(const Region& r)
 {
     /// TODO Implement
 }
 
-void Region::move(int32_t x, int32_t y)
+void Region::Move(int32_t x, int32_t y)
 {
     for (Rectangle& r : rectangles)
-        r.move(x, y);
+        r.Move(x, y);
 }
 
-void Region::add(const Rectangle& r)
+void Region::Add(const Rectangle& r)
 {
-    if (!contains(r))
-        doAdd(r);
+    if (!Contains(r))
+        DoAdd(r);
 }
 
-void Region::add(const Region& r)
+void Region::Add(const Region& r)
 {
-    for (const Rectangle& inr : r.getData())
-        add(inr);
+    for (const Rectangle& inr : r.GetData())
+        Add(inr);
 }
 
-void Region::exclusiveOr(const Rectangle& r)
-{
-    /// TODO Implement
-}
-
-void Region::exclusiveOr(const Region& r)
+void Region::ExclusiveOr(const Rectangle& r)
 {
     /// TODO Implement
 }
 
-int64_t Region::area() const
+void Region::ExclusiveOr(const Region& r)
+{
+    /// TODO Implement
+}
+
+int64_t Region::Area() const
 {
     sort(rectangles.begin(), rectangles.end());
     std::set<int32_t> events;
@@ -260,20 +260,20 @@ int64_t Region::area() const
     return area;
 }
 
-int Region::size() const
+int Region::Size() const
 {
     return rectangles.size();
 }
 
-void Region::clear()
+void Region::Clear()
 {
     rectangles.clear();
 }
 
-void Region::doAdd(const Rectangle& r)
+void Region::DoAdd(const Rectangle& r)
 {
     std::vector<Rectangle>::iterator it = remove_if(rectangles.begin(), rectangles.end(),
-                                                    [&r](Rectangle& inr) {return r.contains(inr);});
+                                                    [&r](Rectangle& inr) {return r.Contains(inr);});
     rectangles.erase(it, rectangles.end());
     rectangles.push_back(r);
 }

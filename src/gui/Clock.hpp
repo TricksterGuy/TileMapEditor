@@ -39,14 +39,14 @@ class Clock : public wxTimer
         Clock(unsigned int rate = 1);
         ~Clock();
 
-        void add(wxView* owner);
-        void remove(wxView* owner);
-        void pause();
-        void run();
-        bool isPaused();
+        void Add(wxView* owner);
+        void Remove(wxView* owner);
+        void Pause();
+        void Run();
+        bool IsPaused();
 
-        unsigned int getFramerate() const;
-        void setFramerate(unsigned int rate);
+        unsigned int GetFramerate() const;
+        void SetFramerate(unsigned int rate);
 
         virtual void Notify();
     private:

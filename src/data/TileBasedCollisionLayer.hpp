@@ -58,21 +58,21 @@ class TileBasedCollisionLayer : public CollisionLayer
 		int32_t& operator[](const uint32_t index) {return data[index];}
 
         /** @see CollisionLayer::clear */
-		virtual void clear();
+		virtual void Clear();
 		/** @see CollisionLayer::shift */
-		virtual void shift(int horizontal, int vertical, bool wrap = false);
+		virtual void Shift(int horizontal, int vertical, bool wrap = false);
 		/** @see CollisionLayer::resize */
-		virtual void resize(uint32_t width, uint32_t height, bool copy = true);
+		virtual void Resize(uint32_t width, uint32_t height, bool copy = true);
 
-		uint32_t getWidth() const {return width;}
-		uint32_t getHeight() const {return height;}
-		const std::vector<int32_t>& getData() const {return data;}
-		std::vector<int32_t>& getData() {return data;}
-		int32_t at(uint32_t index) const {return data[index];}
-		int32_t at(uint32_t x, uint32_t y) const {return at(y * width + x);}
+		uint32_t GetWidth() const {return width;}
+		uint32_t GetHeight() const {return height;}
+		const std::vector<int32_t>& GetData() const {return data;}
+		std::vector<int32_t>& GetData() {return data;}
+		int32_t At(uint32_t index) const {return data[index];}
+		int32_t At(uint32_t x, uint32_t y) const {return At(y * width + x);}
 
-		void set(uint32_t x, uint32_t y, int32_t value) {set(y * width + x, value);}
-		void set(uint32_t index, int32_t value) {data[index] = value;}
+		void Set(uint32_t x, uint32_t y, int32_t value) {Set(y * width + x, value);}
+		void Set(uint32_t index, int32_t value) {data[index] = value;}
 
 	protected:
         uint32_t width, height;

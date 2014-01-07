@@ -37,80 +37,80 @@ class Region
         Region();
         ~Region();
 
-        const std::vector<Rectangle>& getData() const {return rectangles;}
+        const std::vector<Rectangle>& GetData() const {return rectangles;}
 
         /** Test if the point (x,y) is contained in the region.
           * @param x X coordinate.
           * @param y Y coordinate.
           * @return true if the point is contained false otherwise.
           */
-        bool contains(int32_t x, int32_t y) const;
+        bool Contains(int32_t x, int32_t y) const;
         /** Test if the rectangle is fully contained in the region.
           * @param r Rectangle to test.
           * @return true if the rectangle is contained in this region false otherwise.
           */
-        bool contains(const Rectangle& r) const;
+        bool Contains(const Rectangle& r) const;
         /** Test if the region is fully contained within this one.
           * @param r Region to test.
           * @return true if the region is contained in this one false otherwise.
           */
-        bool contains(const Region& r) const;
+        bool Contains(const Region& r) const;
         /** Gets the bounds of this region.
           * @return The smallest rectangle that fully contains this region.
           */
-        Rectangle bounds() const;
+        Rectangle Bounds() const;
         /** Intersects the rectangle given with this region.
           * @param r Rectangle to intersect this region with.
           */
-        void intersect(const Rectangle& r);
+        void Intersect(const Rectangle& r);
         /** Intersects the region given with this region.
           * @param r Region to intersect this region with.
           */
-        void intersect(const Region& r);
+        void Intersect(const Region& r);
         /** Subtracts the rectangle given with this region.
           * @param r Rectangle to intersect this region with.
           */
-        void subtract(const Rectangle& r);
+        void Subtract(const Rectangle& r);
         /** Subtracts the region given with this region.
           * @param r Region to intersect this region with.
           */
-        void subtract(const Region& r);
+        void Subtract(const Region& r);
         /** Moves this region.
           * @param x Horizontal Movement.
           * @param y Vertical Movement.
           */
-        void move(int32_t x, int32_t y);
+        void Move(int32_t x, int32_t y);
         /** Adds a rectangle to this region.
           * @param r Rectangle to add.
           */
-        void add(const Rectangle& r);
+        void Add(const Rectangle& r);
         /** Adds a region to this region.
           * @param r Region to add.
           */
-        void add(const Region& r);
+        void Add(const Region& r);
         /** Xors this region with the rectangle given.
           * @param r Rectangle to xor with.
           */
-        void exclusiveOr(const Rectangle& r);
+        void ExclusiveOr(const Rectangle& r);
         /** Xors this region with the region given.
           * @param r Region to xor with.
           */
-        void exclusiveOr(const Region& r);
+        void ExclusiveOr(const Region& r);
         /** Calculates the area of this region.
           * @return the area of the region.
           */
-        int64_t area() const;
+        int64_t Area() const;
         /** Gets the size of the region (number of rectangles)
           * @return the number of rectangles that make up this region.
           */
-        int size() const;
+        int Size() const;
         /** Clears the region.*/
-        void clear();
+        void Clear();
 
     private:
         mutable std::vector<Rectangle> rectangles;
         /** Adds a rectangle and minimizes rectangles */
-        void doAdd(const Rectangle& r);
+        void DoAdd(const Rectangle& r);
 };
 
 #endif

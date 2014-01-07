@@ -26,10 +26,10 @@
 
 ParallaxBackground::ParallaxBackground(const wxString& filename, const Background& back)
 {
-    name = back.getName();
+    name = back.GetName();
     this->filename = filename.ToStdString();
-    mode = (Background::Autoscroll | Background::Repeating);//back.getMode();
-    back.getSpeed(speedx, speedy);
+    mode = (Background::Autoscroll | Background::Repeating);//back.GetMode();
+    back.GetSpeed(speedx, speedy);
     //updateImage();
     needUpdateImage = true;
 }
@@ -41,7 +41,7 @@ ParallaxBackground::~ParallaxBackground()
 void ParallaxBackground::Update(wxGCDC& dc)
 {
     if (needUpdateImage)
-        updateImage();
+        UpdateImage();
 
     if (mode & Background::Autoscroll)
     {
@@ -139,7 +139,7 @@ void ParallaxBackground::Draw(wxGCDC& dc)
     }
 }
 
-void ParallaxBackground::updateImage()
+void ParallaxBackground::UpdateImage()
 {
     if (!image.LoadFile(filename))
     {

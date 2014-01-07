@@ -85,25 +85,25 @@ class AnimatedTile
         /** Adds a new frame to this animated tile.
           * @param frame tile_id to add to the sequence in the animation.
           */
-        void add(int32_t frame);
+        void Add(int32_t frame);
 		/** Gets the current frame (tile_id) in the animation.
 		  * @param global_clock the current timestep.
 		  */
-		int32_t getCurrentFrame(int global_clock) const;
+		int32_t GetCurrentFrame(int global_clock) const;
 
-		const std::string& getName() const {return name;}
-		int32_t getDelay() const {return delay;}
-		int32_t getType() const {return type;}
-		int32_t getTimes() const {return times;}
-		const std::vector<int32_t>& getFrames() const {return frames;}
-		uint32_t getNumFrames() const {return frames.size();}
-		int32_t getFrame(int i) const {return frames[i];}
+		const std::string& GetName() const {return name;}
+		int32_t GetDelay() const {return delay;}
+		int32_t GetType() const {return type;}
+		int32_t GetTimes() const {return times;}
+		const std::vector<int32_t>& GetFrames() const {return frames;}
+		uint32_t GetNumFrames() const {return frames.size();}
+		int32_t GetFrame(int i) const {return frames[i];}
 
-		void setName(const std::string& _name) {name = _name;}
-		void setDelay(int32_t _delay) {delay = _delay;}
-		void setType(int32_t _type) {type = _type;}
-		void setTimes(int32_t _times) {times = _times;}
-		void setFrames(const std::vector<int32_t>& _frames) {frames = _frames;}
+		void SetName(const std::string& _name) {name = _name;}
+		void SetDelay(int32_t _delay) {delay = _delay;}
+		void SetType(int32_t _type) {type = _type;}
+		void SetTimes(int32_t _times) {times = _times;}
+		void SetFrames(const std::vector<int32_t>& _frames) {frames = _frames;}
 
 	private:
 		std::string name;

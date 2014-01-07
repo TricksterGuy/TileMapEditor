@@ -6,7 +6,7 @@ IMPLEMENT_DYNAMIC_CLASS(MapDocument, wxDocument)
 
 bool MapDocument::DeleteContents()
 {
-    map.clear();
+    map.Clear();
     return true;
 }
 
@@ -14,7 +14,7 @@ bool MapDocument::DoSaveDocument(const wxString& file)
 {
     try
     {
-        MapHandlerManager().save(file.ToStdString(), map);
+        MapHandlerManager().Save(file.ToStdString(), map);
     }
     catch (const char* str)
     {
@@ -28,7 +28,7 @@ bool MapDocument::DoOpenDocument(const wxString& file)
 {
     try
     {
-        MapHandlerManager().load(file.ToStdString(), map);
+        MapHandlerManager().Load(file.ToStdString(), map);
     }
     catch (const char* str)
     {

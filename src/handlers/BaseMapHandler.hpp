@@ -53,29 +53,29 @@ class BaseMapHandler
           * If nonzero is returned the handler will not be able to be used.
           * @return 0 on success.
           */
-        virtual int init();
+        virtual int Init();
         /** Loads a map given a filename
           * @param filename Path to the file to load
           * @param map Map object to load the map to.
           */
-        virtual void load(const std::string& filename, Map& map);
+        virtual void Load(const std::string& filename, Map& map);
         /** Saves a map given a filename
           * @param filename Path to the file to save to.
           * @param map Map object to save.
           */
-        virtual void save(const std::string& filename, Map& map);
+        virtual void Save(const std::string& filename, Map& map);
 
-        const std::string& getName() const {return name;}
-        const std::string& getExtension() const {return extension;}
-        const std::string& getDescription() const {return description;}
-        bool canRead() const {return readable;}
-        bool canWrite() const {return writeable;}
-        const std::set<std::string>& getAltExtensions() const {return alternatives;}
+        const std::string& GetName() const {return name;}
+        const std::string& GetExtension() const {return extension;}
+        const std::string& GetDescription() const {return description;}
+        bool CanRead() const {return readable;}
+        bool CanWrite() const {return writeable;}
+        const std::set<std::string>& GetAltExtensions() const {return alternatives;}
 
-        void setName(const std::string& _name) {name = _name;}
-        void setExtension(const std::string& _extension) {extension = _extension;}
-        void setDescription(const std::string& _description) {description = _description;}
-        void setAltExtensions(const std::set<std::string>& alts) {alternatives = alts;}
+        void SetName(const std::string& _name) {name = _name;}
+        void SetExtension(const std::string& _extension) {extension = _extension;}
+        void SetDescription(const std::string& _description) {description = _description;}
+        void SetAltExtensions(const std::set<std::string>& alts) {alternatives = alts;}
 
 	protected:
         std::string name;

@@ -65,21 +65,21 @@ class CollisionLayer
 		virtual ~CollisionLayer();
 
         /** Clears the collision layer. */
-		virtual void clear() = 0;
+		virtual void Clear() = 0;
         /** Shifts the entire collision layer in any direction a certain number of tiles.
           * @param horizontal amount to move left or right (negative = left).
           * @param vertical amount to move up or down (negative = up).
           * @param wrap if true any rows/columns will wrap around.
           */
-		virtual void shift(int horizontal, int vertical, bool wrap = false) = 0;
+		virtual void Shift(int horizontal, int vertical, bool wrap = false) = 0;
         /** Resizes the collision layer to fit the new dimensions.
           * @param newwidth the new width of the collision layer in tiles.
           * @param newheight the new height of the collision layer in tiles.
           * @param copy if true then don't destroy the layer in the process if false then clear out the layer.
           */
-		virtual void resize(uint32_t width, uint32_t height, bool copy = true) = 0;
+		virtual void Resize(uint32_t width, uint32_t height, bool copy = true) = 0;
 
-		Collision::Type getType() const {return type;}
+		Collision::Type GetType() const {return type;}
 
 	protected:
 		Collision::Type type;

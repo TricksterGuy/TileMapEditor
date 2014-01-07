@@ -54,7 +54,7 @@ class ParallaxBackground
         float speedx, speedy;
         float x, y;
         bool needUpdateImage;
-        void updateImage();
+        void UpdateImage();
         wxBitmap image;
 };
 

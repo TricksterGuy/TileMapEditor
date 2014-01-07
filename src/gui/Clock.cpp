@@ -45,7 +45,7 @@ Clock::~Clock()
   * Adds a window to the list of refreshed windows.
   * @param owner window to add
   */
-void Clock::add(wxView* owner)
+void Clock::Add(wxView* owner)
 {
     owners.push_back(owner);
 }
@@ -54,7 +54,7 @@ void Clock::add(wxView* owner)
   *
   * Pauses the clock.
   */
-void Clock::pause()
+void Clock::Pause()
 {
     paused = true;
     Stop();
@@ -65,7 +65,7 @@ void Clock::pause()
   * Tests if the clock is paused.
   * @return true if the window is paused false otherwise
   */
-bool Clock::isPaused()
+bool Clock::IsPaused()
 {
     return paused;
 }
@@ -74,7 +74,7 @@ bool Clock::isPaused()
   *
   * Runs the clock.
   */
-void Clock::run()
+void Clock::Run()
 {
     paused = false;
     Start(1000 / framerate, wxTIMER_CONTINUOUS);
@@ -82,14 +82,14 @@ void Clock::run()
 
 /** getFramerate
   */
-unsigned int Clock::getFramerate() const
+unsigned int Clock::GetFramerate() const
 {
     return framerate;
 }
 
 /** setFramerate
   */
-void Clock::setFramerate(unsigned int rate)
+void Clock::SetFramerate(unsigned int rate)
 {
     framerate = rate;
 }

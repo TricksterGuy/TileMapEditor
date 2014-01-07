@@ -40,18 +40,18 @@ GBAMapHandler::~GBAMapHandler()
 
 }
 
-void GBAMapHandler::save(const std::string& filename, Map& map)
+void GBAMapHandler::Save(const std::string& filename, Map& map)
 {
     wxString warnings = "";
-    if (map.getTileWidth() != 8 || map.getTileHeight() != 8)
+    if (map.GetTileWidth() != 8 || map.GetTileHeight() != 8)
         warnings.Append("Map Tile Dimensions are incorrect tiles need to be 8x8 pixels\n");
-    if (map.getWidth() > 128 || map.getWidth() < 16 || map.getHeight() > 128 || map.getHeight() < 16)
+    if (map.GetWidth() > 128 || map.GetWidth() < 16 || map.GetHeight() > 128 || map.GetHeight() < 16)
         warnings.Append("Map Dimensions are incorrect map dimensions needs to be between 256x256 to 128x128");
     if (!warnings.IsEmpty())
         wxMessageBox(warnings, "Warning!", wxOK | wxCANCEL);
 
     Magick::Image tileset;
-    if (HandlerUtils::loadTileset(map, tileset))
+    if (HandlerUtils::LoadTileset(map, tileset))
         throw "Failed to load tileset";
 
     tileset.fx("round(round(r*255)*31/255)/255", Magick::RedChannel);
@@ -67,12 +67,12 @@ void GBAMapHandler::save(const std::string& filename, Map& map)
 
     std::vector<Magick::Image> tiles;
     // Get Tiles
-    if (HandlerUtils::getTiles(map, tileset, tiles))
+    if (HandlerUtils::GetTiles(map, tileset, tiles))
         throw "Failed to get tiles";
 
-    writeC(filename, map, pixels, tiles);
+    WriteC(filename, map, pixels, tiles);
 }
 
-void GBAMapHandler::writeC(const std::string& filename, Map& map, const Magick::IndexPacket* pixels, std::vector<Magick::Image> tiles)
+void GBAMapHandler::WriteC(const std::string& filename, Map& map, const Magick::IndexPacket* pixels, std::vector<Magick::Image> tiles)
 {
 }

@@ -25,17 +25,17 @@
   *
   * Converts a map into an ImageMagick Image
   */
-int HandlerUtils::mapToImage(Map& map, Magick::Image& image)
+int HandlerUtils::MapToImage(Map& map, Magick::Image& image)
 {
     std::vector<Magick::Image> tiles;
 
-    if (HandlerUtils::getTiles(map, tiles))
+    if (HandlerUtils::GetTiles(map, tiles))
         return -1;
 
     Magick::Color color = Magick::ColorRGB(0, 0, 0);
     color.alpha(0);
-    int width = map.getWidth() * map.getTileWidth();
-    int height = map.getHeight() * map.getTileHeight();
+    int width = map.GetWidth() * map.GetTileWidth();
+    int height = map.GetHeight() * map.GetTileHeight();
     image.matte(true);
     image.resize(Magick::Geometry(width, height));
     image.backgroundColor(color);
@@ -43,10 +43,10 @@ int HandlerUtils::mapToImage(Map& map, Magick::Image& image)
 
     try
     {
-        for (unsigned int k = 0; k < map.getNumLayers(); k++)
+        for (unsigned int k = 0; k < map.GetNumLayers(); k++)
         {
-            Layer& layer = map.getLayer(k);
-            if (HandlerUtils::layerToImage(map, layer, tiles, image))
+            Layer& layer = map.GetLayer(k);
+            if (HandlerUtils::LayerToImage(map, layer, tiles, image))
                 return -1;
         }
     }
@@ -62,44 +62,44 @@ int HandlerUtils::mapToImage(Map& map, Magick::Image& image)
   *
   * Converts a layer into an ImageMagick Image
   */
-int HandlerUtils::layerToImage(Map& map, Layer& layer, Magick::Image& image)
+int HandlerUtils::LayerToImage(Map& map, Layer& layer, Magick::Image& image)
 {
     std::vector<Magick::Image> tiles;
 
-    if (HandlerUtils::getTiles(map, tiles))
+    if (HandlerUtils::GetTiles(map, tiles))
         return -1;
 
     Magick::Color color = Magick::ColorRGB(0, 0, 0);
     color.alpha(0);
-    int width = map.getWidth() * map.getTileWidth();
-    int height = map.getHeight() * map.getTileHeight();
+    int width = map.GetWidth() * map.GetTileWidth();
+    int height = map.GetHeight() * map.GetTileHeight();
     image.matte(true);
     image.resize(Magick::Geometry(width, height));
     image.backgroundColor(color);
     image.erase();
 
-    return HandlerUtils::layerToImage(map, layer, tiles, image);
+    return HandlerUtils::LayerToImage(map, layer, tiles, image);
 }
 
 /** getTiles
   *
   * Given a map gets the tiles for the map
   */
-int HandlerUtils::getTiles(Map& map, std::vector<Magick::Image>& tiles)
+int HandlerUtils::GetTiles(Map& map, std::vector<Magick::Image>& tiles)
 {
     Magick::Image tileset(Magick::Geometry(32, 32), Magick::ColorRGB(1, 1, 1));
 
-    if (HandlerUtils::loadTileset(map, tileset))
+    if (HandlerUtils::LoadTileset(map, tileset))
         return -1;
 
-    int numTilesX = tileset.columns() / map.getTileWidth();
-    int numTilesY = tileset.rows() / map.getTileHeight();
+    int numTilesX = tileset.columns() / map.GetTileWidth();
+    int numTilesY = tileset.rows() / map.GetTileHeight();
     tiles.reserve(numTilesX * numTilesY);
     for (int i = 0; i < numTilesY; i++)
     {
         for (int j = 0; j < numTilesX; j++)
         {
-            Magick::Geometry dim(map.getTileWidth(), map.getTileHeight(), j * map.getTileWidth(), i * map.getTileHeight());
+            Magick::Geometry dim(map.GetTileWidth(), map.GetTileHeight(), j * map.GetTileWidth(), i * map.GetTileHeight());
             int index = i * numTilesX + j;
             tiles[index] = tileset;
             tiles[index].crop(dim);
@@ -112,11 +112,11 @@ int HandlerUtils::getTiles(Map& map, std::vector<Magick::Image>& tiles)
   *
   * Loads a tileset into the image passed in.
   */
-int HandlerUtils::loadTileset(Map& map, Magick::Image& image)
+int HandlerUtils::LoadTileset(Map& map, Magick::Image& image)
 {
-    if (map.getFilename().empty()) return -1;
+    if (map.GetFilename().empty()) return -1;
 
-    image.read(/*RESOURCE_POOL +*/ map.getFilename());
+    image.read(/*RESOURCE_POOL +*/ map.GetFilename());
 
     return 0;
 }
@@ -125,16 +125,16 @@ int HandlerUtils::loadTileset(Map& map, Magick::Image& image)
   *
   * Converts a layer into an ImageMagick Image
   */
-int HandlerUtils::layerToImage(Map& map, Layer& layer, std::vector<Magick::Image>& tiles, Magick::Image& image)
+int HandlerUtils::LayerToImage(Map& map, Layer& layer, std::vector<Magick::Image>& tiles, Magick::Image& image)
 {
-    for (unsigned int i = 0; i < map.getHeight(); i++)
+    for (unsigned int i = 0; i < map.GetHeight(); i++)
     {
-        for (unsigned int j = 0; j < map.getWidth(); j++)
+        for (unsigned int j = 0; j < map.GetWidth(); j++)
         {
-            int index = i * map.getWidth() + j;
+            int index = i * map.GetWidth() + j;
             int tile = layer[index];
             if (tile == -1) continue;
-            image.composite(tiles[tile], j * map.getTileWidth(), i * map.getTileHeight(), Magick::AtopCompositeOp);
+            image.composite(tiles[tile], j * map.GetTileWidth(), i * map.GetTileHeight(), Magick::AtopCompositeOp);
         }
     }
 
@@ -145,16 +145,16 @@ int HandlerUtils::layerToImage(Map& map, Layer& layer, std::vector<Magick::Image
   *
   * Given a map gets the tiles for the map
   */
-int HandlerUtils::getTiles(Map& map, Magick::Image& tileset, std::vector<Magick::Image>& tiles)
+int HandlerUtils::GetTiles(Map& map, Magick::Image& tileset, std::vector<Magick::Image>& tiles)
 {
-    int numTilesX = tileset.columns() / map.getTileWidth();
-    int numTilesY = tileset.rows() / map.getTileHeight();
+    int numTilesX = tileset.columns() / map.GetTileWidth();
+    int numTilesY = tileset.rows() / map.GetTileHeight();
     tiles.reserve(numTilesX * numTilesY);
     for (int i = 0; i < numTilesY; i++)
     {
         for (int j = 0; j < numTilesX; j++)
         {
-            Magick::Geometry dim(map.getTileWidth(), map.getTileHeight(), j * map.getTileWidth(), i * map.getTileHeight());
+            Magick::Geometry dim(map.GetTileWidth(), map.GetTileHeight(), j * map.GetTileWidth(), i * map.GetTileHeight());
             int index = i * numTilesX + j;
             tiles[index] = tileset;
             tiles[index].crop(dim);

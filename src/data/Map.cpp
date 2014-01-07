@@ -26,7 +26,7 @@ Map::Map(const Map& map)
 
 Map::~Map()
 {
-    destroy();
+    Destroy();
 }
 
 Map& Map::operator=(const Map& map)
@@ -53,16 +53,16 @@ Map& Map::operator=(const Map& map)
     return *this;
 }
 
-void Map::clear()
+void Map::Clear()
 {
     for (unsigned int i = 0; i < layers.size(); i++)
-        layers[i].clear();
+        layers[i].Clear();
 
-    if (hasCollisionLayer())
-        collisionLayer->clear();
+    if (HasCollisionLayer())
+        collisionLayer->Clear();
 }
 
-void Map::destroy()
+void Map::Destroy()
 {
     name = "";
     filename = "";
@@ -76,61 +76,61 @@ void Map::destroy()
     collisionLayer.reset();
 }
 
-void Map::resize(uint32_t newwidth, uint32_t newheight, bool copy)
+void Map::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
 {
     for (unsigned int i = 0; i < layers.size(); i++)
     {
-        layers[i].resize(newwidth, newheight, copy);
+        layers[i].Resize(newwidth, newheight, copy);
     }
     if (collisionLayer)
     {
-        if (collisionLayer->getType() == Collision::PixelBased)
-            collisionLayer->resize(newwidth * tile_width, newheight * tile_height, copy);
+        if (collisionLayer->GetType() == Collision::PixelBased)
+            collisionLayer->Resize(newwidth * tile_width, newheight * tile_height, copy);
         else
-            collisionLayer->resize(newwidth, newheight, copy);
+            collisionLayer->Resize(newwidth, newheight, copy);
     }
     width = newwidth;
     height = newheight;
 }
 
-void Map::shift(int horizontal, int vertical, bool wrap)
+void Map::Shift(int horizontal, int vertical, bool wrap)
 {
     for (unsigned int i = 0; i < layers.size(); i++)
     {
-        layers[i].shift(horizontal, vertical, wrap);
+        layers[i].Shift(horizontal, vertical, wrap);
     }
     if (collisionLayer)
     {
-        collisionLayer->shift(horizontal, vertical, wrap);
+        collisionLayer->Shift(horizontal, vertical, wrap);
     }
 }
 
-void Map::add(const Layer& layer)
+void Map::Add(const Layer& layer)
 {
     layers.push_back(layer);
 }
 
-void Map::add(const Background& back)
+void Map::Add(const Background& back)
 {
     backgrounds.push_back(back);
 }
 
-void Map::deleteLayer(const uint32_t index)
+void Map::DeleteLayer(const uint32_t index)
 {
     layers.erase(layers.begin() + index);
 }
 
-void Map::deleteBackground(const uint32_t index)
+void Map::DeleteBackground(const uint32_t index)
 {
     backgrounds.erase(backgrounds.begin() + index);
 }
 
-void Map::setCollisionLayer(CollisionLayer* layer)
+void Map::SetCollisionLayer(CollisionLayer* layer)
 {
     collisionLayer.reset(layer);
 }
 
-void Map::setTileDimensions(uint32_t width, uint32_t height)
+void Map::SetTileDimensions(uint32_t width, uint32_t height)
 {
     tile_width = width;
     tile_height = height;

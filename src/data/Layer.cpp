@@ -76,7 +76,7 @@ bool Layer::operator==(const Layer& other)
     return true;
 }
 
-void Layer::resize(uint32_t newwidth, uint32_t newheight, bool copy)
+void Layer::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
 {
     if (newwidth == width && newheight == height) return;
 
@@ -109,7 +109,7 @@ void Layer::resize(uint32_t newwidth, uint32_t newheight, bool copy)
     height = newheight;
 }
 
-void Layer::shift(int32_t horizontal, int32_t vertical, bool wrap)
+void Layer::Shift(int32_t horizontal, int32_t vertical, bool wrap)
 {
 /*    int32_t* newdata = new int32_t[width * height];
 
@@ -149,7 +149,7 @@ void Layer::shift(int32_t horizontal, int32_t vertical, bool wrap)
     */
 }
 
-void Layer::clear()
+void Layer::Clear()
 {
     data.assign(width * height, -1);
 }

@@ -43,14 +43,14 @@ class PixelBasedCollisionLayer : public CollisionLayer
 		bool operator==(const PixelBasedCollisionLayer& other);
 
         /** @see CollisionLayer::clear */
-		virtual void clear();
+		virtual void Clear();
 		/** @see CollisionLayer::shift */
-		virtual void shift(int horizontal, int vertical, bool wrap = false);
+		virtual void Shift(int horizontal, int vertical, bool wrap = false);
 		/** @see CollisionLayer::resize */
-		virtual void resize(uint32_t width, uint32_t height, bool copy = true);
+		virtual void Resize(uint32_t width, uint32_t height, bool copy = true);
 
-		const Region& getData() const {return data;}
-		void add(const Rectangle& rectangle);
+		const Region& GetData() const {return data;}
+		void Add(const Rectangle& rectangle);
 
 	protected:
         Region data;

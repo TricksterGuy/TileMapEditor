@@ -29,7 +29,7 @@ class MapView : public wxView
 		  * @param vxf Out parameter final viewable x coordinate.
 		  * @param vyf Out parameter final viewable y coordinate.
 		  */
-		void getViewableCoords(int& vxi, int& vyi, int& vxf, int& vyf);
+		void GetViewableCoords(int& vxi, int& vyi, int& vxf, int& vyf);
 		/** Transforms a screen coordinate to a tile coordinate.
 		  * @param x X coordinate.
 		  * @param y Y coordinate.
@@ -38,13 +38,13 @@ class MapView : public wxView
 		  * @param bounds If true clamp to viewable tile coordinates.
 		  * @param neg1 If outside bounds (> width/height) make result -1.
 		  */
-		void transformScreenToTile(int x, int y, int& outx, int& outy, bool bounds = true, bool neg1 = false);
+		void TransformScreenToTile(int x, int y, int& outx, int& outy, bool bounds = true, bool neg1 = false);
 
 
     private:
         MapCanvas* mapCanvas;
-	    void drawLayer(wxGCDC& dc, int id, int sxi, int syi, int sxf, int syf);
-	    void updateTiles();
+	    void DrawLayer(wxGCDC& dc, int id, int sxi, int syi, int sxf, int syf);
+	    void UpdateTiles();
 	    unsigned long clock;
 	    wxBitmap image;
 	    std::vector<wxBitmap> tiles;

@@ -33,7 +33,7 @@ Background::~Background()
 /**
   * Gets the speed of the background
   */
-void Background::getSpeed(float& x, float& y) const
+void Background::GetSpeed(float& x, float& y) const
 {
     x = this->x;
     y = this->y;
@@ -42,7 +42,7 @@ void Background::getSpeed(float& x, float& y) const
 /**
   * Sets the speed of the background
   */
-void Background::setSpeed(float x, float y)
+void Background::SetSpeed(float x, float y)
 {
     this->x = x;
     this->y = y;

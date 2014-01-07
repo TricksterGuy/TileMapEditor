@@ -37,9 +37,9 @@ TilemapEditorFrame::TilemapEditorFrame(wxFrame* window) : wxDocManager(), Tilema
     FileHistoryUseMenu(menuRecent);
     FileHistoryAddFilesToMenu();
 
-    //clock.add(mapCanvas);
-    clock.setFramerate(60);
-    clock.run();
+    //clock.Add(mapCanvas);
+    clock.SetFramerate(60);
+    clock.Run();
 
     statusBar->SetStatusText("Hello Code::Blocks user!", 0);
     statusBar->SetStatusText("", 1);
@@ -58,7 +58,7 @@ wxFrame* TilemapEditorFrame::CreateChildFrame(wxView* view)
     wxDocument *doc = view->GetDocument();
     subframe = new wxDocMDIChildFrame(doc, view, this, wxID_ANY, "Child Frame", wxDefaultPosition, wxSize(300, 300));
 
-    clock.add(view);
+    clock.Add(view);
     //doc->GetCommandProcessor()->SetEditMenu(editMenu);
     //doc->GetCommandProcessor()->Initialize();
 

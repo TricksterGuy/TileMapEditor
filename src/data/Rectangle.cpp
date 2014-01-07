@@ -45,7 +45,7 @@ bool Rectangle::operator<(const Rectangle& rhs) const
         return false;
 }
 
-void Rectangle::set(int32_t x, int32_t y, uint32_t width, uint32_t height)
+void Rectangle::Set(int32_t x, int32_t y, uint32_t width, uint32_t height)
 {
     this->x = x;
     this->y = y;
@@ -53,23 +53,23 @@ void Rectangle::set(int32_t x, int32_t y, uint32_t width, uint32_t height)
     this->height = height;
 }
 
-void Rectangle::move(int32_t xoffset, int32_t yoffset)
+void Rectangle::Move(int32_t xoffset, int32_t yoffset)
 {
     x += xoffset;
     y += yoffset;
 }
 
-bool Rectangle::contains(const Rectangle& rect) const
+bool Rectangle::Contains(const Rectangle& rect) const
 {
-    return contains(rect.x, rect.y) && contains(rect.x + rect.width, rect.y + rect.height);
+    return Contains(rect.x, rect.y) && Contains(rect.x + rect.width, rect.y + rect.height);
 }
 
-bool Rectangle::contains(int32_t sx, int32_t sy) const
+bool Rectangle::Contains(int32_t sx, int32_t sy) const
 {
     return sx >= x && (uint32_t)sx < x + width && sy >= y && (uint32_t)sy < y + height;
 }
 
-bool Rectangle::intersects(const Rectangle& rect, Rectangle& intersect) const
+bool Rectangle::Intersects(const Rectangle& rect, Rectangle& intersect) const
 {
     int32_t x1 = std::max(x, rect.x);
     int32_t y1 = std::max(y, rect.y);
@@ -88,7 +88,7 @@ bool Rectangle::intersects(const Rectangle& rect, Rectangle& intersect) const
     }
 }
 
-int64_t Rectangle::area() const
+int64_t Rectangle::Area() const
 {
     return width * height;
 }
