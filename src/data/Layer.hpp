@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2013 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -26,9 +26,14 @@
 #include <string>
 #include <cstdint>
 
+#include "DrawAttributes.hpp"
+
+#define MIN_LAYER_SIZE 4
+#define MAX_LAYER_SIZE 1024
+
 /** This class stores one layer of tile information
   */
-class Layer
+class Layer : public DrawAttributes
 {
 	public:
         /** Creates a new layer with the specified name, width, height and data.
@@ -37,26 +42,24 @@ class Layer
           * @param height non-zero height of the layer.
           * @param data data which should be width*height ints.
           */
-		Layer(const std::string& name, uint32_t width, uint32_t height, const std::vector<int32_t>& data);
+		Layer(const std::string& name, uint32_t width, uint32_t height, const std::vector<int32_t>& data, const DrawAttributes& attr = DrawAttributes(0));
         /** Creates a new layer with the specified name, width, height and data.
           * @param name name of the layer.
           * @param width non-zero width of the layer.
           * @param height non-zero height of the layer.
           * @param data data which should be width*height ints.
           */
-		Layer(const std::string& name, uint32_t width, uint32_t height, const int32_t* data);
+		Layer(const std::string& name, uint32_t width, uint32_t height, const int32_t* data, const DrawAttributes& attr = DrawAttributes(0));
         /** Creates a new layer with the specified name, width, and height.
           * @param name name of the layer.
           * @param width non-zero width of the layer.
           * @param height non-zero height of the layer.
           */
-		Layer(const std::string& name = "", uint32_t width = 1, uint32_t height = 1);
+		Layer(const std::string& name = "", uint32_t width = 1, uint32_t height = 1, const DrawAttributes& attr = DrawAttributes(0));
 
 		Layer(const Layer& layer);
-		~Layer();
 
 		Layer& operator=(const Layer& layer);
-		bool operator==(const Layer& other);
 		int32_t& operator[](const uint32_t index) {return data[index];}
 		const int32_t& operator[](const uint32_t index) const {return data[index];}
 

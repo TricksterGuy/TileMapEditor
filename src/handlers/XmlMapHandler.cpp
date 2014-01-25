@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2013 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -34,9 +34,8 @@
 
 using namespace std;
 
-XmlMapHandler::XmlMapHandler() : BaseMapHandler("Xml Format", "xml")
+XmlMapHandler::XmlMapHandler() : BaseMapHandler("Xml Format", "xml", "Exports the map as an xml file")
 {
-    description = "Exports the map as an xml file";
 }
 
 XmlMapHandler::~XmlMapHandler()
@@ -57,7 +56,7 @@ void XmlMapHandler::Load(const std::string& filename, Map& map)
         throw "Properties must be the first node in the XML file";
 
     ReadProperties(child, map);
-    while (child = child->GetNext())
+    while ((child = child->GetNext()))
     {
         if (child->GetName() == "Layer")
             ReadLayer(child, map);
@@ -138,6 +137,10 @@ void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
             height = max(min(height, 128), 8);
 
             map.SetTileDimensions(width, height);
+        }
+        else if (child->GetName() == "Priority")
+        {
+            map.SetFilename(child->GetNodeContent().ToStdString());
         }
         child = child->GetNext();
     }
@@ -294,7 +297,7 @@ void XmlMapHandler::WriteLayer(wxXmlNode* root, Map& map, unsigned int i)
 void XmlMapHandler::WriteBackground(wxXmlNode* root, Map& map, unsigned int i)
 {
     Background& background = map.GetBackground(i);
-    float x, y;
+    int32_t x, y;
     background.GetSpeed(x, y);
     wxXmlNode* back = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Background");
 
@@ -305,8 +308,8 @@ void XmlMapHandler::WriteBackground(wxXmlNode* root, Map& map, unsigned int i)
     wxXmlNode* name = new wxXmlNode(back, wxXML_ELEMENT_NODE, "Name");
 
     new wxXmlNode(filename, wxXML_TEXT_NODE, "Filename", background.GetFilename());
-    new wxXmlNode(speedy, wxXML_TEXT_NODE, "SpeedY", wxString::Format("%f", y));
-    new wxXmlNode(speedx, wxXML_TEXT_NODE, "SpeedX", wxString::Format("%f", x));
+    new wxXmlNode(speedy, wxXML_TEXT_NODE, "SpeedY", wxString::Format("%i", y));
+    new wxXmlNode(speedx, wxXML_TEXT_NODE, "SpeedX", wxString::Format("%i", x));
     new wxXmlNode(mode, wxXML_TEXT_NODE, "Mode", wxString::Format("%i", background.GetMode()));
     new wxXmlNode(name, wxXML_TEXT_NODE, "Name", background.GetName());
 }

@@ -1,7 +1,6 @@
-
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2013 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -51,8 +50,9 @@ class ParallaxBackground
         std::string name;
         std::string filename;
         int mode;
-        float speedx, speedy;
-        float x, y;
+        int32_t speedx, speedy;
+        int32_t x, y;
+        DrawAttributes attr;
         bool needUpdateImage;
         void UpdateImage();
         wxBitmap image;

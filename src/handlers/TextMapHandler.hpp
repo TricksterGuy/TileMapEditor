@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2013 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -41,6 +41,7 @@ class TextMapHandler : public BaseMapHandler
         void ReadLayers(std::ifstream& file, Map& map);
         void ReadBackgrounds(std::ifstream& file, Map& map);
         void ReadCollision(std::ifstream& file, Map& map);
+        void ReadAttributes(std::ifstream& file, DrawAttributes& attr);
 };
 
 #endif

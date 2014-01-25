@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2013 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -30,6 +30,7 @@ ParallaxBackground::ParallaxBackground(const wxString& filename, const Backgroun
     this->filename = filename.ToStdString();
     mode = (Background::Autoscroll | Background::Repeating);//back.GetMode();
     back.GetSpeed(speedx, speedy);
+    attr = back;
     //updateImage();
     needUpdateImage = true;
 }
@@ -74,6 +75,27 @@ void ParallaxBackground::Update(wxGCDC& dc)
 
 void ParallaxBackground::Draw(wxGCDC& dc)
 {
+    wxGraphicsContext* gtx = dc.GetGraphicsContext();
+    int32_t px, py;
+    int32_t ox, oy;
+    float sx, sy;
+    float rotation;
+    float opacity;
+    attr.GetPosition(px, py);
+    attr.GetOrigin(ox, oy);
+    attr.GetScale(sx, sy);
+    rotation = attr.GetRotation();
+    opacity = attr.GetOpacity();
+
+    gtx->PushState();
+    gtx->Translate(px, py);
+    gtx->Translate(ox, oy);
+    gtx->Rotate(rotation * 3.141592654f / 180.f);
+    gtx->Translate(-ox, -oy);
+    gtx->Scale(sx, sy);
+
+    gtx->BeginLayer(opacity / 100);
+
     int vx, vy, vw, vh;
     dc.GetClippingBox(&vx, &vy, &vw, &vh);
     int iw, ih;
@@ -82,7 +104,7 @@ void ParallaxBackground::Draw(wxGCDC& dc)
     ih = isize.GetHeight();
     if (mode == (Background::Stationary | Background::Once))
     {
-        dc.DrawBitmap(image, vx, vy);
+        gtx->DrawBitmap(image, vx, vy, iw, ih);
     }
     else if (mode == (Background::Stationary | Background::Repeating))
     {
@@ -95,13 +117,13 @@ void ParallaxBackground::Draw(wxGCDC& dc)
         {
             for (int j = sxi; j <= sxf; j++)
             {
-                dc.DrawBitmap(image, j * iw, i * ih);
+                gtx->DrawBitmap(image, j * iw, i * ih, iw, ih);
             }
         }
     }
     else if (mode == (Background::Autoscroll | Background::Once))
     {
-        dc.DrawBitmap(image, x, y);
+        gtx->DrawBitmap(image, x, y, iw, ih);
     }
     else if (mode == (Background::Autoscroll | Background::Repeating))
     {
@@ -114,13 +136,13 @@ void ParallaxBackground::Draw(wxGCDC& dc)
         {
             for (int j = sxi; j <= sxf; j++)
             {
-                dc.DrawBitmap(image, x + j * iw, y + i * ih);
+                gtx->DrawBitmap(image, x + j * iw, y + i * ih, iw, ih);
             }
         }
     }
     else if (mode == (Background::Camera | Background::Once))
     {
-        dc.DrawBitmap(image, vx * speedx, vy * speedy);
+        gtx->DrawBitmap(image, vx * speedx, vy * speedy, iw, ih);
     }
     else if (mode == (Background::Camera | Background::Repeating))
     {
@@ -133,10 +155,12 @@ void ParallaxBackground::Draw(wxGCDC& dc)
         {
             for (int j = sxi; j <= sxf; j++)
             {
-                dc.DrawBitmap(image, j * iw - vx * (speedx - 1), i * ih - vy * (speedy - 1));
+                gtx->DrawBitmap(image, j * iw - vx * (speedx - 1), i * ih - vy * (speedy - 1), iw, ih);
             }
         }
     }
+    gtx->EndLayer();
+    gtx->PopState();
 }
 
 void ParallaxBackground::UpdateImage()

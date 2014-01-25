@@ -1,3 +1,24 @@
+/******************************************************************************************************
+ * Tile Map Editor
+ * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ *
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * excluding commercial applications, and to alter it and redistribute it freely,
+ * subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented;
+ *    you must not claim that you wrote the original software.
+ *    An acknowledgement in your documentation and link to the original version is required.
+ *
+ * 2. Altered source versions must be plainly marked as such,
+ *    and must not be misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution.
+ ******************************************************************************************************/
+
 #include "MapView.hpp"
 
 #include "TilemapEditorApp.hpp"
@@ -172,13 +193,33 @@ void MapView::DrawLayer(wxGCDC& dc, int id, int sxi, int syi, int sxf, int syf)
     Map& map = GetMap();
     Layer& layer = map.GetLayer(id);
 
+    wxBitmap layerBitmap((layer.GetWidth()) * map.GetTileWidth(), (layer.GetHeight()) * map.GetTileHeight(), 32);
+    wxMemoryDC layerDc(layerBitmap);
+    wxGraphicsContext* gtx = wxGraphicsContext::Create(layerDc);
+
+    int32_t x, y;
+    int32_t ox, oy;
+    float sx, sy;
+    float rotation;
+    float opacity;
+    uint32_t color;
+    layer.GetPosition(x, y);
+    layer.GetOrigin(ox, oy);
+    layer.GetScale(sx, sy);
+    rotation = layer.GetRotation();
+    color = layer.GetBlendColor();
+    opacity = layer.GetOpacity();
+
     for (int i = syi; i <= syf; i++)
     {
+        if (i >= layer.GetHeight()) break;
         for (int j = sxi; j <= sxf; j++)
         {
+            if (j >= layer.GetWidth()) break;
             int index = i * layer.GetWidth() + j;
             float x = j * map.GetTileWidth();
             float y = i * map.GetTileHeight();
+
             int tile = layer[index];
             if (tile < -1)
             {
@@ -190,9 +231,29 @@ void MapView::DrawLayer(wxGCDC& dc, int id, int sxi, int syi, int sxf, int syf)
             if (tile == -1) continue;
             assert((unsigned int) tile < tiles.size());
             wxBitmap& obj = tiles[tile];
-            dc.DrawBitmap(obj, x, y);
+            gtx->DrawBitmap(obj, x, y, map.GetTileWidth(), map.GetTileHeight());
         }
     }
+
+    gtx->SetCompositionMode(wxCOMPOSITION_OVER);
+    wxColour colour;
+    colour.SetRGBA(color);
+    wxBrush colorBrush = wxBrush(colour);
+    gtx->SetBrush(colorBrush);
+    gtx->DrawRectangle(0, 0, layerBitmap.GetWidth(), layerBitmap.GetHeight());
+
+    wxGraphicsContext* ctx = dc.GetGraphicsContext();
+    ctx->PushState();
+    ctx->Translate(x, y);
+    ctx->Translate(ox, oy);
+    ctx->Rotate(rotation * 3.141592654f / 180.f);
+    ctx->Translate(-ox, -oy);
+    ctx->Scale(sx, sy);
+
+    ctx->BeginLayer(opacity / 100);
+    ctx->DrawBitmap(layerBitmap, 0, 0, layerBitmap.GetWidth(), layerBitmap.GetHeight());
+    ctx->EndLayer();
+    ctx->PopState();
 }
 
 void MapView::UpdateTiles()

@@ -32,6 +32,7 @@ set(SRC_TILEMAPEDITOR
     src/data/AnimatedTile.cpp
     src/data/Background.cpp
     src/data/CollisionLayer.cpp
+    src/data/DrawAttributes.cpp
     src/data/Layer.cpp
     src/data/Map.cpp
     src/data/PixelBasedCollisionLayer.cpp

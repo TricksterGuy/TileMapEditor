@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2013 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -38,12 +38,12 @@
 #include "PixelBasedCollisionLayer.hpp"
 #include "AnimatedTile.hpp"
 
-#define MAJOR 1
+#define MAJOR 2
 #define MINOR 0
 
 const char magic[14] = {0x54, 0x52, 0x49, 0x43, 0x4b, 0x53, 0x54, 0x45, 0x52, 0x47, 0x55, 0x59, 0x38, 0x37};
 
-BinaryMapHandler::BinaryMapHandler() : BaseMapHandler("Official Map Format V1.0", "map", "Basic format this program recognizes")
+BinaryMapHandler::BinaryMapHandler() : BaseMapHandler("Official Map Format", "map", "Basic format this program recognizes")
 {
 }
 
@@ -565,20 +565,16 @@ void BinaryMapHandler::WriteBGDS(std::ofstream& file, Map& map)
     file.write((char*) &size, sizeof(int32_t));
 
     uint32_t texture_size, texture_size_nl;
-    union {float f; int32_t i;} convert;
 
     for (uint32_t i = 0; i < map.GetNumBackgrounds(); i++)
     {
         Background back = map.GetBackground(i);
-        float x, y;
         int32_t ix, iy;
         uint32_t mode = htonl(back.GetMode());
-        back.GetSpeed(x, y);
+        back.GetSpeed(ix, iy);
 
-        convert.f = x;
-        ix = htonl(convert.i);
-        convert.f = y;
-        iy = htonl(convert.i);
+        ix = htonl(ix);
+        iy = htonl(iy);
 
         texture_size = back.GetName().length() + 1;
         texture_size_nl = htonl(texture_size);

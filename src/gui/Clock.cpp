@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2013 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -21,83 +21,54 @@
 
 #include "Clock.hpp"
 
-/** Clock
-  *
-  * Constructor
-  * @param rate Framerate.
-  */
 Clock::Clock(unsigned int rate) : framerate(rate), paused(true), update()
 {
     update.SetNeedRefresh(true);
 }
 
-/** ~Clock
-  *
-  * Destructor
-  */
 Clock::~Clock()
 {
-
+    owners.clear();
 }
 
-/** add
-  *
-  * Adds a window to the list of refreshed windows.
-  * @param owner window to add
-  */
 void Clock::Add(wxView* owner)
 {
     owners.push_back(owner);
 }
 
-/** pause
-  *
-  * Pauses the clock.
-  */
 void Clock::Pause()
 {
     paused = true;
     Stop();
 }
 
-/** isPaused
-  *
-  * Tests if the clock is paused.
-  * @return true if the window is paused false otherwise
-  */
 bool Clock::IsPaused()
 {
     return paused;
 }
 
-/** run
-  *
-  * Runs the clock.
-  */
 void Clock::Run()
 {
     paused = false;
     Start(1000 / framerate, wxTIMER_CONTINUOUS);
 }
 
-/** getFramerate
-  */
+void Clock::Stop()
+{
+    owners.clear();
+    wxTimer::Stop();
+}
+
 unsigned int Clock::GetFramerate() const
 {
     return framerate;
 }
 
-/** setFramerate
-  */
 void Clock::SetFramerate(unsigned int rate)
 {
     framerate = rate;
 }
 
-/** Notify
-  *
-  * Called internally when all of the windows need to be refreshed.
-  */
 void Clock::Notify()
 {
     for (unsigned int i = 0; i < owners.size(); i++)

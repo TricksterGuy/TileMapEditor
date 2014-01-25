@@ -6,7 +6,7 @@
 using namespace std;
 
 Map::Map(const std::string& _name, const std::string& _filename, uint32_t _width, uint32_t _height, uint32_t _tile_width, uint32_t _tile_height) :
-name(_name), filename(_filename), width(_width), height(_height), tile_width(_tile_width), tile_height(_tile_height), collisionLayer(NULL)
+name(_name), filename(_filename), tile_width(_tile_width), tile_height(_tile_height)
 {
 }
 
@@ -14,8 +14,6 @@ Map::Map(const Map& map)
 {
     tile_width = map.tile_width;
     tile_height = map.tile_height;
-    width = map.width;
-    height = map.height;
     filename = map.filename;
     name = map.name;
     layers = map.layers;
@@ -36,8 +34,6 @@ Map& Map::operator=(const Map& map)
         collisionLayer.reset();
         tile_width = map.tile_width;
         tile_height = map.tile_height;
-        width = map.width;
-        height = map.height;
         filename = map.filename;
         name = map.name;
         layers.clear();
@@ -66,8 +62,6 @@ void Map::Destroy()
 {
     name = "";
     filename = "";
-    width = 1;
-    height = 1;
     tile_width = 8;
     tile_height = 8;
     layers.empty();
@@ -89,8 +83,6 @@ void Map::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
         else
             collisionLayer->Resize(newwidth, newheight, copy);
     }
-    width = newwidth;
-    height = newheight;
 }
 
 void Map::Shift(int horizontal, int vertical, bool wrap)
@@ -134,4 +126,26 @@ void Map::SetTileDimensions(uint32_t width, uint32_t height)
 {
     tile_width = width;
     tile_height = height;
+}
+
+uint32_t Map::GetWidth() const
+{
+    uint32_t width = 0;
+    for (const auto& layer : layers)
+    {
+        if (layer.GetWidth() > width)
+            width = layer.GetWidth();
+    }
+    return width;
+}
+
+uint32_t Map::GetHeight() const
+{
+    uint32_t height = 0;
+    for (const auto& layer : layers)
+    {
+        if (layer.GetHeight() > height)
+            height = layer.GetHeight();
+    }
+    return height;
 }

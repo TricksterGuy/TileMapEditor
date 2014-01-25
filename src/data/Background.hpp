@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2013 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,7 +22,10 @@
 #ifndef BACKGROUND_HPP
 #define BACKGROUND_HPP
 
+#include <cstdint>
 #include <string>
+
+#include "DrawAttributes.hpp"
 
 /**
   * This class represents data for a background
@@ -36,7 +39,7 @@
   * A Background can be drawn once, or it can be
   * drawn repeatedly to fit the canvas.
   */
-class Background
+class Background : public DrawAttributes
 {
     public:
         /** Controls how the background moves */
@@ -65,24 +68,23 @@ class Background
           * @param x Horizontal speed.
           * @param y Vertical speed.
           */
-        Background(const std::string& name = "", const std::string& filename = "", int mode = 0,
-                   float x = 0.f, float y = 0.f);
-        ~Background();
+        Background(const std::string& name = "", const std::string& filename = "", uint32_t mode = 0,
+                   int32_t x = 0, int32_t y = 0, const DrawAttributes& attr = DrawAttributes(-1));
 
         const std::string& GetName() const {return name;}
         const std::string& GetFilename() const {return filename;}
-        int GetMode() const {return mode;}
+        uint32_t GetMode() const {return mode;}
         void SetName(const std::string& _name) {name = _name;}
         void SetFilename(const std::string& _filename) {filename = _filename;}
-        void SetMode(int _mode) {mode = _mode;}
+        void SetMode(uint32_t _mode) {mode = _mode;}
 
-        void GetSpeed(float& x, float& y) const;
-        void SetSpeed(float x, float y);
+        void GetSpeed(int32_t& x, int32_t& y) const;
+        void SetSpeed(int32_t x, int32_t y);
     private:
         std::string name;
         std::string filename;
-        int mode;
-        float x, y;
+        uint32_t mode;
+        int32_t speed_x, speed_y;
 };
 
 #endif

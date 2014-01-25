@@ -10,6 +10,9 @@
 #include "Background.hpp"
 #include "AnimatedTile.hpp"
 
+#define MIN_TILE_SIZE 4
+#define MAX_TILE_SIZE 256
+
 /** The main datstructure of the program.
   * This class keeps track of the dimensions of the map itself and its tiles.
   * The data for the map is stored in Layers, Backgrounds, and a CollisionLayer.
@@ -53,8 +56,8 @@ class Map
         void DeleteLayer(const uint32_t index);
         void DeleteBackground(const uint32_t index);
 
-        uint32_t GetWidth() const {return width;}
-        uint32_t GetHeight() const {return height;}
+        uint32_t GetWidth() const;
+        uint32_t GetHeight() const;
         uint32_t GetTileWidth() const {return tile_width;}
         uint32_t GetTileHeight() const {return tile_height;}
         const std::string& GetFilename() const {return filename;}
@@ -84,11 +87,10 @@ class Map
     private:
         std::string name;
         std::string filename;
-        uint32_t width, height;
         uint32_t tile_width, tile_height;
         std::vector<Layer> layers;
         std::vector<AnimatedTile> animatedTiles;
         std::vector<Background> backgrounds;
-        boost::scoped_ptr<CollisionLayer> collisionLayer;
+        std::unique_ptr<CollisionLayer> collisionLayer;
 };
 #endif

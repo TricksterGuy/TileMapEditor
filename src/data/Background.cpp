@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2013 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -21,29 +21,19 @@
 
 #include "Background.hpp"
 
-Background::Background(const std::string& _name, const std::string& _filename, int _mode, float _x, float _y) :
-name(_name), filename(_filename), mode(_mode), x(_x), y(_y)
+Background::Background(const std::string& _name, const std::string& _filename, uint32_t _mode, int32_t x, int32_t y, const DrawAttributes& attr) :
+DrawAttributes(attr), name(_name), filename(_filename), mode(_mode), speed_x(x), speed_y(y)
 {
 }
 
-Background::~Background()
+void Background::GetSpeed(int32_t& x, int32_t& y) const
 {
+    x = speed_x;
+    y = speed_y;
 }
 
-/**
-  * Gets the speed of the background
-  */
-void Background::GetSpeed(float& x, float& y) const
+void Background::SetSpeed(int32_t x, int32_t y)
 {
-    x = this->x;
-    y = this->y;
-}
-
-/**
-  * Sets the speed of the background
-  */
-void Background::SetSpeed(float x, float y)
-{
-    this->x = x;
-    this->y = y;
+    speed_x = x;
+    speed_y = y;
 }

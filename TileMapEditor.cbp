@@ -41,6 +41,8 @@
 		<Unit filename="src/data/Background.hpp" />
 		<Unit filename="src/data/CollisionLayer.cpp" />
 		<Unit filename="src/data/CollisionLayer.hpp" />
+		<Unit filename="src/data/DrawAttributes.cpp" />
+		<Unit filename="src/data/DrawAttributes.hpp" />
 		<Unit filename="src/data/Layer.cpp" />
 		<Unit filename="src/data/Layer.hpp" />
 		<Unit filename="src/data/Map.cpp" />
@@ -92,8 +94,9 @@
 		<Unit filename="src/handlers/TextMapHandler.hpp" />
 		<Unit filename="src/handlers/XmlMapHandler.cpp" />
 		<Unit filename="src/handlers/XmlMapHandler.hpp" />
-		<Unit filename="src/util/ResourceManager.cpp" />
 		<Unit filename="src/util/ResourceManager.hpp" />
+		<Unit filename="src/util/Scanner.cpp" />
+		<Unit filename="src/util/Scanner.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
