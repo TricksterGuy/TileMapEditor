@@ -5,8 +5,12 @@ A general purpose map editor. This program allows users the flexibility of impor
 
 Compiling
 ---------
-To compile this program you will need the following things
-1. Cmake
-2. wxWidgets 3.0
-3. Boost 1.54
-4. ImageMagick (Magick++ specifically)
+To compile this program you will need the following things installed
+	1. Cmake
+	2. wxWidgets 3.0
+	3. Boost 1.54
+	4. ImageMagick (Magick++ specifically)
+
+To set up the build environment run cmake 
+
+
