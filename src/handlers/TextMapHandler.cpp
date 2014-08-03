@@ -22,6 +22,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <wx/log.h>
 #include <wx/msgdlg.h>
 #include <wx/string.h>
 #include "Scanner.hpp"
@@ -30,6 +31,7 @@
 
 TextMapHandler::TextMapHandler() : BaseMapHandler("Text Format", "txt", "Export the map as a text file")
 {
+    wxLogDebug("Init TextMapHandler");
 }
 
 TextMapHandler::~TextMapHandler()
@@ -39,6 +41,7 @@ TextMapHandler::~TextMapHandler()
 
 void TextMapHandler::Load(const std::string& filename, Map& map)
 {
+    wxLogDebug("Loading %s", filename.c_str());
     std::ifstream file(filename.c_str());
     if (!file.good())
         throw "Could not open file for reading";
@@ -66,14 +69,16 @@ void TextMapHandler::Load(const std::string& filename, Map& map)
 
 void TextMapHandler::ReadProperties(std::ifstream& file, Map& map)
 {
+    wxLogDebug("Reading Properties");
     std::string line;
     std::string name;
     std::string tileset;
-    uint32_t tile_width, tile_height;
+    uint32_t tile_width = 8, tile_height = 8;
 
     std::getline(file, line);
     while (!line.empty())
     {
+        wxLogDebug("Read line %s", line.c_str());
         std::string property;
         Scanner scanner(line);
 
@@ -105,22 +110,26 @@ void TextMapHandler::ReadProperties(std::ifstream& file, Map& map)
 
     map.SetTileDimensions(tile_width, tile_height);
     map.SetName(name);
-    map.SetFilename(filename);
+    map.SetFilename(tileset);
 }
 
 void TextMapHandler::ReadLayers(std::ifstream& file, Map& map)
 {
+    wxLogDebug("Reading Layers");
+    std::string line;
     std::getline(file, line);
     while (!line.empty())
     {
+        wxLogDebug("Reading a layer");
+        wxLogDebug("Read line %s", line.c_str());
         std::string name;
         DrawAttributes attr;
         uint32_t width = 0, height = 0;
         std::vector<int32_t> data;
 
-        std::getline(file, line);
         while(!line.empty())
         {
+            wxLogDebug("Read line %s", line.c_str());
             std::string property;
             Scanner scanner(line);
 
@@ -159,7 +168,7 @@ void TextMapHandler::ReadLayers(std::ifstream& file, Map& map)
                     throw "Could not parse scale";
                 attr.SetScale(x, y);
             }
-            else if (property == "scale:")
+            else if (property == "rotation:")
             {
                 float rotation;
                 if (!scanner.Next(rotation))
@@ -193,47 +202,21 @@ void TextMapHandler::ReadLayers(std::ifstream& file, Map& map)
                     throw "Could not parse width";
                 if (!scanner.Next(height))
                     throw "Could not parse height";
+                data.reserve(width * height);
             }
-        }
-    }
-
-    while (1)
-    {
-        std::string name;
-        std::string line;
-        std::string layerdim;
-
-        std::getline(file, name);
-        if (name.empty()) break;
-
-        DrawAttributes attr;
-        ReadAttributes(file, attr);
-
-        wxStringTokenizer scanner;
-        std::getline(file, layerdim);
-
-        scanner.SetString(layerdim);
-        uint32_t width = std::min(1024, std::max(1, wxAtoi(scanner.GetNextToken())));
-        uint32_t height = std::min(1024, std::max(1, wxAtoi(scanner.GetNextToken())));
-        std::vector<int32_t> data;
-        data.reserve(width * height);
-
-        for (unsigned int i = 0; i < height; i++)
-        {
-            std::string line;
-            std::getline(file, line);
-            printf("line: %s\n", line.c_str());
-            if (line.empty()) break;
-            scanner.SetString(line);
-            while (scanner.HasMoreTokens())
+            else if (property == "data:")
             {
-                wxString token = scanner.GetNextToken();
-                int tileid = wxAtoi(token);
-                data.push_back(tileid);
+                while (scanner.HasMoreTokens())
+                {
+                    int32_t element;
+                    if (!scanner.Next(element))
+                        throw "Could not parse data";
+                    data.push_back(element);
+                }
             }
+            std::getline(file, line);
         }
 
-        printf("%d\n", data.size());
         if (data.size() != width * height)
             throw "Incorrect number of tile entries for layer";
 
@@ -246,108 +229,167 @@ void TextMapHandler::ReadLayers(std::ifstream& file, Map& map)
 
 void TextMapHandler::ReadBackgrounds(std::ifstream& file, Map& map)
 {
-    while (1)
+    wxLogDebug("Reading Backgrounds");
+    std::string line;
+    std::getline(file, line);
+    while (!line.empty())
     {
+        wxLogDebug("Reading a background");
+        wxLogDebug("Read line %s", line.c_str());
         std::string name;
         std::string filename;
-        std::string type;
-        std::string speeds;
-        int mode;
-        float speedx, speedy;
-
-        std::getline(file, name);
-        if (name.empty()) break;
-
-        std::getline(file, filename);
-        std::getline(file, type);
-        std::getline(file, speeds);
-
-        mode = wxAtoi(type);
-
-        wxStringTokenizer scanner(speeds);
-        speedx = wxAtof(scanner.GetNextToken());
-        speedy = wxAtof(scanner.GetNextToken());
-
+        int32_t mode = 0;
+        int32_t speedx = 0, speedy = 0;
         DrawAttributes attr;
-        ReadAttributes(file, attr);
+
+        while(!line.empty())
+        {
+            wxLogDebug("Read line %s", line.c_str());
+            std::string property;
+            Scanner scanner(line);
+
+            if (!scanner.Next(property))
+                throw "Could not parse line: " + line;
+
+            if (property == "name:")
+            {
+                if (!scanner.Next(name))
+                    throw "Could not parse name";
+            }
+            else if (property == "filename:")
+            {
+                if (!scanner.Next(filename))
+                    throw "Could not parse filename";
+            }
+            else if (property == "mode:")
+            {
+                if (!scanner.Next(mode))
+                    throw "Could not parse mode";
+            }
+            else if (property == "speed:")
+            {
+                if (!scanner.Next(speedx))
+                    throw "Could not parse speed";
+                if (!scanner.Next(speedy))
+                    throw "Could not parse speed";
+            }
+            else if (property == "position:")
+            {
+                int32_t x, y;
+                if (!scanner.Next(x))
+                    throw "Could not parse position";
+                if (!scanner.Next(y))
+                    throw "Could not parse position";
+                attr.SetPosition(x, y);
+            }
+            else if (property == "origin:")
+            {
+                int32_t x, y;
+                if (!scanner.Next(x))
+                    throw "Could not parse origin";
+                if (!scanner.Next(y))
+                    throw "Could not parse origin";
+                attr.SetOrigin(x, y);
+            }
+            else if (property == "scale:")
+            {
+                float x, y;
+                if (!scanner.Next(x))
+                    throw "Could not parse scale";
+                if (!scanner.Next(y))
+                    throw "Could not parse scale";
+                attr.SetScale(x, y);
+            }
+            else if (property == "rotation:")
+            {
+                float rotation;
+                if (!scanner.Next(rotation))
+                    throw "Could not parse rotation";
+                attr.SetRotation(rotation);
+            }
+            else if (property == "opacity:")
+            {
+                float opacity;
+                if (!scanner.Next(opacity))
+                    throw "Could not parse opacity";
+                attr.SetOpacity(opacity);
+            }
+            else if (property == "blend_mode:")
+            {
+                uint32_t mode;
+                if (!scanner.Next(mode))
+                    throw "Could not parse blend mode";
+                attr.SetBlendMode(mode);
+            }
+            else if (property == "blend_color:")
+            {
+                uint32_t color;
+                if (!scanner.Next(color, 16))
+                    throw "Could not parse blend color";
+                attr.SetBlendColor(color);
+            }
+            std::getline(file, line);
+        }
 
         Background back(name, filename, mode, speedx, speedy, attr);
         map.Add(back);
+
+        std::getline(file, line);
     }
 }
 
 void TextMapHandler::ReadCollision(std::ifstream& file, Map& map)
 {
-    std::string type;
-    std::getline(file, type);
-    Collision::Type ctype = (Collision::Type) wxAtoi(type);
+    wxLogDebug("Reading Collision Layer");
+    std::string line;
+    std::getline(file, line);
 
-    /// TODO this is correct for now
-    // Later when PixelBased and others are implemented change this.
-    std::string layerdim;
-    std::getline(file, layerdim);
-    wxStringTokenizer scanner(layerdim);
-
-    uint32_t width = std::min(1024, std::max(1, wxAtoi(scanner.GetNextToken())));
-    uint32_t height = std::min(1024, std::max(1, wxAtoi(scanner.GetNextToken())));
+    int32_t type = 0;
+    uint32_t width = 0, height = 0;
     std::vector<int32_t> data;
-    data.reserve(width * height);
 
-    for (unsigned int i = 0; i < height; i++)
+    while(!line.empty())
     {
-        std::string line;
-        std::getline(file, line);
-        if (line.empty()) break;
-        scanner.SetString(line);
-        while (scanner.HasMoreTokens())
+        wxLogDebug("Read line %s", line.c_str());
+        std::string property;
+        Scanner scanner(line);
+
+        if (!scanner.Next(property))
+            throw "Could not parse line: " + line;
+
+        if (property == "type:")
         {
-            wxString token = scanner.GetNextToken();
-            int tileid = wxAtoi(token);
-            data.push_back(tileid);
+            if (!scanner.Next(type))
+                throw "Could not parse type";
         }
+        else if (property == "dimensions:")
+        {
+            if (!scanner.Next(width))
+                throw "Could not parse width";
+            if (!scanner.Next(height))
+                throw "Could not parse height";
+            data.reserve(width * height);
+        }
+        else if (property == "data:")
+        {
+            while (scanner.HasMoreTokens())
+            {
+                int32_t element;
+                if (!scanner.Next(element))
+                    throw "Could not parse data";
+                data.push_back(element);
+            }
+        }
+        std::getline(file, line);
     }
 
-    printf("%d\n", data.size());
     if (data.size() != width * height)
         throw "Incorrect number of tile entries for collision layer";
 
     CollisionLayer* layer = new TileBasedCollisionLayer(width, height, data);
-
     map.SetCollisionLayer(layer);
-}
 
-void TextMapHandler::ReadAttributes(std::ifstream& file, DrawAttributes& attr)
-{
-    std::string pos;
-    std::string origin;
-    std::string scale;
-    std::string rotation;
-    std::string opacity;
-    std::string blend_mode;
-    std::string blend_color;
-
-    std::getline(file, pos);
-    std::getline(file, origin);
-    std::getline(file, scale);
-    std::getline(file, rotation);
-    std::getline(file, opacity);
-    std::getline(file, blend_mode);
-    std::getline(file, blend_color);
-
-    wxStringTokenizer posScan(pos);
-    wxStringTokenizer originScan(origin);
-    wxStringTokenizer scaleScan(scale);
-
-    attr.SetPosition(wxAtoi(posScan.GetNextToken()), wxAtoi(posScan.GetNextToken()));
-    attr.SetOrigin(wxAtoi(originScan.GetNextToken()), wxAtoi(originScan.GetNextToken()));
-    attr.SetScale(wxAtof(scaleScan.GetNextToken()), wxAtof(scaleScan.GetNextToken()));
-    attr.SetRotation(wxAtof(rotation));
-    attr.SetOpacity(wxAtof(opacity));
-    attr.SetBlendMode(wxAtoi(blend_mode));
-    unsigned long color;
-    if (!wxString(blend_color).ToULong(&color, 16))
-        throw "Failed to parse blend color";
-    attr.SetBlendColor(color);
+    std::getline(file, line);
 }
 
 void TextMapHandler::Save(const std::string& filename, Map& map)
@@ -359,38 +401,38 @@ void TextMapHandler::Save(const std::string& filename, Map& map)
 
     // Takes the map dimensions, tile dimensions, name, filename, and layer count and writes it to the file.
     file << "Properties\n";
-    file << map.GetTileWidth() << " " << map.GetTileHeight() << "\n";
-    file << map.GetName() << "\n";
-    file << map.GetFilename() << "\n\n";
+    file << "name: " << map.GetName() << "\n";
+    file << "tileset: " << map.GetFilename() << "\n";
+    file << "tile_dimensions: " << map.GetTileWidth() << " " << map.GetTileHeight() << "\n\n";
 
     // Sets all the layer data for each layer.
     file << "Layers\n";
     for (unsigned int k = 0; k < map.GetNumLayers(); k++)
     {
         Layer& layer = map.GetLayer(k);
-        file << layer.GetName() << "\n";
+        file << "name: " << layer.GetName() << "\n";
 
         int32_t x, y;
         layer.GetPosition(x, y);
-        file << x << " " << y << "\n";
+        file << "position: " << x << " " << y << "\n";
 
         int32_t ox, oy;
         layer.GetOrigin(ox, oy);
-        file << ox << " " << oy << "\n";
+        file << "origin: " << ox << " " << oy << "\n";
 
         float sx, sy;
         layer.GetScale(sx, sy);
-        file << sx << " " << sy << "\n";
+        file << "scale: " << sx << " " << sy << "\n";
 
-        file << layer.GetRotation() << "\n";
-        file << layer.GetOpacity() << "\n";
-        file << layer.GetBlendMode() << "\n";
-        file << layer.GetBlendColor() << "\n";
+        file << "rotation: " << layer.GetRotation() << "\n";
+        file << "opacity: " << layer.GetOpacity() << "\n";
+        file << "blend_mode: " << layer.GetBlendMode() << "\n";
+        file << "blend_color: " << layer.GetBlendColor() << "\n";
 
-        file << layer.GetWidth() << " " << layer.GetHeight() << "\n";
+        file << "dimensions: " << layer.GetWidth() << " " << layer.GetHeight() << "\n";
         for (unsigned int i = 0; i < layer.GetHeight(); i++)
         {
-            file << "\t";
+            file << "data: ";
             for (unsigned int j = 0; j < layer.GetWidth(); j++)
             {
                 file << layer[i * layer.GetWidth() + j] << " ";
@@ -399,7 +441,6 @@ void TextMapHandler::Save(const std::string& filename, Map& map)
         }
         file << "\n";
     }
-
     // Sets all the background data for each background.
     if (map.GetNumBackgrounds() > 0) file << "Backgrounds\n";
     for (unsigned int k = 0; k < map.GetNumBackgrounds(); k++)
@@ -407,27 +448,27 @@ void TextMapHandler::Save(const std::string& filename, Map& map)
         Background& background = map.GetBackground(k);
         int32_t spx, spy;
         background.GetSpeed(spx, spy);
-        file << background.GetName() << "\n";
-        file << background.GetFilename() << "\n";
-        file << background.GetMode() << "\n";
-        file << spx << " " << spy << "\n";
+        file << "name: " << background.GetName() << "\n";
+        file << "filename: " << background.GetFilename() << "\n";
+        file << "mode: " << background.GetMode() << "\n";
+        file << "speed: " << spx << " " << spy << "\n";
 
         int32_t x, y;
         background.GetPosition(x, y);
-        file << x << " " << y << "\n";
+        file << "position: " << x << " " << y << "\n";
 
         int32_t ox, oy;
         background.GetOrigin(ox, oy);
-        file << ox << " " << oy << "\n";
+        file << "origin: " << ox << " " << oy << "\n";
 
         float sx, sy;
         background.GetScale(sx, sy);
-        file << sx << " " << sy << "\n";
+        file << "scale: " << sx << " " << sy << "\n";
 
-        file << background.GetRotation() << "\n";
-        file << background.GetOpacity() << "\n";
-        file << background.GetBlendMode() << "\n";
-        file << background.GetBlendColor() << "\n\n";
+        file << "rotation: " << background.GetRotation() << "\n";
+        file << "opacity: " << background.GetOpacity() << "\n";
+        file << "blend_mode: " << background.GetBlendMode() << "\n";
+        file << "blend_color: " << std::hex << background.GetBlendColor() << std::dec << "\n\n";
     }
 
     if (map.HasCollisionLayer())
@@ -435,11 +476,11 @@ void TextMapHandler::Save(const std::string& filename, Map& map)
         file << "Collision\n";
         TileBasedCollisionLayer* collLayer = dynamic_cast<TileBasedCollisionLayer*>(map.GetCollisionLayer());
         std::vector<int32_t>& collMap = collLayer->GetData();
-        file << collLayer->GetType() << "\n";
-        file << collLayer->GetWidth() << " " << collLayer->GetHeight() << "\n";
+        file << "type: " << collLayer->GetType() << "\n";
+        file << "dimensions: " << collLayer->GetWidth() << " " << collLayer->GetHeight() << "\n";
         for (unsigned int i = 0; i < collLayer->GetHeight(); i++)
         {
-            file << "\t";
+            file << "data: ";
             for (unsigned int j = 0; j < collLayer->GetWidth(); j++)
             {
                 int32_t tile = collMap[i * collLayer->GetWidth() + j];

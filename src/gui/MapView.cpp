@@ -212,10 +212,10 @@ void MapView::DrawLayer(wxGCDC& dc, int id, int sxi, int syi, int sxf, int syf)
 
     for (int i = syi; i <= syf; i++)
     {
-        if (i >= layer.GetHeight()) break;
+        if ((uint32_t)i >= layer.GetHeight()) break;
         for (int j = sxi; j <= sxf; j++)
         {
-            if (j >= layer.GetWidth()) break;
+            if ((uint32_t)j >= layer.GetWidth()) break;
             int index = i * layer.GetWidth() + j;
             float x = j * map.GetTileWidth();
             float y = i * map.GetTileHeight();

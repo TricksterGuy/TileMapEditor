@@ -77,7 +77,8 @@ class Background : public DrawAttributes
         void SetName(const std::string& _name) {name = _name;}
         void SetFilename(const std::string& _filename) {filename = _filename;}
         void SetMode(uint32_t _mode) {mode = _mode;}
-
+        int32_t GetSpeedX() const {return speed_x;}
+        int32_t GetSpeedY() const {return speed_y;}
         void GetSpeed(int32_t& x, int32_t& y) const;
         void SetSpeed(int32_t x, int32_t y);
     private:

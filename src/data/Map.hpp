@@ -10,8 +10,8 @@
 #include "Background.hpp"
 #include "AnimatedTile.hpp"
 
-#define MIN_TILE_SIZE 4
-#define MAX_TILE_SIZE 256
+#define MIN_TILE_SIZE ((uint32_t)4)
+#define MAX_TILE_SIZE ((uint32_t)256)
 
 /** The main datstructure of the program.
   * This class keeps track of the dimensions of the map itself and its tiles.

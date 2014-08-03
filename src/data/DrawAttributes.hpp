@@ -29,6 +29,12 @@ class DrawAttributes
     public:
         DrawAttributes() : depth(0), x(0), y(0), origin_x(0), origin_y(0), scale_x(1), scale_y(1), rotation(0), opacity(100), blend_mode(0), blend_color(-1) {}
         DrawAttributes(int32_t z) : depth(z), x(0), y(0), origin_x(0), origin_y(0), scale_x(1), scale_y(1), rotation(0), opacity(100), blend_mode(0), blend_color(-1) {}
+        int32_t GetX() const {return x;}
+        int32_t GetY() const {return y;}
+        int32_t GetOriginX() const {return origin_x;}
+        int32_t GetOriginY() const {return origin_y;}
+        float GetScaleX() const {return scale_x;}
+        float GetScaleY() const {return scale_y;}
         int32_t GetDepth() const {return depth;}
         void SetDepth(int32_t _depth) {depth = _depth;}
         void GetPosition(int32_t& x, int32_t& y) const;

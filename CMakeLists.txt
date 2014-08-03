@@ -29,17 +29,6 @@ option(TEST_MODE "Build for testing" OFF)
 
 # Source files definition
 set(SRC_TILEMAPEDITOR
-    src/data/AnimatedTile.cpp
-    src/data/Background.cpp
-    src/data/CollisionLayer.cpp
-    src/data/DrawAttributes.cpp
-    src/data/Layer.cpp
-    src/data/Map.cpp
-    src/data/PixelBasedCollisionLayer.cpp
-    src/data/Rectangle.cpp
-    src/data/Region.cpp
-    src/data/TileBasedCollisionLayer.cpp
-
     src/gen/TilemapEditorGUI.cpp
     src/gen/MapNotebookGUI.cpp
 
@@ -51,7 +40,22 @@ set(SRC_TILEMAPEDITOR
     src/gui/ParallaxBackground.cpp
     src/gui/TilemapEditorApp.cpp
     src/gui/TilemapEditorFrame.cpp
+)
 
+set(SRC_MAP
+    src/data/AnimatedTile.cpp
+    src/data/Background.cpp
+    src/data/CollisionLayer.cpp
+    src/data/DrawAttributes.cpp
+    src/data/Layer.cpp
+    src/data/Map.cpp
+    src/data/PixelBasedCollisionLayer.cpp
+    src/data/Rectangle.cpp
+    src/data/Region.cpp
+    src/data/TileBasedCollisionLayer.cpp
+)
+
+set(SRC_HANDLERS
     src/handlers/BaseMapHandler.cpp
     src/handlers/BinaryMapHandler.cpp
     src/handlers/GBAImageHandler.cpp
@@ -61,6 +65,10 @@ set(SRC_TILEMAPEDITOR
     src/handlers/MapHandlerManager.cpp
     src/handlers/TextMapHandler.cpp
     src/handlers/XmlMapHandler.cpp
+)
+
+set(SRC_UTIL
+    src/util/Scanner.cpp
 )
 
 set(SRC_wxFlatNotebook
@@ -78,6 +86,8 @@ find_package(wxWidgets REQUIRED)
 find_package(ImageMagick COMPONENTS Magick++)
 find_package(GTK2 REQUIRED gtk)
 find_package(Boost 1.54 REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+pkg_search_module(PROTOBUF REQUIRED protobuf)
 #execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --cxxflags)
 
 IF(DEBUG_MODE)
@@ -98,6 +108,7 @@ include_directories(${tilemapeditor_SOURCE_DIR}/lib/wxFlatNotebook)
 include_directories(${ImageMagick_INCLUDE_DIRS})
 include_directories(${GTK2_INCLUDE_DIRS})
 include_directories(${Boost_INCLUDE_DIR})
+include_directories(${PROTOBUF_INCLUDEDIR})
 
 add_executable(
 	tilemapeditor
@@ -110,13 +121,50 @@ add_library(
 	${SRC_wxFlatNotebook}
 )
 
+add_library(
+    map
+    STATIC
+    ${SRC_MAP}
+)
+
+add_library(
+    handlers
+    STATIC
+    ${SRC_HANDLERS}
+)
+
+add_library(
+    util
+    STATIC
+    ${SRC_UTIL}
+)
+
 target_link_libraries(
 	tilemapeditor
+    handlers
+    util
+    map
 	wxFlatNotebook
    	${wxWidgets_LIBRARIES}
     ${ImageMagick_LIBRARIES}
     ${GTK2_LIBRARIES}
     ${Boost_LIBRARIES}
+)
+
+add_executable(
+    TextMapHandlerTest
+    src/testing/TextMapHandlerTest.cpp
+)
+
+target_link_libraries(
+    TextMapHandlerTest
+    handlers
+    util
+    map
+	${wxWidgets_LIBRARIES}
+	${GTK2_LIBRARIES}
+	${PROTOBUF_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tilemapeditor DESTINATION bin)
