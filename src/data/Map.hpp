@@ -67,11 +67,17 @@ class Map
         uint32_t GetNumAnimatedTiles() const {return animatedTiles.size();}
 
         std::vector<Layer>& GetLayers() {return layers;}
+        const std::vector<Layer>& GetLayers() const {return layers;}
         std::vector<Background>& GetBackgrounds() {return backgrounds;}
+        const std::vector<Background>& GetBackgrounds() const {return backgrounds;}
         std::vector<AnimatedTile>& GetAnimatedTiles() {return animatedTiles;}
+        const std::vector<AnimatedTile>& GetAnimatedTiles() const {return animatedTiles;}
         Layer& GetLayer(const uint32_t index) {return layers[index];}
+        const Layer& GetLayer(const uint32_t index) const {return layers[index];}
         Background& GetBackground(const uint32_t index) {return backgrounds[index];}
+        const Background& GetBackground(const uint32_t index) const {return backgrounds[index];}
         AnimatedTile& GetAnimatedTile(const uint32_t index) {return animatedTiles[index];}
+        const AnimatedTile& GetAnimatedTile(const uint32_t index) const {return animatedTiles[index];}
 
         CollisionLayer* GetCollisionLayer() const {return collisionLayer.get();}
         bool HasCollisionLayer() const {return collisionLayer != NULL;}

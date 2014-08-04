@@ -36,7 +36,7 @@ GBAImageHandler::~GBAImageHandler()
 {
 }
 
-void GBAImageHandler::Save(const std::string& filename, Map& map)
+void GBAImageHandler::Save(std::ostream& filename, const Map& map)
 {
     int mode;
     wxArrayString choices;
@@ -68,13 +68,16 @@ void GBAImageHandler::Save(const std::string& filename, Map& map)
         image.syncPixels();
     }
 
+#if 0
     if (mode != 4)
         WriteCMode3(filename, image);
     else
         WriteCMode4(filename, image);
+#endif
 }
 
-void GBAImageHandler::WriteCMode3(const std::string& filename, Magick::Image& image)
+#if 0
+void GBAImageHandler::WriteCMode3(std::ostream& file, Magick::Image& image)
 {
     /// TODO update this code.
     std::ofstream file_c, file_h;
@@ -137,7 +140,7 @@ void GBAImageHandler::WriteCMode3(const std::string& filename, Magick::Image& im
     delete[] pixels;
 }
 
-void GBAImageHandler::WriteCMode4(const std::string& filename, Magick::Image& image)
+void GBAImageHandler::WriteCMode4(std::ostream& file, Magick::Image& image)
 {
     /// TODO update this too.
     std::ofstream file_c, file_h;
@@ -226,3 +229,4 @@ void GBAImageHandler::WriteCMode4(const std::string& filename, Magick::Image& im
     file_c.close();
     file_h.close();
 }
+#endif

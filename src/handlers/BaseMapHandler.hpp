@@ -24,6 +24,7 @@
 
 #include <string>
 #include <set>
+#include <iostream>
 #include "Map.hpp"
 
 /** Base class for all map handlers
@@ -59,11 +60,21 @@ class BaseMapHandler
           * @param map Map object to load the map to.
           */
         virtual void Load(const std::string& filename, Map& map);
+        /** Loads a map given a stream object
+          * @param file Stream object to load data from
+          * @param map Map object to load the map to.
+          */
+        virtual void Load(std::istream& file, Map& map);
         /** Saves a map given a filename
           * @param filename Path to the file to save to.
           * @param map Map object to save.
           */
-        virtual void Save(const std::string& filename, Map& map);
+        virtual void Save(const std::string& filename, const Map& map);
+        /** Saves a map given a stream object
+          * @param file Stream object to save data to.
+          * @param map Map object to save.
+          */
+        virtual void Save(std::ostream& file, const Map& map);
 
         const std::string& GetName() const {return name;}
         const std::string& GetExtension() const {return extension;}

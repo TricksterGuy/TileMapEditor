@@ -51,15 +51,31 @@ BinaryMapHandler::~BinaryMapHandler()
 {
 }
 
+
 void BinaryMapHandler::Load(const std::string& mapfile, Map& map)
+{
+    std::ifstream file(mapfile.c_str(), std::ios::binary);
+    if (!file.good())
+        throw "Could not open file";
+
+    Load(file, map);
+    file.close();
+}
+
+void BinaryMapHandler::Save(const std::string& mapfile, const Map& map)
+{
+    std::ofstream file(mapfile.c_str(), std::ios::binary);
+    if (!file.good())
+        throw "Could not open file";
+
+    Save(file, map);
+    file.close();
+}
+
+void BinaryMapHandler::Load(std::istream& file, Map& map)
 {
     int32_t num_layers = -1;
     int32_t num_backgrounds = -1;
-
-    std::ifstream file(mapfile.c_str(), std::ios::binary);
-
-    if (!file.good())
-        throw "Could not open file";
 
     while (!file.eof())
     {
@@ -107,17 +123,10 @@ void BinaryMapHandler::Load(const std::string& mapfile, Map& map)
             fprintf(stderr, "Malformed Chunk or size incorrect id %s size = %d read = %d\n", chunkname.c_str(), size, end - start);
         }
     }
-
-    file.close();
 }
 
-void BinaryMapHandler::Save(const std::string& mapfile, Map& map)
+void BinaryMapHandler::Save(std::ostream& file, const Map& map)
 {
-    std::ofstream file(mapfile.c_str(), std::ios::binary);
-
-    if (!file.good())
-        throw "Could not open file";
-
     WriteHEAD(file, map);
     WriteMAPP(file, map);
     WriteLYRS(file, map);
@@ -155,12 +164,9 @@ void BinaryMapHandler::Save(const std::string& mapfile, Map& map)
 
     file.write(eom, sizeof(char) * 4);
     file.write((char*) &size, sizeof(int32_t));
-    file.close();
-
-
 }
 
-void BinaryMapHandler::ReadChunkName(std::ifstream& file, std::string& name, uint32_t& size)
+void BinaryMapHandler::ReadChunkName(std::istream& file, std::string& name, uint32_t& size)
 {
     char chunk[5];
 
@@ -176,7 +182,7 @@ void BinaryMapHandler::ReadChunkName(std::ifstream& file, std::string& name, uin
         throw "Failed to read chunk name";
 }
 
-void BinaryMapHandler::ReadHEAD(std::ifstream& file, Map& map)
+void BinaryMapHandler::ReadHEAD(std::istream& file, Map& map)
 {
     char major;
     char minor;
@@ -200,7 +206,7 @@ void BinaryMapHandler::ReadHEAD(std::ifstream& file, Map& map)
         throw "Failed to read HEAD chunk";
 }
 
-void BinaryMapHandler::ReadMAPP(std::ifstream& file, Map& map, int32_t& num_layers, int32_t& num_backgrounds)
+void BinaryMapHandler::ReadMAPP(std::istream& file, Map& map, int32_t& num_layers, int32_t& num_backgrounds)
 {
     uint32_t tile_width;
     uint32_t tile_height;
@@ -249,7 +255,7 @@ void BinaryMapHandler::ReadMAPP(std::ifstream& file, Map& map, int32_t& num_laye
     map.SetFilename(filename);
 }
 
-void BinaryMapHandler::ReadLYRS(std::ifstream& file, Map& map, int32_t& num_layers)
+void BinaryMapHandler::ReadLYRS(std::istream& file, Map& map, int32_t& num_layers)
 {
     uint32_t texture_size;
     char* temp;
@@ -279,7 +285,7 @@ void BinaryMapHandler::ReadLYRS(std::ifstream& file, Map& map, int32_t& num_laye
         throw "Failed to read the LYRS chunk";
 }
 
-void BinaryMapHandler::ReadBGDS(std::ifstream& file, Map& map, int32_t& num_backgrounds)
+void BinaryMapHandler::ReadBGDS(std::istream& file, Map& map, int32_t& num_backgrounds)
 {
     uint32_t texture_size;
     char* temp;
@@ -326,7 +332,7 @@ void BinaryMapHandler::ReadBGDS(std::ifstream& file, Map& map, int32_t& num_back
         throw "Failed to read the BGDS chunk";
 }
 
-void BinaryMapHandler::ReadMTCL(std::ifstream& file, Map& map)
+void BinaryMapHandler::ReadMTCL(std::istream& file, Map& map)
 {
     uint32_t width = map.GetWidth();
     uint32_t height = map.GetHeight();
@@ -341,7 +347,7 @@ void BinaryMapHandler::ReadMTCL(std::ifstream& file, Map& map)
         throw "Failed to read the MTCL chunk";
 }
 
-void BinaryMapHandler::ReadMDCL(std::ifstream& file, Map& map)
+void BinaryMapHandler::ReadMDCL(std::istream& file, Map& map)
 {
     uint32_t width = map.GetWidth();
     uint32_t height = map.GetHeight();
@@ -356,7 +362,7 @@ void BinaryMapHandler::ReadMDCL(std::ifstream& file, Map& map)
         throw "Failed to read the MDCL chunk";
 }
 
-void BinaryMapHandler::ReadMPCL(std::ifstream& file, Map& map)
+void BinaryMapHandler::ReadMPCL(std::istream& file, Map& map)
 {
     int32_t numrects;
     file.read((char*)(&numrects), sizeof(int32_t));
@@ -385,25 +391,25 @@ void BinaryMapHandler::ReadMPCL(std::ifstream& file, Map& map)
         throw "Failed to read the MPCL chunk";
 }
 
-void BinaryMapHandler::ReadTTCI(std::ifstream& file, Map& map)
+void BinaryMapHandler::ReadTTCI(std::istream& file, Map& map)
 {
     throw "Failed to read the TTCI chunk";
 
 }
 
-void BinaryMapHandler::ReadTDCI(std::ifstream& file, Map& map)
+void BinaryMapHandler::ReadTDCI(std::istream& file, Map& map)
 {
     throw "Failed to read the TDCI chunk";
 
 }
 
-void BinaryMapHandler::ReadTPCI(std::ifstream& file, Map& map)
+void BinaryMapHandler::ReadTPCI(std::istream& file, Map& map)
 {
     throw "Failed to read the TPCI chunk";
 
 }
 
-void BinaryMapHandler::ReadANIM(std::ifstream& file, Map& map)
+void BinaryMapHandler::ReadANIM(std::istream& file, Map& map)
 {
     uint32_t numanimations;
     file.read((char*)&numanimations, sizeof(uint32_t));
@@ -450,7 +456,7 @@ void BinaryMapHandler::ReadANIM(std::ifstream& file, Map& map)
         throw "Failed to read the ANIM chunk";
 }
 
-void BinaryMapHandler::WriteHEAD(std::ofstream& file, Map& map)
+void BinaryMapHandler::WriteHEAD(std::ostream& file, const Map& map)
 {
     char major = MAJOR;
     char minor = MINOR;
@@ -468,7 +474,7 @@ void BinaryMapHandler::WriteHEAD(std::ofstream& file, Map& map)
         throw "Failed to write the HEAD chunk";
 }
 
-void BinaryMapHandler::WriteMAPP(std::ofstream& file, Map& map)
+void BinaryMapHandler::WriteMAPP(std::ostream& file, const Map& map)
 {
     // 8 ints + two strings.
     uint32_t size = htonl(8 * sizeof(uint32_t) + (map.GetName().length() + 2 + map.GetFilename().length()) * sizeof(char));
@@ -505,7 +511,7 @@ void BinaryMapHandler::WriteMAPP(std::ofstream& file, Map& map)
         throw "Failed to write the MAPP chunk";
 }
 
-void BinaryMapHandler::WriteLYRS(std::ofstream& file, Map& map)
+void BinaryMapHandler::WriteLYRS(std::ostream& file, const Map& map)
 {
     const std::string& chunk = "LYRS";
     uint32_t size = 0;
@@ -514,7 +520,7 @@ void BinaryMapHandler::WriteLYRS(std::ofstream& file, Map& map)
 
     for (uint32_t i = 0; i < map.GetNumLayers(); i++)
     {
-        Layer& layer = map.GetLayer(i);
+        const Layer& layer = map.GetLayer(i);
 
         size += sizeof(uint32_t);
         size += (layer.GetName().length() + 1) * sizeof(char);
@@ -531,12 +537,12 @@ void BinaryMapHandler::WriteLYRS(std::ofstream& file, Map& map)
 
     for (unsigned int i = 0; i < map.GetNumLayers(); i++)
     {
-        Layer& layer = map.GetLayer(i);
+        const Layer& layer = map.GetLayer(i);
         texture_size = layer.GetName().length() + 1;
         texture_size_nl = htonl(texture_size);
         file.write((char*)(&texture_size_nl), sizeof(int32_t));
         file.write(layer.GetName().c_str(), sizeof(char) * texture_size);
-        std::vector<int32_t>& data = layer.GetData();
+        const std::vector<int32_t>& data = layer.GetData();
         for (uint32_t i = 0; i < width * height; i++) buffer[i] = htonl(data[i]);
         file.write((char*) buffer, sizeof(int32_t) * width * height);
     }
@@ -547,14 +553,14 @@ void BinaryMapHandler::WriteLYRS(std::ofstream& file, Map& map)
         throw "Failed to write the LYRS chunk";
 }
 
-void BinaryMapHandler::WriteBGDS(std::ofstream& file, Map& map)
+void BinaryMapHandler::WriteBGDS(std::ostream& file, const Map& map)
 {
     uint32_t size = 0;
     const std::string& chunk = "BGDS";
 
     for (uint32_t i = 0; i < map.GetNumBackgrounds(); i++)
     {
-        Background& back = map.GetBackground(i);
+        const Background& back = map.GetBackground(i);
         size += (back.GetName().length() + 1) * sizeof(char);
         size += (back.GetFilename().length() + 1) * sizeof(char);
         size += 5 * sizeof(int32_t);
@@ -568,7 +574,7 @@ void BinaryMapHandler::WriteBGDS(std::ofstream& file, Map& map)
 
     for (uint32_t i = 0; i < map.GetNumBackgrounds(); i++)
     {
-        Background back = map.GetBackground(i);
+        const Background& back = map.GetBackground(i);
         int32_t ix, iy;
         uint32_t mode = htonl(back.GetMode());
         back.GetSpeed(ix, iy);
@@ -595,7 +601,7 @@ void BinaryMapHandler::WriteBGDS(std::ofstream& file, Map& map)
         throw "Failed to write the BGDS chunk";
 }
 
-void BinaryMapHandler::WriteMTCL(std::ofstream& file, Map& map)
+void BinaryMapHandler::WriteMTCL(std::ostream& file, const Map& map)
 {
     uint32_t width = map.GetWidth();
     uint32_t height = map.GetHeight();
@@ -619,7 +625,7 @@ void BinaryMapHandler::WriteMTCL(std::ofstream& file, Map& map)
         throw "Failed to write the MTCL chunk";
 }
 
-void BinaryMapHandler::WriteMDCL(std::ofstream& file, Map& map)
+void BinaryMapHandler::WriteMDCL(std::ostream& file, const Map& map)
 {
     uint32_t width = map.GetWidth();
     uint32_t height = map.GetHeight();
@@ -643,7 +649,7 @@ void BinaryMapHandler::WriteMDCL(std::ofstream& file, Map& map)
         throw "Failed to write the MDCL chunk";
 }
 
-void BinaryMapHandler::WriteMPCL(std::ofstream& file, Map& map)
+void BinaryMapHandler::WriteMPCL(std::ostream& file, const Map& map)
 {
     PixelBasedCollisionLayer* layer = dynamic_cast<PixelBasedCollisionLayer*>(map.GetCollisionLayer());
     const Region& region = layer->GetData();
@@ -677,28 +683,28 @@ void BinaryMapHandler::WriteMPCL(std::ofstream& file, Map& map)
         throw "Failed to write the MPCL chunk";
 }
 
-void BinaryMapHandler::WriteTTCI(std::ofstream& file, Map& map)
+void BinaryMapHandler::WriteTTCI(std::ostream& file, const Map& map)
 {
     throw "Failed to write the TTCI chunk";
 }
 
-void BinaryMapHandler::WriteTDCI(std::ofstream& file, Map& map)
+void BinaryMapHandler::WriteTDCI(std::ostream& file, const Map& map)
 {
     throw "Failed to write the TDCI chunk";
 }
 
-void BinaryMapHandler::WriteTPCI(std::ofstream& file, Map& map)
+void BinaryMapHandler::WriteTPCI(std::ostream& file, const Map& map)
 {
     throw "Failed to write the TPCI chunk";
 }
 
-void BinaryMapHandler::WriteANIM(std::ofstream& file, Map& map)
+void BinaryMapHandler::WriteANIM(std::ostream& file, const Map& map)
 {
     uint32_t size = sizeof(int32_t);
     const std::string& chunk = "ANIM";
     for (uint32_t i = 0; i < map.GetNumAnimatedTiles(); i++)
     {
-        AnimatedTile& anim = map.GetAnimatedTile(i);
+        const AnimatedTile& anim = map.GetAnimatedTile(i);
         size += (anim.GetName().length() + 1) * sizeof(char);
         size += (anim.GetFrames().size() + 1) * sizeof(int32_t);
         size += 4 * sizeof(int32_t);
@@ -714,7 +720,7 @@ void BinaryMapHandler::WriteANIM(std::ofstream& file, Map& map)
 
     for (uint32_t i = 0; i < map.GetNumAnimatedTiles(); i++)
     {
-        AnimatedTile& anim = map.GetAnimatedTile(i);
+        const AnimatedTile& anim = map.GetAnimatedTile(i);
         int32_t delay, type, times;
         uint32_t frames;
         uint32_t texture_size, texture_size_nl;

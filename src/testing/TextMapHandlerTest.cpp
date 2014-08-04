@@ -23,10 +23,50 @@
     #define BOOST_TEST_DYN_LINK
 #endif
 #define BOOST_TEST_MAIN
+#include <sstream>
 #include <boost/test/auto_unit_test.hpp>
 #include "Map.hpp"
 #include "TextMapHandler.hpp"
 #include "TileBasedCollisionLayer.hpp"
+
+const char* file_data =
+"Properties\n"
+"name: HELLO\n"
+"tileset: 011-PortTown01.png\n"
+"tile_dimensions: 32 32\n"
+"\n"
+"Layers\n"
+"name: A\n"
+"position: 32 24\n"
+"origin: 10 12\n"
+"scale: 3.0 5.0\n"
+"rotation: 92.0\n"
+"opacity: 50.0\n"
+"blend_mode: 0\n"
+"blend_color: FEFDFCFA\n"
+"dimensions: 2 2\n"
+"data: 50 70\n"
+"data: 70 60\n"
+"\n"
+"\n"
+"Backgrounds\n"
+"name: B\n"
+"filename: 003-StarlitSky01.png\n"
+"mode: 6\n"
+"speed: 2 4\n"
+"position: 1 2\n"
+"origin: 3 4\n"
+"scale: 5.0 6.0\n"
+"rotation: 7.0\n"
+"opacity: 8.0\n"
+"blend_mode: 9\n"
+"blend_color: 0a0b0c0d\n"
+"\n"
+"\n"
+"Collision\n"
+"type: 0\n"
+"dimensions: 2 2\n"
+"data: 1 0 1 1\n";
 
 struct TextMapHandlerTest
 {
@@ -38,9 +78,10 @@ struct TextMapHandlerTest
 
 BOOST_FIXTURE_TEST_CASE(TestLoad, TextMapHandlerTest)
 {
+    std::stringstream file(file_data);
     try
     {
-        handler.Load("textmaphandlertest.txt", map);
+        handler.Load(file, map);
     }
     catch (const char* s)
     {

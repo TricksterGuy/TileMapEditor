@@ -31,6 +31,8 @@
 #include <wx/xml/xml.h>
 #include "XmlMapHandler.hpp"
 #include "TileBasedCollisionLayer.hpp"
+#include <wx/wfstream.h>
+#include <wx/stdstream.h>
 
 using namespace std;
 
@@ -43,10 +45,30 @@ XmlMapHandler::~XmlMapHandler()
 
 }
 
-void XmlMapHandler::Load(const std::string& filename, Map& map)
+void XmlMapHandler::Load(const std::string& mapfile, Map& map)
+{
+    wxFileInputStream wxfile(mapfile);
+    if (!wxfile.IsOk())
+        throw "Could not open file";
+
+    wxStdInputStream out(wxfile);
+    Load(out, map);
+}
+
+void XmlMapHandler::Save(const std::string& mapfile, const Map& map)
+{
+    wxFileOutputStream wxfile(mapfile);
+    if (!wxfile.IsOk())
+        throw "Could not open file";
+
+    wxStdOutputStream out(wxfile);
+    Save(out, map);
+}
+
+void XmlMapHandler::Load(std::istream& file, Map& map)
 {
     wxXmlDocument doc;
-    if (!doc.Load(filename.c_str()))
+    if (!doc.Load(dynamic_cast<wxInputStream&>(file)))
         throw "Could not open XML file";
 
     wxXmlNode* child = doc.GetRoot()->GetChildren();
@@ -67,7 +89,7 @@ void XmlMapHandler::Load(const std::string& filename, Map& map)
     }
 }
 
-void XmlMapHandler::Save(const std::string& filename, Map& map)
+void XmlMapHandler::Save(std::ostream& file, const Map& map)
 {
     wxXmlNode* root = new wxXmlNode(wxXML_ELEMENT_NODE, "Map");
 
@@ -82,7 +104,7 @@ void XmlMapHandler::Save(const std::string& filename, Map& map)
     wxXmlDocument doc;
     doc.SetRoot(root);
 
-    if (!doc.Save(filename, 4))
+    if (!doc.Save(dynamic_cast<wxOutputStream&>(file)))
         throw "Failed to save XML file";
 }
 
@@ -249,7 +271,7 @@ void XmlMapHandler::ReadCollision(wxXmlNode* root, Map& map)
     map.SetCollisionLayer(clayer);
 }
 
-void XmlMapHandler::WriteProperties(wxXmlNode* root, Map& map)
+void XmlMapHandler::WriteProperties(wxXmlNode* root, const Map& map)
 {
     wxXmlNode* properties = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Properties");
 
@@ -272,9 +294,9 @@ void XmlMapHandler::WriteProperties(wxXmlNode* root, Map& map)
     new wxXmlNode(mheight, wxXML_TEXT_NODE, "Height", wxString::Format("%i", map.GetHeight()));
 }
 
-void XmlMapHandler::WriteLayer(wxXmlNode* root, Map& map, unsigned int i)
+void XmlMapHandler::WriteLayer(wxXmlNode* root, const Map& map, unsigned int i)
 {
-    Layer& layer = map.GetLayer(i);
+    const Layer& layer = map.GetLayer(i);
 
     wxXmlNode* layern = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Layer");
 
@@ -294,9 +316,9 @@ void XmlMapHandler::WriteLayer(wxXmlNode* root, Map& map, unsigned int i)
     new wxXmlNode(name, wxXML_TEXT_NODE, "Name", layer.GetName());
 }
 
-void XmlMapHandler::WriteBackground(wxXmlNode* root, Map& map, unsigned int i)
+void XmlMapHandler::WriteBackground(wxXmlNode* root, const Map& map, unsigned int i)
 {
-    Background& background = map.GetBackground(i);
+    const Background& background = map.GetBackground(i);
     int32_t x, y;
     background.GetSpeed(x, y);
     wxXmlNode* back = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Background");
@@ -314,7 +336,7 @@ void XmlMapHandler::WriteBackground(wxXmlNode* root, Map& map, unsigned int i)
     new wxXmlNode(name, wxXML_TEXT_NODE, "Name", background.GetName());
 }
 
-void XmlMapHandler::WriteCollision(wxXmlNode* root, Map& map)
+void XmlMapHandler::WriteCollision(wxXmlNode* root, const Map& map)
 {
     TileBasedCollisionLayer* layer = dynamic_cast<TileBasedCollisionLayer*>(map.GetCollisionLayer());
     wxXmlNode* layern = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Collision");

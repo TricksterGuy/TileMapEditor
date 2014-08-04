@@ -25,7 +25,7 @@
   *
   * Converts a map into an ImageMagick Image
   */
-int HandlerUtils::MapToImage(Map& map, Magick::Image& image)
+int HandlerUtils::MapToImage(const Map& map, Magick::Image& image)
 {
     std::vector<Magick::Image> tiles;
 
@@ -45,7 +45,7 @@ int HandlerUtils::MapToImage(Map& map, Magick::Image& image)
     {
         for (unsigned int k = 0; k < map.GetNumLayers(); k++)
         {
-            Layer& layer = map.GetLayer(k);
+            const Layer& layer = map.GetLayer(k);
             if (HandlerUtils::LayerToImage(map, layer, tiles, image))
                 return -1;
         }
@@ -62,7 +62,7 @@ int HandlerUtils::MapToImage(Map& map, Magick::Image& image)
   *
   * Converts a layer into an ImageMagick Image
   */
-int HandlerUtils::LayerToImage(Map& map, Layer& layer, Magick::Image& image)
+int HandlerUtils::LayerToImage(const Map& map, const Layer& layer, Magick::Image& image)
 {
     std::vector<Magick::Image> tiles;
 
@@ -85,7 +85,7 @@ int HandlerUtils::LayerToImage(Map& map, Layer& layer, Magick::Image& image)
   *
   * Given a map gets the tiles for the map
   */
-int HandlerUtils::GetTiles(Map& map, std::vector<Magick::Image>& tiles)
+int HandlerUtils::GetTiles(const Map& map, std::vector<Magick::Image>& tiles)
 {
     Magick::Image tileset(Magick::Geometry(32, 32), Magick::ColorRGB(1, 1, 1));
 
@@ -112,7 +112,7 @@ int HandlerUtils::GetTiles(Map& map, std::vector<Magick::Image>& tiles)
   *
   * Loads a tileset into the image passed in.
   */
-int HandlerUtils::LoadTileset(Map& map, Magick::Image& image)
+int HandlerUtils::LoadTileset(const Map& map, Magick::Image& image)
 {
     if (map.GetFilename().empty()) return -1;
 
@@ -125,7 +125,7 @@ int HandlerUtils::LoadTileset(Map& map, Magick::Image& image)
   *
   * Converts a layer into an ImageMagick Image
   */
-int HandlerUtils::LayerToImage(Map& map, Layer& layer, std::vector<Magick::Image>& tiles, Magick::Image& image)
+int HandlerUtils::LayerToImage(const Map& map, const Layer& layer, std::vector<Magick::Image>& tiles, Magick::Image& image)
 {
     for (unsigned int i = 0; i < map.GetHeight(); i++)
     {
@@ -145,7 +145,7 @@ int HandlerUtils::LayerToImage(Map& map, Layer& layer, std::vector<Magick::Image
   *
   * Given a map gets the tiles for the map
   */
-int HandlerUtils::GetTiles(Map& map, Magick::Image& tileset, std::vector<Magick::Image>& tiles)
+int HandlerUtils::GetTiles(const Map& map, Magick::Image& tileset, std::vector<Magick::Image>& tiles)
 {
     int numTilesX = tileset.columns() / map.GetTileWidth();
     int numTilesY = tileset.rows() / map.GetTileHeight();

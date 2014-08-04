@@ -19,7 +19,6 @@
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
 
-#include <iostream>
 #include <fstream>
 #include <algorithm>
 #include <wx/log.h>
@@ -29,9 +28,9 @@
 #include "TextMapHandler.hpp"
 #include "TileBasedCollisionLayer.hpp"
 
+
 TextMapHandler::TextMapHandler() : BaseMapHandler("Text Format", "txt", "Export the map as a text file")
 {
-    wxLogDebug("Init TextMapHandler");
 }
 
 TextMapHandler::~TextMapHandler()
@@ -39,16 +38,12 @@ TextMapHandler::~TextMapHandler()
 
 }
 
-void TextMapHandler::Load(const std::string& filename, Map& map)
+void TextMapHandler::Load(std::istream& file, Map& map)
 {
-    wxLogDebug("Loading %s", filename.c_str());
-    std::ifstream file(filename.c_str());
-    if (!file.good())
-        throw "Could not open file for reading";
-
     std::string line;
     std::getline(file, line);
 
+    wxLogDebug("%s Read line %s", __func__, line.c_str());
     if (line == "Properties")
         ReadProperties(file, map);
     else
@@ -56,6 +51,7 @@ void TextMapHandler::Load(const std::string& filename, Map& map)
 
     while (std::getline(file, line))
     {
+        wxLogDebug("%s Read line %s", __func__, line.c_str());
         if (line == "Layers")
             ReadLayers(file, map);
         else if (line == "Backgrounds")
@@ -65,9 +61,10 @@ void TextMapHandler::Load(const std::string& filename, Map& map)
         else if (!line.empty())
             throw "Unknown type found in file line: " + line;
     }
+    wxLogDebug("Done Loading");
 }
 
-void TextMapHandler::ReadProperties(std::ifstream& file, Map& map)
+void TextMapHandler::ReadProperties(std::istream& file, Map& map)
 {
     wxLogDebug("Reading Properties");
     std::string line;
@@ -78,7 +75,7 @@ void TextMapHandler::ReadProperties(std::ifstream& file, Map& map)
     std::getline(file, line);
     while (!line.empty())
     {
-        wxLogDebug("Read line %s", line.c_str());
+        wxLogDebug("%s Read line %s", __func__, line.c_str());
         std::string property;
         Scanner scanner(line);
 
@@ -102,6 +99,10 @@ void TextMapHandler::ReadProperties(std::ifstream& file, Map& map)
             if (!scanner.Next(tile_height))
                 throw "Could not parse tile_height";
         }
+        else
+        {
+            throw "Unexpected token " + property;
+        }
         std::getline(file, line);
     }
 
@@ -111,9 +112,10 @@ void TextMapHandler::ReadProperties(std::ifstream& file, Map& map)
     map.SetTileDimensions(tile_width, tile_height);
     map.SetName(name);
     map.SetFilename(tileset);
+    wxLogDebug("Done Reading Properties");
 }
 
-void TextMapHandler::ReadLayers(std::ifstream& file, Map& map)
+void TextMapHandler::ReadLayers(std::istream& file, Map& map)
 {
     wxLogDebug("Reading Layers");
     std::string line;
@@ -121,7 +123,7 @@ void TextMapHandler::ReadLayers(std::ifstream& file, Map& map)
     while (!line.empty())
     {
         wxLogDebug("Reading a layer");
-        wxLogDebug("Read line %s", line.c_str());
+        wxLogDebug("%s Read line %s", __func__, line.c_str());
         std::string name;
         DrawAttributes attr;
         uint32_t width = 0, height = 0;
@@ -129,7 +131,7 @@ void TextMapHandler::ReadLayers(std::ifstream& file, Map& map)
 
         while(!line.empty())
         {
-            wxLogDebug("Read line %s", line.c_str());
+            wxLogDebug("%s Read line %s", __func__, line.c_str());
             std::string property;
             Scanner scanner(line);
 
@@ -214,6 +216,10 @@ void TextMapHandler::ReadLayers(std::ifstream& file, Map& map)
                     data.push_back(element);
                 }
             }
+            else
+            {
+                throw "Unexpected token " + property;
+            }
             std::getline(file, line);
         }
 
@@ -225,9 +231,10 @@ void TextMapHandler::ReadLayers(std::ifstream& file, Map& map)
 
         std::getline(file, line);
     }
+    wxLogDebug("Done Reading Layers");
 }
 
-void TextMapHandler::ReadBackgrounds(std::ifstream& file, Map& map)
+void TextMapHandler::ReadBackgrounds(std::istream& file, Map& map)
 {
     wxLogDebug("Reading Backgrounds");
     std::string line;
@@ -235,7 +242,7 @@ void TextMapHandler::ReadBackgrounds(std::ifstream& file, Map& map)
     while (!line.empty())
     {
         wxLogDebug("Reading a background");
-        wxLogDebug("Read line %s", line.c_str());
+        wxLogDebug("%s Read line %s", __func__, line.c_str());
         std::string name;
         std::string filename;
         int32_t mode = 0;
@@ -244,7 +251,7 @@ void TextMapHandler::ReadBackgrounds(std::ifstream& file, Map& map)
 
         while(!line.empty())
         {
-            wxLogDebug("Read line %s", line.c_str());
+            wxLogDebug("%s Read line %s", __func__, line.c_str());
             std::string property;
             Scanner scanner(line);
 
@@ -328,6 +335,10 @@ void TextMapHandler::ReadBackgrounds(std::ifstream& file, Map& map)
                     throw "Could not parse blend color";
                 attr.SetBlendColor(color);
             }
+            else
+            {
+                throw "Unexpected token " + property;
+            }
             std::getline(file, line);
         }
 
@@ -336,9 +347,10 @@ void TextMapHandler::ReadBackgrounds(std::ifstream& file, Map& map)
 
         std::getline(file, line);
     }
+    wxLogDebug("Done Reading Backgrounds");
 }
 
-void TextMapHandler::ReadCollision(std::ifstream& file, Map& map)
+void TextMapHandler::ReadCollision(std::istream& file, Map& map)
 {
     wxLogDebug("Reading Collision Layer");
     std::string line;
@@ -350,7 +362,7 @@ void TextMapHandler::ReadCollision(std::ifstream& file, Map& map)
 
     while(!line.empty())
     {
-        wxLogDebug("Read line %s", line.c_str());
+        wxLogDebug("%s Read line %s", __func__, line.c_str());
         std::string property;
         Scanner scanner(line);
 
@@ -380,6 +392,10 @@ void TextMapHandler::ReadCollision(std::ifstream& file, Map& map)
                 data.push_back(element);
             }
         }
+        else
+        {
+            throw "Unexpected token " + property;
+        }
         std::getline(file, line);
     }
 
@@ -390,15 +406,11 @@ void TextMapHandler::ReadCollision(std::ifstream& file, Map& map)
     map.SetCollisionLayer(layer);
 
     std::getline(file, line);
+    wxLogDebug("Done Reading Collision Layer");
 }
 
-void TextMapHandler::Save(const std::string& filename, Map& map)
+void TextMapHandler::Save(std::ostream& file, const Map& map)
 {
-    // Checking to see if the file can be saved to.
-    std::ofstream file(filename.c_str());
-    if (!file.good())
-        throw "Could not open file for writing";
-
     // Takes the map dimensions, tile dimensions, name, filename, and layer count and writes it to the file.
     file << "Properties\n";
     file << "name: " << map.GetName() << "\n";
@@ -409,7 +421,7 @@ void TextMapHandler::Save(const std::string& filename, Map& map)
     file << "Layers\n";
     for (unsigned int k = 0; k < map.GetNumLayers(); k++)
     {
-        Layer& layer = map.GetLayer(k);
+        const Layer& layer = map.GetLayer(k);
         file << "name: " << layer.GetName() << "\n";
 
         int32_t x, y;
@@ -445,7 +457,7 @@ void TextMapHandler::Save(const std::string& filename, Map& map)
     if (map.GetNumBackgrounds() > 0) file << "Backgrounds\n";
     for (unsigned int k = 0; k < map.GetNumBackgrounds(); k++)
     {
-        Background& background = map.GetBackground(k);
+        const Background& background = map.GetBackground(k);
         int32_t spx, spy;
         background.GetSpeed(spx, spy);
         file << "name: " << background.GetName() << "\n";
@@ -490,6 +502,4 @@ void TextMapHandler::Save(const std::string& filename, Map& map)
         }
         file << "\n";
     }
-
-    file.close();
 }

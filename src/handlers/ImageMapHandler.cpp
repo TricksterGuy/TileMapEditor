@@ -42,10 +42,10 @@ int ImageMapHandler::Init()
     return 0;
 }
 
-void ImageMapHandler::Save(const std::string& filename, Map& map)
+void ImageMapHandler::Save(std::ostream& file, const Map& map)
 {
     Image image;
     if (HandlerUtils::MapToImage(map, image))
         throw "Failed to convert map to an image";
-    image.write(filename);
+    //image.write(file);
 }

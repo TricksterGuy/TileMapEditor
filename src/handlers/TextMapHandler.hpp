@@ -23,7 +23,6 @@
 #define TEXTMAPHANDLER_HPP
 
 #include <iostream>
-#include <fstream>
 #include "BaseMapHandler.hpp"
 
 /** Saves the map as a text file */
@@ -32,16 +31,15 @@ class TextMapHandler : public BaseMapHandler
 	public:
 		TextMapHandler();
 		~TextMapHandler();
-		/** @see BaseMapHandler::load */
-        virtual void Load(const std::string& filename, Map& map);
-        /** @see BaseMapHandler::save */
-        virtual void Save(const std::string& filename, Map& map);
+		/** @see BaseMapHandler::Load */
+        virtual void Load(std::istream& file, Map& map);
+        /** @see BaseMapHandler::Save */
+        virtual void Save(std::ostream& files, const Map& map);
 	private:
-        void ReadProperties(std::ifstream& file, Map& map);
-        void ReadLayers(std::ifstream& file, Map& map);
-        void ReadBackgrounds(std::ifstream& file, Map& map);
-        void ReadCollision(std::ifstream& file, Map& map);
-        void ReadAttributes(std::ifstream& file, DrawAttributes& attr);
+        void ReadProperties(std::istream& file, Map& map);
+        void ReadLayers(std::istream& file, Map& map);
+        void ReadBackgrounds(std::istream& file, Map& map);
+        void ReadCollision(std::istream& file, Map& map);
 };
 
 #endif

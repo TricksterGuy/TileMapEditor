@@ -40,7 +40,7 @@ GBAMapHandler::~GBAMapHandler()
 
 }
 
-void GBAMapHandler::Save(const std::string& filename, Map& map)
+void GBAMapHandler::Save(std::ostream& file, const Map& map)
 {
     wxString warnings = "";
     if (map.GetTileWidth() != 8 || map.GetTileHeight() != 8)
@@ -70,9 +70,9 @@ void GBAMapHandler::Save(const std::string& filename, Map& map)
     if (HandlerUtils::GetTiles(map, tileset, tiles))
         throw "Failed to get tiles";
 
-    WriteC(filename, map, pixels, tiles);
+    WriteC(file, map, pixels, tiles);
 }
 
-void GBAMapHandler::WriteC(const std::string& filename, Map& map, const Magick::IndexPacket* pixels, std::vector<Magick::Image> tiles)
+void GBAMapHandler::WriteC(std::ostream& file, const Map& map, const Magick::IndexPacket* pixels, std::vector<Magick::Image> tiles)
 {
 }
