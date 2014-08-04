@@ -53,8 +53,10 @@ class Map
 
         void Add(const Layer& layer);
         void Add(const Background& back);
+        void Add(const AnimatedTile& tile);
         void DeleteLayer(const uint32_t index);
         void DeleteBackground(const uint32_t index);
+        void DeleteAnimatedTile(const uint32_t index);
 
         uint32_t GetWidth() const;
         uint32_t GetHeight() const;

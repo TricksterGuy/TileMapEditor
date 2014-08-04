@@ -27,7 +27,7 @@ name(_name), delay(_delay), type(_type), times(_times)//, cachedFrame(0)
 }
 
 AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times, const std::vector<int32_t>& _frames) :
-name(_name), delay(_delay), type(_type), times(_times)//, frames(_frames), cachedFrame(0)
+name(_name), delay(_delay), type(_type), times(_times), frames(_frames)//, cachedFrame(0)
 {
 }
 

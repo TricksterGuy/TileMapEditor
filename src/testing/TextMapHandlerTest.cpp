@@ -25,6 +25,7 @@
 #define BOOST_TEST_MAIN
 #include <sstream>
 #include <boost/test/auto_unit_test.hpp>
+#include <wx/log.h>
 #include "Map.hpp"
 #include "TextMapHandler.hpp"
 #include "TileBasedCollisionLayer.hpp"
@@ -63,6 +64,20 @@ const char* file_data =
 "blend_color: 0a0b0c0d\n"
 "\n"
 "\n"
+"Animations\n"
+"name: Water\n"
+"delay: 3\n"
+"type: 0\n"
+"times: -1\n"
+"frames: 0 1 2 3 4 5\n"
+"\n"
+"name: Waterfall\n"
+"delay: 1\n"
+"type: 1\n"
+"times: -1\n"
+"frames: 61 62 63 64 65\n"
+"\n"
+"\n"
 "Collision\n"
 "type: 0\n"
 "dimensions: 2 2\n"
@@ -70,7 +85,7 @@ const char* file_data =
 
 struct TextMapHandlerTest
 {
-    TextMapHandlerTest() {}
+    TextMapHandlerTest() {wxLog::SetVerbose(true);}
     ~TextMapHandlerTest() {}
     TextMapHandler handler;
     Map map;
@@ -94,7 +109,7 @@ BOOST_FIXTURE_TEST_CASE(TestLoad, TextMapHandlerTest)
     BOOST_REQUIRE_EQUAL(map.GetTileWidth(), 32);
     BOOST_REQUIRE_EQUAL(map.GetTileHeight(), 32);
     BOOST_REQUIRE_EQUAL(map.GetNumLayers(), 1);
-    BOOST_REQUIRE_EQUAL(map.GetNumAnimatedTiles(), 0);
+    BOOST_REQUIRE_EQUAL(map.GetNumAnimatedTiles(), 2);
     BOOST_REQUIRE_EQUAL(map.GetNumBackgrounds(), 1);
     BOOST_REQUIRE(map.HasCollisionLayer());
 
@@ -135,6 +150,23 @@ BOOST_FIXTURE_TEST_CASE(TestLoad, TextMapHandlerTest)
     BOOST_REQUIRE_EQUAL(attr->GetOpacity(), 8.0f);
     BOOST_REQUIRE_EQUAL(attr->GetBlendMode(), 9);
     BOOST_REQUIRE_EQUAL(attr->GetBlendColor(), (uint32_t)0x0A0B0C0D);
+
+    AnimatedTile& at1 = map.GetAnimatedTile(0);
+    AnimatedTile& at2 = map.GetAnimatedTile(1);
+    const std::vector<int32_t>& actualFramesAt1 = at1.GetFrames();
+    const std::vector<int32_t>& actualFramesAt2 = at2.GetFrames();
+    std::vector<int32_t> expectedFramesAt1 = {0, 1, 2, 3, 4, 5};
+    std::vector<int32_t> expectedFramesAt2 = {61, 62, 63, 64, 65};
+    BOOST_REQUIRE_EQUAL(at1.GetName(), "Water");
+    BOOST_REQUIRE_EQUAL(at1.GetDelay(), 3);
+    BOOST_REQUIRE_EQUAL(at1.GetType(), 0);
+    BOOST_REQUIRE_EQUAL(at1.GetTimes(), -1);
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(actualFramesAt1.begin(), actualFramesAt1.end(), expectedFramesAt1.begin(), expectedFramesAt1.end());
+    BOOST_REQUIRE_EQUAL(at2.GetName(), "Waterfall");
+    BOOST_REQUIRE_EQUAL(at2.GetDelay(), 1);
+    BOOST_REQUIRE_EQUAL(at2.GetType(), 1);
+    BOOST_REQUIRE_EQUAL(at2.GetTimes(), -1);
+    BOOST_REQUIRE_EQUAL_COLLECTIONS(actualFramesAt2.begin(), actualFramesAt2.end(), expectedFramesAt2.begin(), expectedFramesAt2.end());
 
     TileBasedCollisionLayer* clayer = dynamic_cast<TileBasedCollisionLayer*>(map.GetCollisionLayer());
     actualData = clayer->GetData();

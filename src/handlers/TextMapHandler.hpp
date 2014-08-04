@@ -39,6 +39,7 @@ class TextMapHandler : public BaseMapHandler
         void ReadProperties(std::istream& file, Map& map);
         void ReadLayers(std::istream& file, Map& map);
         void ReadBackgrounds(std::istream& file, Map& map);
+        void ReadAnimations(std::istream& file, Map& map);
         void ReadCollision(std::istream& file, Map& map);
 };
 

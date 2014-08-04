@@ -107,6 +107,11 @@ void Map::Add(const Background& back)
     backgrounds.push_back(back);
 }
 
+void Map::Add(const AnimatedTile& tile)
+{
+    animatedTiles.push_back(tile);
+}
+
 void Map::DeleteLayer(const uint32_t index)
 {
     layers.erase(layers.begin() + index);
@@ -115,6 +120,11 @@ void Map::DeleteLayer(const uint32_t index)
 void Map::DeleteBackground(const uint32_t index)
 {
     backgrounds.erase(backgrounds.begin() + index);
+}
+
+void Map::DeleteAnimatedTile(const uint32_t index)
+{
+    animatedTiles.erase(animatedTiles.begin() + index);
 }
 
 void Map::SetCollisionLayer(CollisionLayer* layer)

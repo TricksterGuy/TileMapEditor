@@ -58,6 +58,8 @@ void TextMapHandler::Load(std::istream& file, Map& map)
             ReadBackgrounds(file, map);
         else if (line == "Collision")
             ReadCollision(file, map);
+        else if (line == "Animations")
+            ReadAnimations(file, map);
         else if (!line.empty())
             throw "Unknown type found in file line: " + line;
     }
@@ -123,7 +125,6 @@ void TextMapHandler::ReadLayers(std::istream& file, Map& map)
     while (!line.empty())
     {
         wxLogDebug("Reading a layer");
-        wxLogDebug("%s Read line %s", __func__, line.c_str());
         std::string name;
         DrawAttributes attr;
         uint32_t width = 0, height = 0;
@@ -242,7 +243,6 @@ void TextMapHandler::ReadBackgrounds(std::istream& file, Map& map)
     while (!line.empty())
     {
         wxLogDebug("Reading a background");
-        wxLogDebug("%s Read line %s", __func__, line.c_str());
         std::string name;
         std::string filename;
         int32_t mode = 0;
@@ -350,15 +350,83 @@ void TextMapHandler::ReadBackgrounds(std::istream& file, Map& map)
     wxLogDebug("Done Reading Backgrounds");
 }
 
+void TextMapHandler::ReadAnimations(std::istream& file, Map& map)
+{
+    wxLogDebug("Reading Animations");
+    std::string line;
+    std::getline(file, line);
+    while (!line.empty())
+    {
+        wxLogDebug("Reading an Animation");
+		std::string name;
+		int32_t delay;
+		int32_t type;
+		int32_t times;
+		std::vector<int32_t> frames;
+
+        while(!line.empty())
+        {
+            wxLogDebug("%s Read line %s", __func__, line.c_str());
+            std::string property;
+            Scanner scanner(line);
+
+            if (!scanner.Next(property))
+                throw "Could not parse line: " + line;
+
+            if (property == "name:")
+            {
+                if (!scanner.Next(name))
+                    throw "Could not parse name";
+            }
+            else if (property == "delay:")
+            {
+                if (!scanner.Next(delay))
+                    throw "Could not parse delay";
+            }
+            else if (property == "type:")
+            {
+                if (!scanner.Next(type))
+                    throw "Could not parse type";
+            }
+            else if (property == "times:")
+            {
+                if (!scanner.Next(times))
+                    throw "Could not parse times";
+            }
+            else if (property == "frames:")
+            {
+                while (scanner.HasMoreTokens())
+                {
+                    int32_t element;
+                    if (!scanner.Next(element))
+                        throw "Could not parse frames";
+                    frames.push_back(element);
+                }
+            }
+            else
+            {
+                throw "Unexpected token " + property;
+            }
+            std::getline(file, line);
+        }
+        AnimatedTile tile(name, delay, (Animation::Type)type, times, frames);
+        map.Add(tile);
+
+        std::getline(file, line);
+    }
+    wxLogDebug("Done Reading Animations");
+}
+
 void TextMapHandler::ReadCollision(std::istream& file, Map& map)
 {
     wxLogDebug("Reading Collision Layer");
-    std::string line;
-    std::getline(file, line);
 
     int32_t type = 0;
     uint32_t width = 0, height = 0;
     std::vector<int32_t> data;
+
+    std::string line;
+    std::getline(file, line);
 
     while(!line.empty())
     {
@@ -481,6 +549,23 @@ void TextMapHandler::Save(std::ostream& file, const Map& map)
         file << "opacity: " << background.GetOpacity() << "\n";
         file << "blend_mode: " << background.GetBlendMode() << "\n";
         file << "blend_color: " << std::hex << background.GetBlendColor() << std::dec << "\n\n";
+    }
+
+    if (map.GetNumAnimatedTiles() > 0) file << "Animations\n";
+    for (unsigned int k = 0; k < map.GetNumAnimatedTiles(); k++)
+    {
+        const AnimatedTile& tile = map.GetAnimatedTile(k);
+        const std::vector<int32_t>& frames = tile.GetFrames();
+        file << "name: " << tile.GetName() << "\n";
+        file << "delay: " << tile.GetDelay() << "\n";
+        file << "type: " << tile.GetType() << "\n";
+        file << "times: " << tile.GetTimes() << "\n";
+        file << "frames: ";
+        for (int32_t element : frames)
+        {
+            file << element << " ";
+        }
+        file << "\n\n";
     }
 
     if (map.HasCollisionLayer())
