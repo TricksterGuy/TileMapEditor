@@ -40,9 +40,9 @@ const char* file_data =
 "name: A\n"
 "position: 32 24\n"
 "origin: 10 12\n"
-"scale: 3.0 5.0\n"
-"rotation: 92.0\n"
-"opacity: 50.0\n"
+"scale: 3 5\n"
+"rotation: 92\n"
+"opacity: 50\n"
 "blend_mode: 0\n"
 "blend_color: FEFDFCFA\n"
 "dimensions: 2 2\n"
@@ -57,11 +57,11 @@ const char* file_data =
 "speed: 2 4\n"
 "position: 1 2\n"
 "origin: 3 4\n"
-"scale: 5.0 6.0\n"
-"rotation: 7.0\n"
-"opacity: 8.0\n"
+"scale: 5 6\n"
+"rotation: 7\n"
+"opacity: 8\n"
 "blend_mode: 9\n"
-"blend_color: 0a0b0c0d\n"
+"blend_color: A0B0C0D\n"
 "\n"
 "\n"
 "Animations\n"
@@ -81,7 +81,21 @@ const char* file_data =
 "Collision\n"
 "type: 0\n"
 "dimensions: 2 2\n"
-"data: 1 0 1 1\n";
+"data: 1 0\n"
+"data: 1 1\n"
+"\n";
+
+static inline void trim(std::string& str)
+{
+    std::string::size_type pos = str.find_last_not_of(' ');
+    if(pos != std::string::npos) {
+        str.erase(pos + 1);
+        pos = str.find_first_not_of(' ');
+        if(pos != std::string::npos) str.erase(0, pos);
+    }
+    else
+        str.erase(str.begin(), str.end());
+}
 
 struct TextMapHandlerTest
 {
@@ -174,4 +188,33 @@ BOOST_FIXTURE_TEST_CASE(TestLoad, TextMapHandlerTest)
     BOOST_REQUIRE_EQUAL(clayer->GetWidth(), 2);
     BOOST_REQUIRE_EQUAL(clayer->GetHeight(), 2);
     BOOST_REQUIRE_EQUAL_COLLECTIONS(actualData.begin(), actualData.end(), expectedData.begin(), expectedData.end());
+}
+
+BOOST_FIXTURE_TEST_CASE(TestSave, TextMapHandlerTest)
+{
+    std::stringstream file(file_data);
+    std::stringstream out;
+    try
+    {
+        handler.Load(file, map);
+        handler.Save(out, map);
+    }
+    catch (const char* s)
+    {
+        BOOST_FAIL(s);
+        return;
+    }
+
+    std::stringstream expected(file_data);
+
+    std::string expectedLine;
+    std::string actualLine;
+    while (expected && out)
+    {
+        std::getline(expected, expectedLine);
+        std::getline(out, actualLine);
+        trim(actualLine);
+
+        BOOST_REQUIRE_EQUAL(expectedLine, actualLine);
+    }
 }

@@ -507,7 +507,7 @@ void TextMapHandler::Save(std::ostream& file, const Map& map)
         file << "rotation: " << layer.GetRotation() << "\n";
         file << "opacity: " << layer.GetOpacity() << "\n";
         file << "blend_mode: " << layer.GetBlendMode() << "\n";
-        file << "blend_color: " << layer.GetBlendColor() << "\n";
+        file << "blend_color: " << std::uppercase << std::hex << layer.GetBlendColor() << std::dec << std::nouppercase << "\n";
 
         file << "dimensions: " << layer.GetWidth() << " " << layer.GetHeight() << "\n";
         for (unsigned int i = 0; i < layer.GetHeight(); i++)
@@ -521,6 +521,7 @@ void TextMapHandler::Save(std::ostream& file, const Map& map)
         }
         file << "\n";
     }
+    file << "\n";
     // Sets all the background data for each background.
     if (map.GetNumBackgrounds() > 0) file << "Backgrounds\n";
     for (unsigned int k = 0; k < map.GetNumBackgrounds(); k++)
@@ -548,8 +549,9 @@ void TextMapHandler::Save(std::ostream& file, const Map& map)
         file << "rotation: " << background.GetRotation() << "\n";
         file << "opacity: " << background.GetOpacity() << "\n";
         file << "blend_mode: " << background.GetBlendMode() << "\n";
-        file << "blend_color: " << std::hex << background.GetBlendColor() << std::dec << "\n\n";
+        file << "blend_color: " << std::uppercase << std::hex << background.GetBlendColor() << std::dec << std::nouppercase << "\n\n";
     }
+    file << "\n";
 
     if (map.GetNumAnimatedTiles() > 0) file << "Animations\n";
     for (unsigned int k = 0; k < map.GetNumAnimatedTiles(); k++)
@@ -567,6 +569,7 @@ void TextMapHandler::Save(std::ostream& file, const Map& map)
         }
         file << "\n\n";
     }
+    file << "\n";
 
     if (map.HasCollisionLayer())
     {
@@ -587,4 +590,5 @@ void TextMapHandler::Save(std::ostream& file, const Map& map)
         }
         file << "\n";
     }
+    file << "\n";
 }
