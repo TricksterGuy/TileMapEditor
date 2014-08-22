@@ -1,4 +1,3 @@
-#include <wx/log.h>
 #include "Scanner.hpp"
 #include "Logger.hpp"
 

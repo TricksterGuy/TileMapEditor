@@ -196,7 +196,7 @@ void BinaryMapHandler::ReadHEAD(std::istream& file, Map& map)
     if (major > MAJOR)
         throw "Incorrect major version";
     if (minor > MINOR && major == MAJOR)
-        throw "Incorrent minor version";
+        throw "Incorrect minor version";
 
     // Check if magic numbers are equal.
     if (memcmp(magic, filemagic, sizeof(char) * 14) != 0)
@@ -210,14 +210,10 @@ void BinaryMapHandler::ReadMAPP(std::istream& file, Map& map, int32_t& num_layer
 {
     uint32_t tile_width;
     uint32_t tile_height;
-    uint32_t width;
-    uint32_t height;
     std::string name;
     std::string filename;
     uint32_t texture_size;
 
-    file.read((char*)(&width), sizeof(uint32_t));
-    file.read((char*)(&height), sizeof(uint32_t));
     file.read((char*)(&tile_width), sizeof(uint32_t));
     file.read((char*)(&tile_height), sizeof(uint32_t));
     file.read((char*)(&num_layers), sizeof(uint32_t));
@@ -225,8 +221,6 @@ void BinaryMapHandler::ReadMAPP(std::istream& file, Map& map, int32_t& num_layer
 
     tile_width = ntohl(tile_width);
     tile_height = ntohl(tile_height);
-    width = ntohl(width);
-    height = ntohl(height);
     num_layers = ntohl(num_layers);
     num_backgrounds = ntohl(num_backgrounds);
 
@@ -250,7 +244,6 @@ void BinaryMapHandler::ReadMAPP(std::istream& file, Map& map, int32_t& num_layer
         throw "Invalid number of layers or backgrounds";
 
     map.SetTileDimensions(tile_width, tile_height);
-    map.Resize(width, height);
     map.SetName(name);
     map.SetFilename(filename);
 }

@@ -33,6 +33,7 @@
 #include "TileBasedCollisionLayer.hpp"
 #include <wx/wfstream.h>
 #include <wx/stdstream.h>
+#include "Logger.hpp"
 
 using namespace std;
 
@@ -110,47 +111,36 @@ void XmlMapHandler::Save(std::ostream& file, const Map& map)
 
 void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
 {
+    DebugLog("Reading Properties");
     wxXmlNode* child = root->GetChildren();
 
     while(child)
     {
-        if (child->GetName() == "Name")
-            map.SetName(child->GetNodeContent().ToStdString());
-        else if (child->GetName() == "Filename")
-            map.SetFilename(child->GetNodeContent().ToStdString());
-        else if (child->GetName() == "Dimensions")
-        {
-            int width = -1, height = -1;
-            wxXmlNode* grandchild = child->GetChildren();
-            while(grandchild)
-            {
-                if (grandchild->GetName() == "Width")
-                    width = wxAtoi(grandchild->GetNodeContent());
-                else if (grandchild->GetName() == "Height")
-                    height = wxAtoi(grandchild->GetNodeContent());
-                grandchild = grandchild->GetNext();
-            }
-
-            if (width <= 0 || height <= 0)
-                throw "Map Dimensions are incorrect or not set";
-
-            width = max(min(width, 1024), 1);
-            height = max(min(height, 1024), 1);
-
-            map.Resize(width, height);
-        }
+        std::string name = child->GetName().ToStdString();
+        std::string content = child->GetNodeContent().ToStdString();
+        DebugLog("%s Got node %s content %s",  __func__, name.c_str(), content.c_str());
+        if (name == "Name")
+            map.SetName(content);
+        else if (name == "Filename")
+            map.SetFilename(content);
         else if (child->GetName() == "TileDimensions")
         {
             int width = -1, height = -1;
             wxXmlNode* grandchild = child->GetChildren();
+            DebugLog("Reading TileDimensions");
             while(grandchild)
             {
-                if (grandchild->GetName() == "Width")
-                    width = wxAtoi(grandchild->GetNodeContent());
-                else if (grandchild->GetName() == "Height")
-                    height = wxAtoi(grandchild->GetNodeContent());
+                name = grandchild->GetName().ToStdString();
+                content = grandchild->GetNodeContent().ToStdString();
+                DebugLog("%s Got node %s content %s",  __func__, name.c_str(), content.c_str());
+                int value = atoi(content.c_str());
+                if (name == "Width")
+                    width = value;
+                else if (name == "Height")
+                    height = value;
                 grandchild = grandchild->GetNext();
             }
+
 
             if (width <= 0 || height <= 0)
                 throw "Tile Dimensions are incorrect or not set";
@@ -159,10 +149,6 @@ void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
             height = max(min(height, 128), 8);
 
             map.SetTileDimensions(width, height);
-        }
-        else if (child->GetName() == "Priority")
-        {
-            map.SetFilename(child->GetNodeContent().ToStdString());
         }
         child = child->GetNext();
     }

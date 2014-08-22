@@ -45,6 +45,7 @@ const char* file_data =
 "opacity: 50\n"
 "blend_mode: 0\n"
 "blend_color: FEFDFCFA\n"
+"priority: 0\n"
 "dimensions: 2 2\n"
 "data: 50 70\n"
 "data: 70 60\n"
@@ -62,6 +63,7 @@ const char* file_data =
 "opacity: 8\n"
 "blend_mode: 9\n"
 "blend_color: A0B0C0D\n"
+"priority: 1\n"
 "\n"
 "\n"
 "Animations\n"
@@ -146,6 +148,7 @@ BOOST_FIXTURE_TEST_CASE(TestLoad, TextMapHandlerTest)
     BOOST_REQUIRE_EQUAL(attr->GetOpacity(), 50.0f);
     BOOST_REQUIRE_EQUAL(attr->GetBlendMode(), 0);
     BOOST_REQUIRE_EQUAL(attr->GetBlendColor(), (uint32_t)0xFEFDFCFA);
+    BOOST_REQUIRE_EQUAL(attr->GetDepth(), 0);
 
     Background& background = map.GetBackground(0);
     attr = dynamic_cast<DrawAttributes*>(&background);
@@ -164,6 +167,7 @@ BOOST_FIXTURE_TEST_CASE(TestLoad, TextMapHandlerTest)
     BOOST_REQUIRE_EQUAL(attr->GetOpacity(), 8.0f);
     BOOST_REQUIRE_EQUAL(attr->GetBlendMode(), 9);
     BOOST_REQUIRE_EQUAL(attr->GetBlendColor(), (uint32_t)0x0A0B0C0D);
+    BOOST_REQUIRE_EQUAL(attr->GetDepth(), 1);
 
     AnimatedTile& at1 = map.GetAnimatedTile(0);
     AnimatedTile& at2 = map.GetAnimatedTile(1);

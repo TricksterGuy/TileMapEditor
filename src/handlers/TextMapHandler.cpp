@@ -199,6 +199,13 @@ void TextMapHandler::ReadLayers(std::istream& file, Map& map)
                     throw "Could not parse blend color";
                 attr.SetBlendColor(color);
             }
+            else if (property == "priority:")
+            {
+                int32_t priority;
+                if (!scanner.Next(priority))
+                    throw "Could not parser priority";
+                attr.SetDepth(priority);
+            }
             else if (property == "dimensions:")
             {
                 if (!scanner.Next(width))
@@ -334,6 +341,13 @@ void TextMapHandler::ReadBackgrounds(std::istream& file, Map& map)
                 if (!scanner.Next(color, 16))
                     throw "Could not parse blend color";
                 attr.SetBlendColor(color);
+            }
+            else if (property == "priority:")
+            {
+                int32_t priority;
+                if (!scanner.Next(priority))
+                    throw "Could not parser priority";
+                attr.SetDepth(priority);
             }
             else
             {
@@ -508,6 +522,7 @@ void TextMapHandler::Save(std::ostream& file, const Map& map)
         file << "opacity: " << layer.GetOpacity() << "\n";
         file << "blend_mode: " << layer.GetBlendMode() << "\n";
         file << "blend_color: " << std::uppercase << std::hex << layer.GetBlendColor() << std::dec << std::nouppercase << "\n";
+        file << "priority: " << layer.GetDepth() << "\n";
 
         file << "dimensions: " << layer.GetWidth() << " " << layer.GetHeight() << "\n";
         for (unsigned int i = 0; i < layer.GetHeight(); i++)
@@ -549,7 +564,8 @@ void TextMapHandler::Save(std::ostream& file, const Map& map)
         file << "rotation: " << background.GetRotation() << "\n";
         file << "opacity: " << background.GetOpacity() << "\n";
         file << "blend_mode: " << background.GetBlendMode() << "\n";
-        file << "blend_color: " << std::uppercase << std::hex << background.GetBlendColor() << std::dec << std::nouppercase << "\n\n";
+        file << "blend_color: " << std::uppercase << std::hex << background.GetBlendColor() << std::dec << std::nouppercase << "\n";
+        file << "priority: " << background.GetDepth() << "\n\n";
     }
     file << "\n";
 
