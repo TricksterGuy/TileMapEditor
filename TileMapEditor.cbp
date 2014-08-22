@@ -95,6 +95,9 @@
 		<Unit filename="src/handlers/XmlMapHandler.cpp" />
 		<Unit filename="src/handlers/XmlMapHandler.hpp" />
 		<Unit filename="src/testing/TextMapHandlerTest.cpp" />
+		<Unit filename="src/util/Logger.cpp" />
+		<Unit filename="src/util/Logger.hpp" />
+		<Unit filename="src/util/NullLogger.hpp" />
 		<Unit filename="src/util/ResourceManager.hpp" />
 		<Unit filename="src/util/Scanner.cpp" />
 		<Unit filename="src/util/Scanner.hpp" />

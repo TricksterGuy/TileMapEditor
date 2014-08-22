@@ -1,12 +1,13 @@
 #include <wx/log.h>
 #include "Scanner.hpp"
+#include "Logger.hpp"
 
 bool Scanner::Next(int32_t& var, int base)
 {
     if (!HasMoreTokens()) return false;
 
     wxString token = GetNextToken();
-    wxLogVerbose("Read int %s base %d", token, base);
+    VerboseLog("Read int %s base %d", static_cast<const char*>(token.c_str()), base);
     long ret;
     if (!token.ToLong(&ret, base)) return false;
 
@@ -19,7 +20,7 @@ bool Scanner::Next(uint32_t& var, int base)
     if (!HasMoreTokens()) return false;
 
     wxString token = GetNextToken();
-    wxLogVerbose("Read unsigned int %s base %d", token, base);
+    VerboseLog("Read unsigned int %s base %d", static_cast<const char*>(token.c_str()), base);
     unsigned long ret;
     if (!token.ToULong(&ret, base)) return false;
 
@@ -32,7 +33,7 @@ bool Scanner::Next(float& var)
     if (!HasMoreTokens()) return false;
 
     wxString token = GetNextToken();
-    wxLogVerbose("Read float %s", token);
+    VerboseLog("Read float %s", static_cast<const char*>(token.c_str()));
     double ret;
     if (!token.ToDouble(&ret)) return false;
 
@@ -46,6 +47,6 @@ bool Scanner::Next(std::string& var)
     if (!HasMoreTokens()) return false;
 
     var = GetNextToken();
-    wxLogVerbose("Read string %s", var);
+    VerboseLog("Read string %s", static_cast<const char*>(var.c_str()));
     return true;
 }

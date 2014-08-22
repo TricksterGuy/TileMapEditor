@@ -25,7 +25,7 @@
 #define BOOST_TEST_MAIN
 #include <sstream>
 #include <boost/test/auto_unit_test.hpp>
-#include <wx/log.h>
+#include "Logger.hpp"
 #include "Map.hpp"
 #include "TextMapHandler.hpp"
 #include "TileBasedCollisionLayer.hpp"
@@ -99,7 +99,7 @@ static inline void trim(std::string& str)
 
 struct TextMapHandlerTest
 {
-    TextMapHandlerTest() {wxLog::SetVerbose(true);}
+    TextMapHandlerTest() {logger->SetLogLevel(LogLevel::VERBOSE);}
     ~TextMapHandlerTest() {}
     TextMapHandler handler;
     Map map;

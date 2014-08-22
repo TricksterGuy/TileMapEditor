@@ -69,6 +69,7 @@ set(SRC_HANDLERS
 
 set(SRC_UTIL
     src/util/Scanner.cpp
+    src/util/Logger.cpp
 )
 
 set(SRC_wxFlatNotebook

@@ -21,14 +21,14 @@
 
 #include "BaseMapHandler.hpp"
 #include <fstream>
-#include <wx/log.h>
+#include "Logger.hpp"
 
 BaseMapHandler::BaseMapHandler(const std::string& _name, const std::string& _extension, const std::string& _description,
                                bool _readable, bool _writeable, const std::set<std::string> _alternatives) :
 name(_name), extension(_extension), description(_description),
 readable(_readable), writeable(_writeable), alternatives(_alternatives)
 {
-    wxLogDebug("Init %s %s handles: %s", name, description, extension);
+    DebugLog("Init %s %s handles: %s", name.c_str(), description.c_str(), extension.c_str());
 }
 
 BaseMapHandler::~BaseMapHandler()
@@ -42,7 +42,7 @@ int BaseMapHandler::Init()
 
 void BaseMapHandler::Load(const std::string& filename, Map& map)
 {
-    wxLogDebug("Loading %s", filename.c_str());
+    DebugLog("Loading %s", filename.c_str());
     // Checking to see if the file can be loaded to.
     std::ifstream file(filename.c_str());
     if (!file.good())
@@ -53,7 +53,7 @@ void BaseMapHandler::Load(const std::string& filename, Map& map)
 
 void BaseMapHandler::Save(const std::string& filename, const Map& map)
 {
-    wxLogDebug("Saving %s", filename.c_str());
+    DebugLog("Saving %s", filename.c_str());
     // Checking to see if the file can be saved to.
     std::ofstream file(filename.c_str());
     if (!file.good())
