@@ -34,6 +34,7 @@
 #include <wx/wfstream.h>
 #include <wx/stdstream.h>
 #include "Logger.hpp"
+#include "Scanner.hpp"
 
 using namespace std;
 
@@ -48,6 +49,7 @@ XmlMapHandler::~XmlMapHandler()
 
 void XmlMapHandler::Load(const std::string& mapfile, Map& map)
 {
+    DebugLog("Loading %s", mapfile.c_str());
     wxFileInputStream wxfile(mapfile);
     if (!wxfile.IsOk())
         throw "Could not open file";
@@ -58,6 +60,7 @@ void XmlMapHandler::Load(const std::string& mapfile, Map& map)
 
 void XmlMapHandler::Save(const std::string& mapfile, const Map& map)
 {
+    DebugLog("Saving %s", mapfile.c_str());
     wxFileOutputStream wxfile(mapfile);
     if (!wxfile.IsOk())
         throw "Could not open file";
@@ -81,12 +84,17 @@ void XmlMapHandler::Load(std::istream& file, Map& map)
     ReadProperties(child, map);
     while ((child = child->GetNext()))
     {
-        if (child->GetName() == "Layer")
+        std::string name = child->GetName().ToStdString();
+        DebugLog("%s Got node %s",  __func__, name.c_str());
+
+        if (name == "Layer")
             ReadLayer(child, map);
-        else if (child->GetName() == "Background")
+        else if (name == "Background")
             ReadBackground(child, map);
-        else if (child->GetName() == "Collision")
+        else if (name == "Collision")
             ReadCollision(child, map);
+        else
+            throw "Unknown tag found in file " + name;
     }
 }
 
@@ -112,82 +120,89 @@ void XmlMapHandler::Save(std::ostream& file, const Map& map)
 void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
 {
     DebugLog("Reading Properties");
-    wxXmlNode* child = root->GetChildren();
 
+    std::string name;
+    std::string tileset;
+    uint32_t tile_width = 8, tile_height = 8;
+
+    wxXmlNode* child = root->GetChildren();
     while(child)
     {
-        std::string name = child->GetName().ToStdString();
+        std::string property = child->GetName().ToStdString();
         std::string content = child->GetNodeContent().ToStdString();
-        DebugLog("%s Got node %s content %s",  __func__, name.c_str(), content.c_str());
-        if (name == "Name")
-            map.SetName(content);
-        else if (name == "Filename")
-            map.SetFilename(content);
-        else if (child->GetName() == "TileDimensions")
+        DebugLog("%s Got node %s content %s",  __func__, property.c_str(), content.c_str());
+        if (property == "Name")
         {
-            int width = -1, height = -1;
-            wxXmlNode* grandchild = child->GetChildren();
+            name = content;
+        }
+        else if (property == "Filename")
+        {
+            tileset = content;
+        }
+        else if (property == "TileDimensions")
+        {
             DebugLog("Reading TileDimensions");
-            while(grandchild)
-            {
-                name = grandchild->GetName().ToStdString();
-                content = grandchild->GetNodeContent().ToStdString();
-                DebugLog("%s Got node %s content %s",  __func__, name.c_str(), content.c_str());
-                int value = atoi(content.c_str());
-                if (name == "Width")
-                    width = value;
-                else if (name == "Height")
-                    height = value;
-                grandchild = grandchild->GetNext();
-            }
-
-
-            if (width <= 0 || height <= 0)
-                throw "Tile Dimensions are incorrect or not set";
-
-            width = max(min(width, 128), 8);
-            height = max(min(height, 128), 8);
-
-            map.SetTileDimensions(width, height);
+            Scanner scanner(content);
+            if (!scanner.Next(tile_width))
+                throw "Could not parse tile_width";
+            if (!scanner.Next(tile_height))
+                throw "Could not parse tile_height";
         }
         child = child->GetNext();
     }
+
+    map.SetName(name);
+    map.SetFilename(tileset);
+    map.SetTileDimensions(tile_width, tile_height);
 }
 
 void XmlMapHandler::ReadLayer(wxXmlNode* root, Map& map)
 {
+    DebugLog("Reading Layer");
     wxXmlNode* child = root->GetChildren();
-
-    Layer layer("No Name", map.GetWidth(), map.GetHeight());
+    std::string name;
+    uint32_t width;
+    uint32_t height;
+    DrawAttributes attr;
+    std::vector<int32_t> data;
 
     while(child)
     {
-        if (child->GetName() == "Name")
-            layer.SetName(child->GetNodeContent().ToStdString());
-        else if (child->GetName() == "Data")
-        {
-            wxString data = child->GetNodeContent();
-            wxStringTokenizer scanner(data);
-            unsigned int i = 0;
-            int tileid;
+        std::string property = child->GetName().ToStdString();
+        std::string content = child->GetNodeContent().ToStdString();
+        DebugLog("%s Got node %s content %s",  __func__, property.c_str(), content.c_str());
 
+        Scanner scanner(content);
+        if (property == "Name")
+        {
+            name = content;
+        }
+        else if (property == "Dimensions")
+        {
+            DebugLog("Reading Dimensions");
+            if (!scanner.Next(width))
+                throw "Could not parse width";
+            if (!scanner.Next(height))
+                throw "Could not parse height";
+        }
+        else if (property == "Data")
+        {
             while (scanner.HasMoreTokens())
             {
-                wxString token = scanner.GetNextToken();
-                tileid = wxAtoi(token);
-                if (i > layer.GetWidth() * layer.GetHeight()) break;
-                layer.Set(i, tileid);
-                i++;
+                int32_t element;
+                if (!scanner.Next(element))
+                    throw "Could not parse data";
+                data.push_back(element);
             }
-
-            if (i != layer.GetWidth() * layer.GetHeight())
-                throw "Incorrect number of tile entries for layer";
         }
 
         child = child->GetNext();
     }
 
-    map.Add(layer);
+    if (data.size() != width * height)
+        throw "Incorrect number of tile entries for layer";
+
+    map.Add(Layer(name, width, height, data));
 }
 
 void XmlMapHandler::ReadBackground(wxXmlNode* root, Map& map)

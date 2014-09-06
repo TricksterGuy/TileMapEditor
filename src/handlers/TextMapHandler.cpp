@@ -108,6 +108,10 @@ void TextMapHandler::ReadProperties(std::istream& file, Map& map)
         std::getline(file, line);
     }
 
+    if (tile_width < MIN_TILE_SIZE || tile_width > MAX_TILE_SIZE ||
+        tile_height < MIN_TILE_SIZE || tile_height > MAX_TILE_SIZE)
+        WarnLog("tile dimensions (%d, %d) are outside bounds clipping", tile_width, tile_width);
+
     tile_width = std::min(MAX_TILE_SIZE, std::max(MIN_TILE_SIZE, tile_width));
     tile_height = std::min(MAX_TILE_SIZE, std::max(MIN_TILE_SIZE, tile_height));
 

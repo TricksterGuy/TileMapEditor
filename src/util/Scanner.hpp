@@ -33,6 +33,7 @@ class Scanner : public wxStringTokenizer
         bool Next(uint32_t& var, int base = 10);
         bool Next(float& var);
         bool Next(std::string& var);
+        bool NextLine(std::string& var);
 };
 
 #endif

@@ -42,7 +42,7 @@ int BaseMapHandler::Init()
 
 void BaseMapHandler::Load(const std::string& filename, Map& map)
 {
-    DebugLog("Loading %s", filename.c_str());
+    DebugLog("Loading %s using %s", filename.c_str(), name.c_str());
     // Checking to see if the file can be loaded to.
     std::ifstream file(filename.c_str());
     if (!file.good())
@@ -53,7 +53,7 @@ void BaseMapHandler::Load(const std::string& filename, Map& map)
 
 void BaseMapHandler::Save(const std::string& filename, const Map& map)
 {
-    DebugLog("Saving %s", filename.c_str());
+    DebugLog("Saving %s using %s", filename.c_str(), name.c_str());
     // Checking to see if the file can be saved to.
     std::ofstream file(filename.c_str());
     if (!file.good())
