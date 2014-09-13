@@ -44,6 +44,7 @@ class XmlMapHandler : public BaseMapHandler
         void ReadLayer(wxXmlNode* root, Map& map);
         void ReadBackground(wxXmlNode* root, Map& map);
         void ReadCollision(wxXmlNode* root, Map& map);
+        void ReadAnimations(wxXmlNode* root, Map& map);
         void WriteProperties(wxXmlNode* root, const Map& map);
         void WriteLayer(wxXmlNode* root, const Map& map, unsigned int i);
         void WriteBackground(wxXmlNode* root, const Map& map, unsigned int i);

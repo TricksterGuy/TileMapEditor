@@ -86,7 +86,7 @@ void TextMapHandler::ReadProperties(std::istream& file, Map& map)
 
         if (property == "name:")
         {
-            if (!scanner.Next(name))
+            if (!scanner.NextLine(name))
                 throw "Could not parse name";
         }
         else if (property == "tileset:")
@@ -145,7 +145,7 @@ void TextMapHandler::ReadLayers(std::istream& file, Map& map)
 
             if (property == "name:")
             {
-                if (!scanner.Next(name))
+                if (!scanner.NextLine(name))
                     throw "Could not parse name";
             }
             else if (property == "position:")
@@ -271,7 +271,7 @@ void TextMapHandler::ReadBackgrounds(std::istream& file, Map& map)
 
             if (property == "name:")
             {
-                if (!scanner.Next(name))
+                if (!scanner.NextLine(name))
                     throw "Could not parse name";
             }
             else if (property == "filename:")
@@ -393,7 +393,7 @@ void TextMapHandler::ReadAnimations(std::istream& file, Map& map)
 
             if (property == "name:")
             {
-                if (!scanner.Next(name))
+                if (!scanner.NextLine(name))
                     throw "Could not parse name";
             }
             else if (property == "delay:")

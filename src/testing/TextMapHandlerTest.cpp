@@ -32,7 +32,7 @@
 
 const char* file_data =
 "Properties\n"
-"name: HELLO\n"
+"name: HELLO WORLD\n"
 "tileset: 011-PortTown01.png\n"
 "tile_dimensions: 32 32\n"
 "\n"
@@ -120,7 +120,7 @@ BOOST_FIXTURE_TEST_CASE(TestLoad, TextMapHandlerTest)
         return;
     }
 
-    BOOST_REQUIRE_EQUAL(map.GetName(), "HELLO");
+    BOOST_REQUIRE_EQUAL(map.GetName(), "HELLO WORLD");
     BOOST_REQUIRE_EQUAL(map.GetFilename(), "011-PortTown01.png");
     BOOST_REQUIRE_EQUAL(map.GetTileWidth(), 32);
     BOOST_REQUIRE_EQUAL(map.GetTileHeight(), 32);

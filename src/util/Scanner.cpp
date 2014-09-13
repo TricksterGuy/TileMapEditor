@@ -14,7 +14,7 @@ bool Scanner::Next(int32_t& var, int base)
     return true;
 }
 
-bool Scanner::Next(uint32_t& var, int base
+bool Scanner::Next(uint32_t& var, int base)
 {
     if (!HasMoreTokens()) return false;
 
@@ -53,9 +53,14 @@ bool Scanner::Next(std::string& var)
 bool Scanner::NextLine(std::string& var)
 {
     if (!HasMoreTokens()) return false;
-    std::stringstream str;
+    /*std::stringstream str;
 
-    var = GetNextToken();
+    do
+    {
+        str << GetNextToken();
+    } while (GetLastDelimiter() != '\n' && HasMoreTokens())*/
+
+    var = GetString();
     VerboseLog("Read line %s", static_cast<const char*>(var.c_str()));
     return true;
 }

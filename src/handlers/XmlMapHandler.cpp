@@ -131,6 +131,7 @@ void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
         std::string property = child->GetName().ToStdString();
         std::string content = child->GetNodeContent().ToStdString();
         DebugLog("%s Got node %s content %s",  __func__, property.c_str(), content.c_str());
+
         if (property == "Name")
         {
             name = content;
@@ -158,7 +159,8 @@ void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
 
 void XmlMapHandler::ReadLayer(wxXmlNode* root, Map& map)
 {
-    DebugLog("Reading Layer");
+    DebugLog("Reading a Layer");
+
     wxXmlNode* child = root->GetChildren();
     std::string name;
     uint32_t width;
@@ -179,7 +181,6 @@ void XmlMapHandler::ReadLayer(wxXmlNode* root, Map& map)
         }
         else if (property == "Dimensions")
         {
-            DebugLog("Reading Dimensions");
             if (!scanner.Next(width))
                 throw "Could not parse width";
             if (!scanner.Next(height))
@@ -195,6 +196,72 @@ void XmlMapHandler::ReadLayer(wxXmlNode* root, Map& map)
                 data.push_back(element);
             }
         }
+        else if (property == "Position")
+        {
+            int32_t x, y;
+            if (!scanner.Next(x))
+                throw "Could not parse position";
+            if (!scanner.Next(y))
+                throw "Could not parse position";
+            attr.SetPosition(x, y);
+        }
+        else if (property == "Origin")
+        {
+            int32_t x, y;
+            if (!scanner.Next(x))
+                throw "Could not parse origin";
+            if (!scanner.Next(y))
+                throw "Could not parse origin";
+            attr.SetOrigin(x, y);
+        }
+        else if (property == "Scale")
+        {
+            float x, y;
+            if (!scanner.Next(x))
+                throw "Could not parse scale";
+            if (!scanner.Next(y))
+                throw "Could not parse scale";
+            attr.SetScale(x, y);
+        }
+        else if (property == "Rotation")
+        {
+            float rotation;
+            if (!scanner.Next(rotation))
+                throw "Could not parse rotation";
+            attr.SetRotation(rotation);
+        }
+        else if (property == "Opacity")
+        {
+            float opacity;
+            if (!scanner.Next(opacity))
+                throw "Could not parse opacity";
+            attr.SetOpacity(opacity);
+        }
+        else if (property == "BlendMode")
+        {
+            uint32_t mode;
+            if (!scanner.Next(mode))
+                throw "Could not parse blend mode";
+            attr.SetBlendMode(mode);
+        }
+        else if (property == "BlendColor")
+        {
+            uint32_t color;
+            if (!scanner.Next(color, 16))
+                throw "Could not parse blend color";
+            attr.SetBlendColor(color);
+        }
+        else if (property == "Priority")
+        {
+            int32_t priority;
+            if (!scanner.Next(priority))
+                throw "Could not parser priority";
+            attr.SetDepth(priority);
+        }
+        else
+        {
+            throw "Unexpected token " + property;
+        }
 
         child = child->GetNext();
     }
@@ -203,73 +270,236 @@ void XmlMapHandler::ReadLayer(wxXmlNode* root, Map& map)
         throw "Incorrect number of tile entries for layer";
 
     map.Add(Layer(name, width, height, data));
+
+    DebugLog("Done Reading Layer");
 }
 
 void XmlMapHandler::ReadBackground(wxXmlNode* root, Map& map)
 {
+    DebugLog("Reading a background");
     wxXmlNode* child = root->GetChildren();
 
-    Background background;
-
-    float speedx = 0, speedy = 0;
+    std::string name;
+    std::string filename;
+    int32_t mode;
+    int32_t speedx = 0, speedy = 0;
+    DrawAttributes attr;
 
     while(child)
     {
-        if (child->GetName() == "Name")
-            background.SetName(child->GetNodeContent().ToStdString());
-        else if (child->GetName() == "Filename")
-            background.SetFilename(child->GetNodeContent().ToStdString());
-        else if (child->GetName() == "Mode")
-            background.SetMode(wxAtoi(child->GetNodeContent()));
-        else if (child->GetName() == "SpeedX")
-            speedx = wxAtof(child->GetNodeContent());
-        else if (child->GetName() == "SpeedY")
-            speedy = wxAtof(child->GetNodeContent());
+        std::string property = child->GetName().ToStdString();
+        std::string content = child->GetNodeContent().ToStdString();
+        DebugLog("%s Got node %s content %s",  __func__, property.c_str(), content.c_str());
 
-        child = child->GetNext();
-    }
-
-    background.SetSpeed(speedx, speedy);
-    map.Add(background);
-}
-
-void XmlMapHandler::ReadCollision(wxXmlNode* root, Map& map)
-{
-    wxXmlNode* child = root->GetChildren();
-
-    Collision::Type type = (Collision::Type) -1;
-    std::vector<int32_t> collision;
-    collision.resize(map.GetWidth() * map.GetHeight());
-
-    /// TODO this is correct for now when more types are implemented handle them
-    while(child)
-    {
-        if (child->GetName() == "Type")
-            type = (Collision::Type) wxAtoi(child->GetNodeContent());
-        else if (child->GetName() == "Data")
+        Scanner scanner(content);
+        if (property == "Name")
         {
-            wxString data = child->GetNodeContent();
-            wxStringTokenizer scanner(data);
-            unsigned int i = 0;
-            int tileid;
-
-            while (scanner.HasMoreTokens())
-            {
-                wxString token = scanner.GetNextToken();
-                tileid = wxAtoi(token);
-                collision[i] = tileid;
-                i++;
-            }
-
-            if (i != map.GetWidth() * map.GetHeight())
-                throw "Incorrect number of collision entries for collision layer";
+            name = content;
+        }
+        else if (property == "Filename")
+        {
+            filename = content;
+        }
+        else if (property == "Mode")
+        {
+            if (!scanner.Next(mode))
+                throw "Could not parse mode";
+        }
+        else if (property == "Speed")
+        {
+            if (!scanner.Next(speedx))
+                throw "Could not parse speed";
+            if (!scanner.Next(speedy))
+                throw "Could not parse speed";
+        }
+        else if (property == "Position")
+        {
+            int32_t x, y;
+            if (!scanner.Next(x))
+                throw "Could not parse position";
+            if (!scanner.Next(y))
+                throw "Could not parse position";
+            attr.SetPosition(x, y);
+        }
+        else if (property == "Origin")
+        {
+            int32_t x, y;
+            if (!scanner.Next(x))
+                throw "Could not parse origin";
+            if (!scanner.Next(y))
+                throw "Could not parse origin";
+            attr.SetOrigin(x, y);
+        }
+        else if (property == "Scale")
+        {
+            float x, y;
+            if (!scanner.Next(x))
+                throw "Could not parse scale";
+            if (!scanner.Next(y))
+                throw "Could not parse scale";
+            attr.SetScale(x, y);
+        }
+        else if (property == "Rotation")
+        {
+            float rotation;
+            if (!scanner.Next(rotation))
+                throw "Could not parse rotation";
+            attr.SetRotation(rotation);
+        }
+        else if (property == "Opacity")
+        {
+            float opacity;
+            if (!scanner.Next(opacity))
+                throw "Could not parse opacity";
+            attr.SetOpacity(opacity);
+        }
+        else if (property == "BlendMode")
+        {
+            uint32_t mode;
+            if (!scanner.Next(mode))
+                throw "Could not parse blend mode";
+            attr.SetBlendMode(mode);
+        }
+        else if (property == "BlendColor")
+        {
+            uint32_t color;
+            if (!scanner.Next(color, 16))
+                throw "Could not parse blend color";
+            attr.SetBlendColor(color);
+        }
+        else if (property == "Priority")
+        {
+            int32_t priority;
+            if (!scanner.Next(priority))
+                throw "Could not parser priority";
+            attr.SetDepth(priority);
+        }
+        else
+        {
+            throw "Unexpected token " + property;
         }
 
         child = child->GetNext();
     }
 
-    TileBasedCollisionLayer* clayer = new TileBasedCollisionLayer(map.GetWidth(), map.GetHeight(), collision);
+    map.Add(Background(name, filename, mode, speedx, speedy));
+
+    DebugLog("Done Reading Background");
+}
+
+void XmlMapHandler::ReadAnimations(wxXmlNode* root, Map& map)
+{
+    DebugLog("Reading an animation");
+    wxXmlNode* child = root->GetChildren();
+
+    std::string name;
+    int32_t delay;
+    int32_t type;
+    int32_t times;
+    std::vector<int32_t> frames;
+
+    while(child)
+    {
+        std::string property = child->GetName().ToStdString();
+        std::string content = child->GetNodeContent().ToStdString();
+        DebugLog("%s Got node %s content %s",  __func__, property.c_str(), content.c_str());
+
+        Scanner scanner(content);
+
+        if (property == "Name")
+        {
+            name = content;
+        }
+        else if (property == "Delay")
+        {
+            if (!scanner.Next(delay))
+                throw "Could not parse name";
+        }
+        else if (property == "Type")
+        {
+            if (!scanner.Next(type))
+                throw "Could not parse type";
+        }
+        else if (property == "Times")
+        {
+            if (!scanner.Next(times))
+                throw "Could not parse times";
+        }
+        else if (property == "Frames")
+        {
+            while (scanner.HasMoreTokens())
+            {
+                int32_t element;
+                if (!scanner.Next(element))
+                    throw "Could not parse frames";
+                frames.push_back(element);
+            }
+        }
+        else
+        {
+            throw "Unexpected token " + property;
+        }
+        child = child->GetNext();
+    }
+
+    map.Add(AnimatedTile(name, delay, (Animation::Type)type, times, frames));
+    DebugLog("Done Reading Animations");
+}
+
+void XmlMapHandler::ReadCollision(wxXmlNode* root, Map& map)
+{
+    DebugLog("Reading Collision Layer");
+    wxXmlNode* child = root->GetChildren();
+
+    int32_t type = -1;
+    uint32_t width = 0, height = 0;
+    std::vector<int32_t> data;
+
+    /// TODO this is correct for now when more types are implemented handle them
+    while(child)
+    {
+        std::string property = child->GetName().ToStdString();
+        std::string content = child->GetNodeContent().ToStdString();
+        DebugLog("%s Got node %s content %s",  __func__, property.c_str(), content.c_str());
+
+        Scanner scanner(content);
+        if (property == "Type")
+        {
+            if (!scanner.Next(type))
+                throw "Could not parse collision layer type";
+        }
+        else if (property == "Dimensions")
+        {
+            if (!scanner.Next(width))
+                throw "Could not parse width";
+            if (!scanner.Next(height))
+                throw "Could not parse height";
+        }
+        else if (child->GetName() == "Data")
+        {
+            while (scanner.HasMoreTokens())
+            {
+                int32_t element;
+                if (!scanner.Next(element))
+                    throw "Could not parse data";
+                data.push_back(element);
+            }
+        }
+        else
+        {
+            throw "Unexpected token " + property;
+        }
+
+        child = child->GetNext();
+    }
+
+    if (data.size() != width * height)
+        throw "Incorrect number of tile entries for collision layer";
+
+    TileBasedCollisionLayer* clayer = new TileBasedCollisionLayer(width, height, data);
     map.SetCollisionLayer(clayer);
+
+    DebugLog("Done Reading Collision Layer");
 }
 
 void XmlMapHandler::WriteProperties(wxXmlNode* root, const Map& map)
