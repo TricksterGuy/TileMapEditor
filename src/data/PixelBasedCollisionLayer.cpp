@@ -33,10 +33,9 @@ PixelBasedCollisionLayer::~PixelBasedCollisionLayer()
 {
 }
 
-PixelBasedCollisionLayer::PixelBasedCollisionLayer(const PixelBasedCollisionLayer& layer)
+PixelBasedCollisionLayer::PixelBasedCollisionLayer(const PixelBasedCollisionLayer& layer) :
+CollisionLayer(layer.type), data(layer.data)
 {
-    type = layer.type;
-    data = layer.data;
 }
 
 PixelBasedCollisionLayer& PixelBasedCollisionLayer::operator=(const PixelBasedCollisionLayer& layer)

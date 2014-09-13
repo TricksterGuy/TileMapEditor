@@ -251,7 +251,6 @@ void BinaryMapHandler::ReadMAPP(std::istream& file, Map& map, int32_t& num_layer
 void BinaryMapHandler::ReadLYRS(std::istream& file, Map& map, int32_t& num_layers)
 {
     uint32_t texture_size;
-    char* temp;
     uint32_t width = map.GetWidth();
     uint32_t height = map.GetHeight();
     int32_t* data = new int32_t[width * height];
@@ -260,7 +259,7 @@ void BinaryMapHandler::ReadLYRS(std::istream& file, Map& map, int32_t& num_layer
     {
         file.read((char*)(&texture_size), sizeof(uint32_t));
         texture_size = ntohl(texture_size);
-        temp = new char[texture_size];
+        char* temp = new char[texture_size];
         file.read(temp, sizeof(char) * texture_size);
 
 

@@ -27,6 +27,8 @@
 class MapViewUpdate : public wxObject
 {
     public:
+        MapViewUpdate();
+        ~MapViewUpdate() {}
         void SetUpdateMap(bool update) {updateMap = update;}
         bool GetUpdateMap() const {return updateMap;}
         void SetUpdateBackgrounds(bool update) {updateBackgrounds = update;}

@@ -22,3 +22,9 @@
 #include "MapViewUpdate.hpp"
 
 IMPLEMENT_DYNAMIC_CLASS(MapViewUpdate, wxObject)
+
+MapViewUpdate::MapViewUpdate() :
+updateMap(false), updateBackgrounds(false), updateTileset(false), needRefresh(false)
+{
+
+}

@@ -47,7 +47,7 @@ class BaseMapHandler
 	      * @param alternatives Extra extensions this handler handles.
 	      */
 		BaseMapHandler(const std::string& name = "", const std::string& extension = "", const std::string& description = "",
-                       bool readable = true, bool writeable = true, const std::set<std::string> alternatives = std::set<std::string>());
+                       bool readable = true, bool writeable = true, const std::set<std::string>& alternatives = std::set<std::string>());
 		virtual ~BaseMapHandler();
 
         /** Initializes the handler. Called by MapHandlerManager

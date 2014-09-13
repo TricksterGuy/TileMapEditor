@@ -39,12 +39,9 @@ CollisionLayer(Collision::TileBased), width(_width), height(_height), data(width
 {
 }
 
-TileBasedCollisionLayer::TileBasedCollisionLayer(const TileBasedCollisionLayer& layer)
+TileBasedCollisionLayer::TileBasedCollisionLayer(const TileBasedCollisionLayer& layer) :
+CollisionLayer(layer.type), width(layer.width), height(layer.height), data(layer.data)
 {
-    type = layer.type;
-    width = layer.width;
-    height = layer.height;
-    data = layer.data;
 }
 
 TileBasedCollisionLayer::~TileBasedCollisionLayer()

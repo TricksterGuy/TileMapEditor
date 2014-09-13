@@ -28,6 +28,7 @@
 class TilemapEditorApp : public wxApp
 {
     public:
+        TilemapEditorApp() : frame(NULL) {}
         virtual bool OnInit();
         wxFrame* CreateChildFrame(wxView* view);
     private:

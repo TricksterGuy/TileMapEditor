@@ -10,14 +10,18 @@ name(_name), filename(_filename), tile_width(_tile_width), tile_height(_tile_hei
 {
 }
 
-Map::Map(const Map& map)
+        std::string name;
+        std::string filename;
+        uint32_t tile_width, tile_height;
+        std::vector<Layer> layers;
+        std::vector<AnimatedTile> animatedTiles;
+        std::vector<Background> backgrounds;
+        std::unique_ptr<CollisionLayer> collisionLayer;
+
+Map::Map(const Map& map) :
+name(map.name), filename(map.filename), tile_width(map.tile_width), tile_height(map.tile_height), layers(map.layers), animatedTiles(map.animatedTiles),
+backgrounds(map.backgrounds)
 {
-    tile_width = map.tile_width;
-    tile_height = map.tile_height;
-    filename = map.filename;
-    name = map.name;
-    layers = map.layers;
-    backgrounds = map.backgrounds;
     //if (map.collisionLayer != NULL)
     //    collisionLayer.reset(new CollisionLayer(*(map.collisionLayer)));
 }
@@ -64,9 +68,9 @@ void Map::Destroy()
     filename = "";
     tile_width = 8;
     tile_height = 8;
-    layers.empty();
-    backgrounds.empty();
-    animatedTiles.empty();
+    layers.clear();
+    backgrounds.clear();
+    animatedTiles.clear();
     collisionLayer.reset();
 }
 

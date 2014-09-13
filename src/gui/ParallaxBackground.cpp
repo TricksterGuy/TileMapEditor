@@ -24,15 +24,10 @@
 
 //extern const std::string& RESOURCE_POOL;
 
-ParallaxBackground::ParallaxBackground(const wxString& filename, const Background& back)
+ParallaxBackground::ParallaxBackground(const wxString& filename, const Background& back) :
+name(back.GetName()), filename(filename.ToStdString()), mode(back.GetMode()), speedx(back.GetSpeedX()), speedy(back.GetSpeedY()),
+x(0), y(0), attr(back), needUpdateImage(true)
 {
-    name = back.GetName();
-    this->filename = filename.ToStdString();
-    mode = (Background::Autoscroll | Background::Repeating);//back.GetMode();
-    back.GetSpeed(speedx, speedy);
-    attr = back;
-    //updateImage();
-    needUpdateImage = true;
 }
 
 ParallaxBackground::~ParallaxBackground()
@@ -170,5 +165,7 @@ void ParallaxBackground::UpdateImage()
         fprintf(stderr, "ParallaxBackground: %s not found\n", filename.c_str());
         image.Create(640, 480);
     }
+    x = 0;
+    y = 0;
     needUpdateImage = false;
 }

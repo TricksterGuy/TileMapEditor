@@ -37,23 +37,9 @@ DrawAttributes(attr), name(_name), width(_width), height(_height), data(width * 
 {
 }
 
-Layer::Layer(const Layer& layer)
+Layer::Layer(const Layer& layer) :
+DrawAttributes(layer), name(layer.name), width(layer.width), height(layer.height), data(layer.data)
 {
-    name = layer.name;
-    width = layer.width;
-    height = layer.height;
-    data = layer.data;
-    depth = layer.depth;
-    x = layer.x;
-    y = layer.y;
-    origin_x = layer.origin_x;
-    origin_y = layer.origin_y;
-    scale_x = layer.scale_x;
-    scale_y = layer.scale_y;
-    rotation = layer.rotation;
-    opacity = layer.opacity;
-    blend_mode = layer.blend_mode;
-    blend_color = layer.blend_color;
 }
 
 Layer& Layer::operator=(const Layer& layer)
