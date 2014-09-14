@@ -27,7 +27,7 @@
 class Scanner : public wxStringTokenizer
 {
     public:
-        Scanner(const std::string& str, const std::string& delims = " ") : wxStringTokenizer(str, delims) {}
+        Scanner(const std::string& str, const std::string& delims = " ,\t\r\n") : wxStringTokenizer(str, delims, wxTOKEN_STRTOK) {}
         ~Scanner() {}
         bool Next(int32_t& var, int base = 10);
         bool Next(uint32_t& var, int base = 10);

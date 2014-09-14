@@ -32,11 +32,57 @@
 #include "XmlMapHandler.hpp"
 #include "TileBasedCollisionLayer.hpp"
 #include <wx/wfstream.h>
-#include <wx/stdstream.h>
 #include "Logger.hpp"
 #include "Scanner.hpp"
 
 using namespace std;
+
+class wxFInputStream : public wxInputStream
+{
+    public:
+        wxFInputStream(std::istream& _stream) : stream(_stream) {}
+    protected:
+        size_t OnSysRead(void *buffer, size_t bufsize)
+        {
+            if (stream.bad())
+            {
+                m_lasterror = wxSTREAM_READ_ERROR;
+                return 0;
+            }
+            else if (stream.eof())
+            {
+                m_lasterror = wxSTREAM_EOF;
+                return 0;
+            }
+
+            stream.read(reinterpret_cast<char*>(buffer), bufsize);
+            return stream.gcount();
+        }
+    private:
+        std::istream& stream;
+};
+
+class wxFOutputStream : public wxOutputStream
+{
+    public:
+        wxFOutputStream(std::ostream& _stream) : stream(_stream) {}
+    protected:
+        size_t OnSysWrite(const void *buffer, size_t bufsize)
+        {
+            VerboseLog("Writing %d bytes", bufsize);
+
+            if (stream.bad())
+            {
+                m_lasterror = wxSTREAM_WRITE_ERROR;
+                return 0;
+            }
+
+            stream.write(reinterpret_cast<const char*>(buffer), bufsize);
+            return bufsize;
+        }
+    private:
+        std::ostream& stream;
+};
 
 XmlMapHandler::XmlMapHandler() : BaseMapHandler("Xml Format", "xml", "Exports the map as an xml file")
 {
@@ -44,40 +90,17 @@ XmlMapHandler::XmlMapHandler() : BaseMapHandler("Xml Format", "xml", "Exports th
 
 XmlMapHandler::~XmlMapHandler()
 {
-
-}
-
-void XmlMapHandler::Load(const std::string& mapfile, Map& map)
-{
-    DebugLog("Loading %s", mapfile.c_str());
-    wxFileInputStream wxfile(mapfile);
-    if (!wxfile.IsOk())
-        throw "Could not open file";
-
-    wxStdInputStream out(wxfile);
-    Load(out, map);
-}
-
-void XmlMapHandler::Save(const std::string& mapfile, const Map& map)
-{
-    DebugLog("Saving %s", mapfile.c_str());
-    wxFileOutputStream wxfile(mapfile);
-    if (!wxfile.IsOk())
-        throw "Could not open file";
-
-    wxStdOutputStream out(wxfile);
-    Save(out, map);
 }
 
 void XmlMapHandler::Load(std::istream& file, Map& map)
 {
     wxXmlDocument doc;
-    if (!doc.Load(dynamic_cast<wxInputStream&>(file)))
+    wxFInputStream fis(file);
+    if (!doc.Load(dynamic_cast<wxInputStream&>(fis)))
         throw "Could not open XML file";
 
     wxXmlNode* child = doc.GetRoot()->GetChildren();
 
-    // Ensure that the first Node in the XML file is the Properties Node
     if (child != NULL && child->GetName() != "Properties")
         throw "Properties must be the first node in the XML file";
 
@@ -93,28 +116,34 @@ void XmlMapHandler::Load(std::istream& file, Map& map)
             ReadBackground(child, map);
         else if (name == "Collision")
             ReadCollision(child, map);
+        else if (name == "Animation")
+            ReadAnimation(child, map);
         else
-            throw "Unknown tag found in file " + name;
+            throw "Unknown element found in file " + name;
     }
 }
 
 void XmlMapHandler::Save(std::ostream& file, const Map& map)
 {
-    wxXmlNode* root = new wxXmlNode(wxXML_ELEMENT_NODE, "Map");
+    wxXmlNode* root = new wxXmlNode(NULL, wxXML_ELEMENT_NODE, "Map");
 
     if (map.HasCollisionLayer())
         WriteCollision(root, map);
-    for (unsigned int i = map.GetNumBackgrounds(); i > 0; i--)
-        WriteBackground(root, map, i - 1);
-    for (unsigned int i = map.GetNumLayers(); i > 0; i--)
-        WriteLayer(root, map, i - 1);
+    for (int i = map.GetNumAnimatedTiles() - 1; i >= 0; i--)
+        WriteAnimation(root, map, map.GetAnimatedTile(i));
+    for (int i = map.GetNumBackgrounds() - 1; i >= 0; i--)
+        WriteBackground(root, map, map.GetBackground(i));
+    for (int i = map.GetNumLayers() - 1; i >= 0; i--)
+        WriteLayer(root, map, map.GetLayer(i));
     WriteProperties(root, map);
 
-    wxXmlDocument doc;
-    doc.SetRoot(root);
+    wxXmlDocument* doc = new wxXmlDocument();
+    doc->SetRoot(root);
 
-    if (!doc.Save(dynamic_cast<wxOutputStream&>(file)))
+    wxOutputStream* fos = new wxFOutputStream(file);
+    if (!doc->Save(*fos))
         throw "Failed to save XML file";
+    delete fos;
 }
 
 void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
@@ -136,13 +165,12 @@ void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
         {
             name = content;
         }
-        else if (property == "Filename")
+        else if (property == "Tileset")
         {
             tileset = content;
         }
         else if (property == "TileDimensions")
         {
-            DebugLog("Reading TileDimensions");
             Scanner scanner(content);
             if (!scanner.Next(tile_width))
                 throw "Could not parse tile_width";
@@ -155,6 +183,7 @@ void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
     map.SetName(name);
     map.SetFilename(tileset);
     map.SetTileDimensions(tile_width, tile_height);
+    DebugLog("Done Reading Properties");
 }
 
 void XmlMapHandler::ReadLayer(wxXmlNode* root, Map& map)
@@ -269,7 +298,7 @@ void XmlMapHandler::ReadLayer(wxXmlNode* root, Map& map)
     if (data.size() != width * height)
         throw "Incorrect number of tile entries for layer";
 
-    map.Add(Layer(name, width, height, data));
+    map.Add(Layer(name, width, height, data, attr));
 
     DebugLog("Done Reading Layer");
 }
@@ -382,12 +411,12 @@ void XmlMapHandler::ReadBackground(wxXmlNode* root, Map& map)
         child = child->GetNext();
     }
 
-    map.Add(Background(name, filename, mode, speedx, speedy));
+    map.Add(Background(name, filename, mode, speedx, speedy, attr));
 
-    DebugLog("Done Reading Background");
+    DebugLog("Done Reading a Background");
 }
 
-void XmlMapHandler::ReadAnimations(wxXmlNode* root, Map& map)
+void XmlMapHandler::ReadAnimation(wxXmlNode* root, Map& map)
 {
     DebugLog("Reading an animation");
     wxXmlNode* child = root->GetChildren();
@@ -443,7 +472,7 @@ void XmlMapHandler::ReadAnimations(wxXmlNode* root, Map& map)
     }
 
     map.Add(AnimatedTile(name, delay, (Animation::Type)type, times, frames));
-    DebugLog("Done Reading Animations");
+    DebugLog("Done Reading an Animation");
 }
 
 void XmlMapHandler::ReadCollision(wxXmlNode* root, Map& map)
@@ -504,71 +533,105 @@ void XmlMapHandler::ReadCollision(wxXmlNode* root, Map& map)
 
 void XmlMapHandler::WriteProperties(wxXmlNode* root, const Map& map)
 {
+    DebugLog("Writing Properties");
     wxXmlNode* properties = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Properties");
 
-    wxXmlNode* filename = new wxXmlNode(properties, wxXML_ELEMENT_NODE, "Filename");
-    new wxXmlNode(filename, wxXML_TEXT_NODE, "Filename", map.GetFilename());
+    wxXmlNode* tiledimensions = new wxXmlNode(properties, wxXML_ELEMENT_NODE, "TileDimensions");
+    new wxXmlNode(tiledimensions, wxXML_TEXT_NODE, "", wxString::Format("%i, %i", map.GetTileWidth(), map.GetTileHeight()));
+
+    wxXmlNode* filename = new wxXmlNode(properties, wxXML_ELEMENT_NODE, "Tileset");
+    new wxXmlNode(filename, wxXML_TEXT_NODE, "", map.GetFilename());
 
     wxXmlNode* name = new wxXmlNode(properties, wxXML_ELEMENT_NODE, "Name");
-    new wxXmlNode(name, wxXML_TEXT_NODE, "Name", map.GetName());
-
-    wxXmlNode* tiledimensions = new wxXmlNode(properties, wxXML_ELEMENT_NODE, "TileDimensions");
-    wxXmlNode* twidth = new wxXmlNode(tiledimensions, wxXML_ELEMENT_NODE, "Width");
-    wxXmlNode* theight = new wxXmlNode(tiledimensions, wxXML_ELEMENT_NODE, "Height");
-    new wxXmlNode(twidth, wxXML_TEXT_NODE, "Width", wxString::Format("%i", map.GetTileWidth()));
-    new wxXmlNode(theight, wxXML_TEXT_NODE, "Height", wxString::Format("%i", map.GetTileHeight()));
-
-    wxXmlNode* dimensions = new wxXmlNode(properties, wxXML_ELEMENT_NODE, "Dimensions");
-    wxXmlNode* mwidth = new wxXmlNode(dimensions, wxXML_ELEMENT_NODE, "Width");
-    wxXmlNode* mheight = new wxXmlNode(dimensions, wxXML_ELEMENT_NODE, "Height");
-    new wxXmlNode(mwidth, wxXML_TEXT_NODE, "Width", wxString::Format("%i", map.GetWidth()));
-    new wxXmlNode(mheight, wxXML_TEXT_NODE, "Height", wxString::Format("%i", map.GetHeight()));
+    new wxXmlNode(name, wxXML_TEXT_NODE, "", map.GetName());
+    DebugLog("Done Writing Properties");
 }
 
-void XmlMapHandler::WriteLayer(wxXmlNode* root, const Map& map, unsigned int i)
+void XmlMapHandler::WriteLayer(wxXmlNode* root, const Map& map, const Layer& layer)
 {
-    const Layer& layer = map.GetLayer(i);
-
-    wxXmlNode* layern = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Layer");
+    DebugLog("Writing a Layer");
+    wxXmlNode* node = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Layer");
 
     wxString layerdata = "\n";
     for (unsigned int i = 0; i < layer.GetHeight(); i++)
     {
         layerdata << "\t\t\t";
         for (unsigned int j = 0; j < layer.GetWidth(); j++)
-            layerdata << layer.At(j, i) << " ";
+            layerdata << layer.At(j, i) << ", ";
         layerdata << "\n";
     }
 
-    wxXmlNode* data = new wxXmlNode(layern, wxXML_ELEMENT_NODE, "Data");
-    new wxXmlNode(data, wxXML_TEXT_NODE, "Data", layerdata);
+    wxXmlNode* data = new wxXmlNode(node, wxXML_ELEMENT_NODE, "Data");
+    new wxXmlNode(data, wxXML_TEXT_NODE, "", layerdata);
 
-    wxXmlNode* name = new wxXmlNode(layern, wxXML_ELEMENT_NODE, "Name");
-    new wxXmlNode(name, wxXML_TEXT_NODE, "Name", layer.GetName());
+    wxXmlNode* dimensions = new wxXmlNode(node, wxXML_ELEMENT_NODE, "Dimensions");
+    new wxXmlNode(dimensions, wxXML_TEXT_NODE, "", wxString::Format("%i, %i", layer.GetWidth(), layer.GetHeight()));
+
+    WriteAttributes(node, layer);
+
+    wxXmlNode* name = new wxXmlNode(node, wxXML_ELEMENT_NODE, "Name");
+    new wxXmlNode(name, wxXML_TEXT_NODE, "", layer.GetName());
+
+    DebugLog("Done Writing a Layer");
 }
 
-void XmlMapHandler::WriteBackground(wxXmlNode* root, const Map& map, unsigned int i)
+void XmlMapHandler::WriteBackground(wxXmlNode* root, const Map& map, const Background& background)
 {
-    const Background& background = map.GetBackground(i);
+    DebugLog("Writing a Background");
     int32_t x, y;
     background.GetSpeed(x, y);
+
     wxXmlNode* back = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Background");
+    WriteAttributes(back, background);
 
-    wxXmlNode* speedy = new wxXmlNode(back, wxXML_ELEMENT_NODE, "SpeedY");
-    wxXmlNode* speedx = new wxXmlNode(back, wxXML_ELEMENT_NODE, "SpeedX");
+    wxXmlNode* speed = new wxXmlNode(back, wxXML_ELEMENT_NODE, "Speed");
+    new wxXmlNode(speed, wxXML_TEXT_NODE, "", wxString::Format("%i, %i", x, y));
+
     wxXmlNode* mode = new wxXmlNode(back, wxXML_ELEMENT_NODE, "Mode");
-    wxXmlNode* filename = new wxXmlNode(back, wxXML_ELEMENT_NODE, "Filename");
-    wxXmlNode* name = new wxXmlNode(back, wxXML_ELEMENT_NODE, "Name");
+    new wxXmlNode(mode, wxXML_TEXT_NODE, "", wxString::Format("%i", background.GetMode()));
 
-    new wxXmlNode(filename, wxXML_TEXT_NODE, "Filename", background.GetFilename());
-    new wxXmlNode(speedy, wxXML_TEXT_NODE, "SpeedY", wxString::Format("%i", y));
-    new wxXmlNode(speedx, wxXML_TEXT_NODE, "SpeedX", wxString::Format("%i", x));
-    new wxXmlNode(mode, wxXML_TEXT_NODE, "Mode", wxString::Format("%i", background.GetMode()));
-    new wxXmlNode(name, wxXML_TEXT_NODE, "Name", background.GetName());
+    wxXmlNode* filename = new wxXmlNode(back, wxXML_ELEMENT_NODE, "Filename");
+    new wxXmlNode(filename, wxXML_TEXT_NODE, "", background.GetFilename());
+
+    wxXmlNode* name = new wxXmlNode(back, wxXML_ELEMENT_NODE, "Name");
+    new wxXmlNode(name, wxXML_TEXT_NODE, "", background.GetName());
+
+    DebugLog("Done Writing a Background");
+}
+
+void XmlMapHandler::WriteAnimation(wxXmlNode* root, const Map& map, const AnimatedTile& animatedTile)
+{
+    DebugLog("Writing an Animation");
+    wxXmlNode* animation = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Animation");
+
+    wxString frameData = "\n\t\t\t";
+    for (unsigned int i = 0; i < animatedTile.GetNumFrames(); i++)
+    {
+        frameData << animatedTile.GetFrame(i) << ", ";
+    }
+    frameData << "\n";
+
+    wxXmlNode* frames = new wxXmlNode(animation, wxXML_ELEMENT_NODE, "Frames");
+    new wxXmlNode(frames, wxXML_TEXT_NODE, "", frameData);
+
+    wxXmlNode* times = new wxXmlNode(animation, wxXML_ELEMENT_NODE, "Times");
+    new wxXmlNode(times, wxXML_TEXT_NODE, "", wxString::Format("%i", animatedTile.GetTimes()));
+
+    wxXmlNode* type = new wxXmlNode(animation, wxXML_ELEMENT_NODE, "Type");
+    new wxXmlNode(type, wxXML_TEXT_NODE, "", wxString::Format("%i", animatedTile.GetType()));
+
+    wxXmlNode* delay = new wxXmlNode(animation, wxXML_ELEMENT_NODE, "Delay");
+    new wxXmlNode(delay, wxXML_TEXT_NODE, "", wxString::Format("%i", animatedTile.GetDelay()));
+
+    wxXmlNode* name = new wxXmlNode(animation, wxXML_ELEMENT_NODE, "Name");
+    new wxXmlNode(name, wxXML_TEXT_NODE, "", animatedTile.GetName());
+
+    DebugLog("Done Writing an Animation");
 }
 
 void XmlMapHandler::WriteCollision(wxXmlNode* root, const Map& map)
 {
+    DebugLog("Writing Collision Layer");
     TileBasedCollisionLayer* layer = dynamic_cast<TileBasedCollisionLayer*>(map.GetCollisionLayer());
     wxXmlNode* layern = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Collision");
 
@@ -577,13 +640,45 @@ void XmlMapHandler::WriteCollision(wxXmlNode* root, const Map& map)
     {
         layerdata << "\t\t\t";
         for (unsigned int j = 0; j < layer->GetWidth(); j++)
-            layerdata << layer->At(j, i) << " ";
+            layerdata << layer->At(j, i) << ", ";
         layerdata << "\n";
     }
 
     wxXmlNode* data = new wxXmlNode(layern, wxXML_ELEMENT_NODE, "Data");
-    new wxXmlNode(data, wxXML_TEXT_NODE, "Data", layerdata);
+    new wxXmlNode(data, wxXML_TEXT_NODE, "", layerdata);
 
-    wxXmlNode* mode = new wxXmlNode(layern, wxXML_ELEMENT_NODE, "Mode");
-    new wxXmlNode(mode, wxXML_TEXT_NODE, "Mode", wxString::Format("%i", layer->GetType()));
+    wxXmlNode* dimensions = new wxXmlNode(layern, wxXML_ELEMENT_NODE, "Dimensions");
+    new wxXmlNode(dimensions, wxXML_TEXT_NODE, "", wxString::Format("%i, %i", layer->GetWidth(), layer->GetHeight()));
+
+    wxXmlNode* type = new wxXmlNode(layern, wxXML_ELEMENT_NODE, "Type");
+    new wxXmlNode(type, wxXML_TEXT_NODE, "", wxString::Format("%i", layer->GetType()));
+
+    DebugLog("Done Writing Collision Layer");
+}
+
+void XmlMapHandler::WriteAttributes(wxXmlNode* root, const DrawAttributes& attr)
+{
+    wxXmlNode* priority = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Priority");
+    new wxXmlNode(priority, wxXML_TEXT_NODE, "", wxString::Format("%i", attr.GetDepth()));
+
+    wxXmlNode* blendcolor = new wxXmlNode(root, wxXML_ELEMENT_NODE, "BlendColor");
+    new wxXmlNode(blendcolor, wxXML_TEXT_NODE, "", wxString::Format("%X", attr.GetBlendColor()));
+
+    wxXmlNode* blendmode = new wxXmlNode(root, wxXML_ELEMENT_NODE, "BlendMode");
+    new wxXmlNode(blendmode, wxXML_TEXT_NODE, "", wxString::Format("%i", attr.GetBlendMode()));
+
+    wxXmlNode* opacity = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Opacity");
+    new wxXmlNode(opacity, wxXML_TEXT_NODE, "", wxString::Format("%f", attr.GetOpacity()));
+
+    wxXmlNode* rotation = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Rotation");
+    new wxXmlNode(rotation, wxXML_TEXT_NODE, "", wxString::Format("%f", attr.GetRotation()));
+
+    wxXmlNode* scale = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Scale");
+    new wxXmlNode(scale, wxXML_TEXT_NODE, "", wxString::Format("%f, %f", attr.GetScaleX(), attr.GetScaleY()));
+
+    wxXmlNode* origin = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Origin");
+    new wxXmlNode(origin, wxXML_TEXT_NODE, "", wxString::Format("%i, %i", attr.GetOriginX(), attr.GetOriginY()));
+
+    wxXmlNode* position = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Position");
+    new wxXmlNode(position, wxXML_TEXT_NODE, "", wxString::Format("%i, %i", attr.GetX(), attr.GetY()));
 }

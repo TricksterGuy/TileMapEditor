@@ -153,12 +153,15 @@ target_link_libraries(
 )
 
 add_executable(
-    TextMapHandlerTest
+    TileMapEditorTest
+    src/testing/GlobalTest.cpp
     src/testing/TextMapHandlerTest.cpp
+    src/testing/TestUtil.cpp
+    src/testing/XmlMapHandlerTest.cpp
 )
 
 target_link_libraries(
-    TextMapHandlerTest
+    TileMapEditorTest
     handlers
     util
     map

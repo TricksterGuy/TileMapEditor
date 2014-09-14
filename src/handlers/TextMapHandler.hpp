@@ -34,7 +34,7 @@ class TextMapHandler : public BaseMapHandler
 		/** @see BaseMapHandler::Load */
         virtual void Load(std::istream& file, Map& map);
         /** @see BaseMapHandler::Save */
-        virtual void Save(std::ostream& files, const Map& map);
+        virtual void Save(std::ostream& file, const Map& map);
 	private:
         void ReadProperties(std::istream& file, Map& map);
         void ReadLayers(std::istream& file, Map& map);

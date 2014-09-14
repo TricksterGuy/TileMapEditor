@@ -1,5 +1,5 @@
 /******************************************************************************************************
- * Morphan
+ * TileMapEditor
  * Copyright (C) 2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
@@ -19,18 +19,16 @@
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
 
-#if !defined( WIN32 )
-    #define BOOST_TEST_DYN_LINK
-#endif
-#define BOOST_TEST_MAIN
-#include <sstream>
+#define BOOST_TEST_DYN_LINK
 #include <boost/test/auto_unit_test.hpp>
+#include <sstream>
 #include "Logger.hpp"
 #include "Map.hpp"
+#include "TestUtil.hpp"
 #include "TextMapHandler.hpp"
 #include "TileBasedCollisionLayer.hpp"
 
-const char* file_data =
+const char* map_data_txt_file =
 "Properties\n"
 "name: HELLO WORLD\n"
 "tileset: 011-PortTown01.png\n"
@@ -87,29 +85,12 @@ const char* file_data =
 "data: 1 1\n"
 "\n";
 
-static inline void trim(std::string& str)
+BOOST_AUTO_TEST_CASE(TextMapHandlerLoad)
 {
-    std::string::size_type pos = str.find_last_not_of(' ');
-    if(pos != std::string::npos) {
-        str.erase(pos + 1);
-        pos = str.find_first_not_of(' ');
-        if(pos != std::string::npos) str.erase(0, pos);
-    }
-    else
-        str.erase(str.begin(), str.end());
-}
-
-struct TextMapHandlerTest
-{
-    TextMapHandlerTest() {logger->SetLogLevel(LogLevel::VERBOSE);}
-    ~TextMapHandlerTest() {}
     TextMapHandler handler;
     Map map;
-};
 
-BOOST_FIXTURE_TEST_CASE(TestLoad, TextMapHandlerTest)
-{
-    std::stringstream file(file_data);
+    std::stringstream file(map_data_txt_file);
     try
     {
         handler.Load(file, map);
@@ -194,9 +175,12 @@ BOOST_FIXTURE_TEST_CASE(TestLoad, TextMapHandlerTest)
     BOOST_REQUIRE_EQUAL_COLLECTIONS(actualData.begin(), actualData.end(), expectedData.begin(), expectedData.end());
 }
 
-BOOST_FIXTURE_TEST_CASE(TestSave, TextMapHandlerTest)
+BOOST_AUTO_TEST_CASE(TextMapHandlerSave)
 {
-    std::stringstream file(file_data);
+    TextMapHandler handler;
+    Map map;
+
+    std::stringstream file(map_data_txt_file);
     std::stringstream out;
     try
     {
@@ -209,7 +193,7 @@ BOOST_FIXTURE_TEST_CASE(TestSave, TextMapHandlerTest)
         return;
     }
 
-    std::stringstream expected(file_data);
+    std::stringstream expected(map_data_txt_file);
 
     std::string expectedLine;
     std::string actualLine;
@@ -218,6 +202,7 @@ BOOST_FIXTURE_TEST_CASE(TestSave, TextMapHandlerTest)
         std::getline(expected, expectedLine);
         std::getline(out, actualLine);
         trim(actualLine);
+        trim(expectedLine);
 
         BOOST_REQUIRE_EQUAL(expectedLine, actualLine);
     }

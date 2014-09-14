@@ -53,12 +53,6 @@ bool Scanner::Next(std::string& var)
 bool Scanner::NextLine(std::string& var)
 {
     if (!HasMoreTokens()) return false;
-    /*std::stringstream str;
-
-    do
-    {
-        str << GetNextToken();
-    } while (GetLastDelimiter() != '\n' && HasMoreTokens())*/
 
     var = GetString();
     VerboseLog("Read line %s", static_cast<const char*>(var.c_str()));

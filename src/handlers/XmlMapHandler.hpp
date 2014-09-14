@@ -31,10 +31,6 @@ class XmlMapHandler : public BaseMapHandler
 	public:
 		XmlMapHandler();
 		~XmlMapHandler();
-        /** See BaseMapHandler::Load */
-        virtual void Load(const std::string& filename, Map& map);
-        /** See BaseMapHandler::Save */
-        virtual void Save(const std::string& filename, const Map& map);
 		/** @see BaseMapHandler::Load */
         virtual void Load(std::istream& file, Map& map);
         /** @see BaseMapHandler::Save */
@@ -43,12 +39,14 @@ class XmlMapHandler : public BaseMapHandler
         void ReadProperties(wxXmlNode* root, Map& map);
         void ReadLayer(wxXmlNode* root, Map& map);
         void ReadBackground(wxXmlNode* root, Map& map);
+        void ReadAnimation(wxXmlNode* root, Map& map);
         void ReadCollision(wxXmlNode* root, Map& map);
-        void ReadAnimations(wxXmlNode* root, Map& map);
         void WriteProperties(wxXmlNode* root, const Map& map);
-        void WriteLayer(wxXmlNode* root, const Map& map, unsigned int i);
-        void WriteBackground(wxXmlNode* root, const Map& map, unsigned int i);
+        void WriteLayer(wxXmlNode* root, const Map& map, const Layer& layer);
+        void WriteBackground(wxXmlNode* root, const Map& map, const Background& background);
+        void WriteAnimation(wxXmlNode* root, const Map& map, const AnimatedTile& animatedTile);
         void WriteCollision(wxXmlNode* root, const Map& map);
+        void WriteAttributes(wxXmlNode* root, const DrawAttributes& attr);
 };
 
 #endif
