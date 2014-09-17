@@ -94,7 +94,15 @@
 		<Unit filename="src/handlers/TextMapHandler.hpp" />
 		<Unit filename="src/handlers/XmlMapHandler.cpp" />
 		<Unit filename="src/handlers/XmlMapHandler.hpp" />
+		<Unit filename="src/testing/BasicHandlersTest.cpp" />
+		<Unit filename="src/testing/GlobalTest.cpp" />
+		<Unit filename="src/testing/LayerTest.cpp" />
+		<Unit filename="src/testing/MapTest.cpp" />
+		<Unit filename="src/testing/RegionTest.cpp" />
+		<Unit filename="src/testing/TestUtil.cpp" />
+		<Unit filename="src/testing/TestUtil.hpp" />
 		<Unit filename="src/testing/TextMapHandlerTest.cpp" />
+		<Unit filename="src/testing/XmlMapHandlerTest.cpp" />
 		<Unit filename="src/util/Logger.cpp" />
 		<Unit filename="src/util/Logger.hpp" />
 		<Unit filename="src/util/NullLogger.hpp" />

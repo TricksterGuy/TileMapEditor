@@ -32,8 +32,9 @@ BOOST_AUTO_TEST_CASE(TestFindHandler)
 
 BOOST_AUTO_TEST_CASE(TestSavePass)
 {
-    int* data = new int[25];
-    int* data2 = new int[25];
+    int data[25];
+    int data2[25];
+
     Map map;
     for (int i = 0; i < 25 ; i++) data[i] = rand() % 100;
     for (int i = 0; i < 25 ; i++) data2[i] = rand() % 100;
@@ -52,16 +53,20 @@ BOOST_AUTO_TEST_CASE(TestSavePass)
     const std::vector<int32_t>& layer2 = map.GetLayer(1).GetData();
     BOOST_CHECK_EQUAL_COLLECTIONS(layer1.begin(), layer1.end(), data, data + 25);
     BOOST_CHECK_EQUAL_COLLECTIONS(layer2.begin(), layer2.end(), data2, data2 + 25);
-
-    delete[] data;
-    delete[] data2;
 }
 
 BOOST_AUTO_TEST_CASE(TestSaveFail)
 {
     Map map;
 
-    MapHandlerManager().Save("testout3.ZZYNAS", map);
+    try
+    {
+        MapHandlerManager().Save("testout3.ZZYNAS", map);
+        BOOST_FAIL("");
+    }
+    catch (const char* s)
+    {
+    }
 }
 
 BOOST_AUTO_TEST_CASE(TestLoadFail)
