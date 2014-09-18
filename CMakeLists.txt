@@ -154,10 +154,11 @@ target_link_libraries(
 
 add_executable(
     TileMapEditorTest
-    src/testing/BasicHandlersTest.cpp
+    #src/testing/BasicHandlersTest.cpp
     src/testing/GlobalTest.cpp
-    src/testing/LayerTest.cpp
-    src/testing/MapTest.cpp
+    #src/testing/LayerTest.cpp
+    #src/testing/MapTest.cpp
+    src/testing/RegionTest.cpp
     src/testing/TextMapHandlerTest.cpp
     src/testing/TestUtil.cpp
     src/testing/XmlMapHandlerTest.cpp

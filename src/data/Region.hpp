@@ -67,6 +67,11 @@ class Region
           * @param r Region to intersect this region with.
           */
         void Intersect(const Region& r);
+        /** Tests if the rectangle passed in intersects with any rectangle in the region.
+          * @param r Rectangle to test if intersects.
+          * @return true if the rectangle intersects any rectangle in the region false otherwise.
+          */
+        bool Intersects(const Rectangle& r);
         /** Subtracts the rectangle given with this region.
           * @param r Rectangle to intersect this region with.
           */

@@ -152,6 +152,7 @@ void Region::Intersect(const Rectangle& r)
         if (r.Intersects(inr, overlap))
             intersect.insert(overlap);
     }
+    // TODO what if the intersection overlaps?
     rectangles.assign(intersect.begin(), intersect.end());
 }
 
@@ -159,6 +160,19 @@ void Region::Intersect(const Region& r)
 {
     /// TODO Implement
 }
+
+bool Region::Intersects(const Rectangle& r)
+{
+    for (const Rectangle& inr : rectangles)
+    {
+        Rectangle overlap;
+        if (r.Intersects(inr, overlap))
+            return true;
+    }
+
+    return false;
+}
+
 
 void Region::Subtract(const Rectangle& r)
 {

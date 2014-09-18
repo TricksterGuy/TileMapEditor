@@ -88,49 +88,123 @@ BOOST_AUTO_TEST_CASE(RegionSubtract1Formed)
 
     // DDDD
     //  11
-    //
-    Region r1({Rectangle(0, 0, 10, 30)});
-    r1.Subtract(Rectangle(0, 0, 30, 10));
+    Region r5({Rectangle(0, 0, 20, 20)});
+    r5.Subtract(Rectangle(-10, 0, 40, 10));
 
-    BOOST_REQUIRE(!r1.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_REQUIRE(!r1.Intersects(Rectangle(0, 0, 30, 10)));
-    BOOST_REQUIRE(r1.Contains(Rectangle(0, 10, 10, 20)));
-    BOOST_REQUIRE_EQUAL(r1.Size(), 1);
+    BOOST_REQUIRE(!r5.Contains(Rectangle(0, 0, 20, 10)));
+    BOOST_REQUIRE(!r5.Intersects(Rectangle(-10, 0, 40, 10)));
+    BOOST_REQUIRE(r5.Contains(Rectangle(0, 10, 20, 10)));
+    BOOST_REQUIRE_EQUAL(r5.Size(), 1);
 
-    // DDD
-    //   1
-    //   1
-    Region r2({Rectangle(0, 0, 10, 30)});
-    r2.Subtract(Rectangle(-20, 0, 30, 10));
+    //  11
+    // DDDD
+    Region r6({Rectangle(0, 0, 20, 20)});
+    r6.Subtract(Rectangle(-10, 10, 40, 10));
 
-    BOOST_REQUIRE(!r2.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_REQUIRE(!r2.Intersects(Rectangle(-20, 0, 30, 10)));
-    BOOST_REQUIRE(r2.Contains(Rectangle(0, 10, 10, 20)));
-    BOOST_REQUIRE_EQUAL(r2.Size(), 1);
+    BOOST_REQUIRE(!r6.Contains(Rectangle(0, 10, 20, 10)));
+    BOOST_REQUIRE(!r6.Intersects(Rectangle(-10, 10, 40, 10)));
+    BOOST_REQUIRE(r6.Contains(Rectangle(0, 0, 20, 10)));
+    BOOST_REQUIRE_EQUAL(r6.Size(), 1);
 
-    //   1
-    //   1
-    // DDD
-    Region r3({Rectangle(0, 0, 10, 30)});
-    r3.Subtract(Rectangle(-20, 20, 30, 10));
+    // D
+    // D1
+    // D1
+    // D
+    Region r7({Rectangle(0, 0, 20, 20)});
+    r7.Subtract(Rectangle(0, -10, 10, 40));
 
-    BOOST_REQUIRE(!r3.Contains(Rectangle(0, 20, 10, 10)));
-    BOOST_REQUIRE(!r3.Intersects(Rectangle(-20, 20, 30, 10)));
-    BOOST_REQUIRE(r3.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_REQUIRE_EQUAL(r3.Size(), 1);
+    BOOST_REQUIRE(!r7.Contains(Rectangle(0, 0, 10, 20)));
+    BOOST_REQUIRE(!r7.Intersects(Rectangle(0, -10, 10, 40)));
+    BOOST_REQUIRE(r7.Contains(Rectangle(10, 0, 10, 20)));
+    BOOST_REQUIRE_EQUAL(r7.Size(), 1);
 
-    // 1
-    // 1
-    // DDD
-    Region r4({Rectangle(0, 0, 10, 30)});
-    r4.Subtract(Rectangle(0, 20, 30, 10));
+    //  D
+    // 1D
+    // 1D
+    //  D
+    Region r8({Rectangle(0, 0, 10, 30)});
+    r8.Subtract(Rectangle(10, -10, 10, 40));
 
-    BOOST_REQUIRE(!r4.Contains(Rectangle(0, 20, 10, 10)));
-    BOOST_REQUIRE(!r4.Intersects(Rectangle(0, 20, 30, 10)));
-    BOOST_REQUIRE(r4.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_REQUIRE_EQUAL(r4.Size(), 1);
+    BOOST_REQUIRE(!r8.Contains(Rectangle(10, 0, 10, 20)));
+    BOOST_REQUIRE(!r8.Intersects(Rectangle(10, -10, 10, 40)));
+    BOOST_REQUIRE(r8.Contains(Rectangle(0, 0, 10, 20)));
+    BOOST_REQUIRE_EQUAL(r8.Size(), 1);
 }
 
+BOOST_AUTO_TEST_CASE(RegionSubtract2Formed)
+{
+    //  1
+    // DDD
+    //  1
+    Region r1({Rectangle(0, 0, 10, 30)});
+    r1.Subtract(Rectangle(-10, 10, 30, 10));
+
+    BOOST_REQUIRE(!r1.Contains(Rectangle(0, 10, 10, 10)));
+    BOOST_REQUIRE(!r1.Intersects(Rectangle(-10, 10, 30, 10)));
+    BOOST_REQUIRE(r1.Contains(Rectangle(0, 0, 10, 10)));
+    BOOST_REQUIRE(r1.Contains(Rectangle(0, 20, 10, 10)));
+    BOOST_REQUIRE_EQUAL(r1.Size(), 2);
+
+    //  D
+    // 1D1
+    //  D
+    Region r2({Rectangle(0, 0, 30, 10)});
+    r2.Subtract(Rectangle(10, -10, 10, 30));
+
+    BOOST_REQUIRE(!r2.Contains(Rectangle(10, 0, 10, 10)));
+    BOOST_REQUIRE(!r2.Intersects(Rectangle(10, -10, 10, 30)));
+    BOOST_REQUIRE(r2.Contains(Rectangle(0, 0, 10, 10)));
+    BOOST_REQUIRE(r2.Contains(Rectangle(20, 0, 10, 10)));
+    BOOST_REQUIRE_EQUAL(r2.Size(), 2);
+
+    //  DD
+    // 1DD
+    // 11
+    Region r3({Rectangle(0, 0, 20, 20)});
+    r3.Subtract(Rectangle(10, -10, 20, 20));
+
+    BOOST_REQUIRE(!r3.Contains(Rectangle(10, 0, 10, 10)));
+    BOOST_REQUIRE(!r3.Intersects(Rectangle(10, -10, 20, 20)));
+    BOOST_REQUIRE(r3.Contains(Rectangle(0, 0, 10, 20)));
+    BOOST_REQUIRE(r3.Contains(Rectangle(0, 10, 20, 10)));
+    BOOST_REQUIRE_EQUAL(r3.Size(), 2);
+
+    // DD
+    // DD1
+    //  11
+    Region r4({Rectangle(0, 0, 20, 20)});
+    r4.Subtract(Rectangle(-10, -10, 20, 20));
+
+    BOOST_REQUIRE(!r4.Contains(Rectangle(0, 0, 10, 10)));
+    BOOST_REQUIRE(!r4.Intersects(Rectangle(-10, -10, 20, 20)));
+    BOOST_REQUIRE(r4.Contains(Rectangle(10, 0, 10, 20)));
+    BOOST_REQUIRE(r4.Contains(Rectangle(0, 10, 20, 10)));
+    BOOST_REQUIRE_EQUAL(r4.Size(), 2);
+
+    // 11
+    // 1DD
+    //  DD
+    Region r5({Rectangle(0, 0, 20, 20)});
+    r5.Subtract(Rectangle(10, 10, 20, 20));
+
+    BOOST_REQUIRE(!r5.Contains(Rectangle(10, 10, 10, 10)));
+    BOOST_REQUIRE(!r5.Intersects(Rectangle(10, 10, 20, 20)));
+    BOOST_REQUIRE(r5.Contains(Rectangle(0, 0, 20, 10)));
+    BOOST_REQUIRE(r5.Contains(Rectangle(0, 0, 10, 20)));
+    BOOST_REQUIRE_EQUAL(r5.Size(), 2);
+
+    //  11
+    // DD1
+    // DD
+    Region r6({Rectangle(0, 0, 20, 20)});
+    r6.Subtract(Rectangle(-10, 10, 20, 20));
+
+    BOOST_REQUIRE(!r6.Contains(Rectangle(0, 10, 10, 10)));
+    BOOST_REQUIRE(!r6.Intersects(Rectangle(-10, 10, 20, 20)));
+    BOOST_REQUIRE(r6.Contains(Rectangle(0, 0, 20, 10)));
+    BOOST_REQUIRE(r6.Contains(Rectangle(10, 0, 10, 20)));
+    BOOST_REQUIRE_EQUAL(r6.Size(), 2);
+}
 
 BOOST_AUTO_TEST_CASE(RegionSubtract3Formed)
 {
@@ -182,4 +256,21 @@ BOOST_AUTO_TEST_CASE(RegionSubtract3Formed)
     BOOST_REQUIRE(r4.Contains(Rectangle(10, 5, 10, 5)));
     BOOST_REQUIRE(r4.Contains(Rectangle(20, 0, 10, 10)));
     BOOST_REQUIRE_EQUAL(r4.Size(), 3);
+}
+
+BOOST_AUTO_TEST_CASE(RegionSubtract4Formed)
+{
+    // 111
+    // 3D2
+    // 444
+    Region r1({Rectangle(0, 0, 30, 30)});
+    r1.Subtract(Rectangle(10, 10, 10, 10));
+
+    BOOST_REQUIRE(!r1.Contains(Rectangle(10, 10, 10, 10)));
+    BOOST_REQUIRE(!r1.Intersects(Rectangle(10, 10, 10, 10)));
+    BOOST_REQUIRE(r1.Contains(Rectangle(0, 0, 30, 10)));
+    BOOST_REQUIRE(r1.Contains(Rectangle(0, 0, 10, 30)));
+    BOOST_REQUIRE(r1.Contains(Rectangle(0, 20, 30, 10)));
+    BOOST_REQUIRE(r1.Contains(Rectangle(20, 0, 10, 30)));
+    BOOST_REQUIRE_EQUAL(r1.Size(), 4);
 }
