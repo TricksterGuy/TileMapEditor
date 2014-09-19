@@ -23,16 +23,9 @@
 #include <set>
 #include <list>
 #include "Region.hpp"
+#include "Logger.hpp"
 
 Region::Region(const std::vector<Rectangle>& _rectangles) : rectangles(_rectangles)
-{
-}
-
-Region::Region()
-{
-}
-
-Region::~Region()
 {
 }
 
@@ -107,7 +100,7 @@ bool Region::Contains(const Rectangle& r) const
                     // Enter event
                     if (inr.y == event2)
                         overlap++;
-                    else if (inr.y + inr.height == (uint32_t)event2)
+                    else if (inr.y + inr.height == event2)
                         overlap--;
                 }
                 prevEvent = event2;
@@ -117,10 +110,10 @@ bool Region::Contains(const Rectangle& r) const
         area += cutlength * (event - lastevent);
 
         // Leave event? remove rectangles.
-        activeSet.remove_if([&event](const Rectangle& inr) {return inr.x + inr.width == (uint32_t)event;});
+        activeSet.remove_if([&event](const Rectangle& inr) {return inr.x + inr.width == event;});
 
         // Enter event add rectangles to active set.
-        while (rptr < (int)intersect.size() && intersect[rptr].x == (int32_t)event)
+        while (rptr < (int)intersect.size() && intersect[rptr].x == event)
         {
             activeSet.push_back(intersect[rptr]);
             rptr++;
@@ -152,7 +145,7 @@ void Region::Intersect(const Rectangle& r)
         if (r.Intersects(inr, overlap))
             intersect.insert(overlap);
     }
-    // TODO what if the intersection overlaps?
+
     rectangles.assign(intersect.begin(), intersect.end());
 }
 
@@ -174,9 +167,38 @@ bool Region::Intersects(const Rectangle& r)
 }
 
 
-void Region::Subtract(const Rectangle& r)
+void Region::Subtract(const Rectangle& remove)
 {
-    /// TODO Implement
+    std::vector<Rectangle> newRectangles = rectangles;
+    rectangles.clear();
+    for (const Rectangle& rectangle : newRectangles)
+    {
+        Rectangle overlap;
+        // If it doesn't intersect we are ok, but if it does
+        // try to create 4 rectangles.
+        if (rectangle.Intersects(remove, overlap))
+        {
+            int64_t x1i, y1i, x1f, y1f;
+            int64_t x2i, y2i, x2f, y2f;
+
+            rectangle.GetCoords(x1i, y1i, x1f, y1f);
+            overlap.GetCoords(x2i, y2i, x2f, y2f);
+
+            Rectangle top(std::min(x1i, x2i), std::min(y1i, y2i), rectangle.width, y2i - y1i);
+            Rectangle left(std::min(x1i, x2i), std::min(y1i, y2i), x2i - x1i, rectangle.height);
+            Rectangle right(std::min(x1f, x2f), std::min(y1i, y2i), x1f - x2f, rectangle.height);
+            Rectangle bottom(std::min(x1i, x2i), std::min(y1f, y2f), rectangle.width, y1f - y2f);
+
+            if (top.IsValid()) Add(top);
+            if (left.IsValid()) Add(left);
+            if (right.IsValid()) Add(right);
+            if (bottom.IsValid()) Add(bottom);
+        }
+        else
+        {
+            rectangles.push_back(rectangle);
+        }
+    }
 }
 
 void Region::Subtract(const Region& r)
@@ -250,7 +272,7 @@ int64_t Region::Area() const
                     // Enter event
                     if (inr.y == event2)
                         overlap++;
-                    else if (inr.y + inr.height == (uint32_t)event2)
+                    else if (inr.y + inr.height == event2)
                         overlap--;
                 }
 
@@ -260,7 +282,7 @@ int64_t Region::Area() const
         area += cutlength * (event - lastevent);
 
         // Leave event? remove rectangles.
-        activeSet.remove_if([&event](const Rectangle& inr) {return inr.x + inr.width == (uint32_t)event;});
+        activeSet.remove_if([&event](const Rectangle& inr) {return inr.x + inr.width == event;});
 
         // Enter event add rectangles to active set.
         while (rptr < (int)rectangles.size() && rectangles[rptr].x == event)
@@ -286,6 +308,7 @@ void Region::Clear()
 
 void Region::DoAdd(const Rectangle& r)
 {
+    VerboseLog("Adding rectangle(%d %d %d %d)", r.x, r.y, r.width, r.height);
     std::vector<Rectangle>::iterator it = remove_if(rectangles.begin(), rectangles.end(),
                                                     [&r](Rectangle& inr) {return r.Contains(inr);});
     rectangles.erase(it, rectangles.end());

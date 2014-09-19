@@ -23,7 +23,7 @@
 #include "Rectangle.hpp"
 #include <cassert>
 
-Rectangle::Rectangle(int32_t _x, int32_t _y, uint32_t _width, uint32_t _height) : x(_x), y(_y), width(_width), height(_height)
+Rectangle::Rectangle(int32_t _x, int32_t _y, int32_t _width, int32_t _height) : x(_x), y(_y), width(_width), height(_height)
 {
 }
 
@@ -45,7 +45,15 @@ bool Rectangle::operator<(const Rectangle& rhs) const
         return false;
 }
 
-void Rectangle::Set(int32_t x, int32_t y, uint32_t width, uint32_t height)
+void Rectangle::GetCoords(int64_t& x1, int64_t& y1, int64_t& x2, int64_t& y2) const
+{
+    x1 = x;
+    y1 = y;
+    x2 = x + width;
+    y2 = y + height;
+}
+
+void Rectangle::Set(int32_t x, int32_t y, int32_t width, int32_t height)
 {
     this->x = x;
     this->y = y;
@@ -66,7 +74,7 @@ bool Rectangle::Contains(const Rectangle& rect) const
 
 bool Rectangle::Contains(int32_t sx, int32_t sy) const
 {
-    return sx >= x && (uint32_t)sx < x + width && sy >= y && (uint32_t)sy < y + height;
+    return sx >= x && sx < x + width && sy >= y && sy < y + height;
 }
 
 bool Rectangle::Intersects(const Rectangle& rect, Rectangle& intersect) const

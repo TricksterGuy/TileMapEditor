@@ -34,8 +34,8 @@ class Region
           */
         Region(const std::vector<Rectangle>& rectangles);
         /** Creates an empty region.*/
-        Region();
-        ~Region();
+        Region() {}
+        ~Region() {}
 
         const std::vector<Rectangle>& GetData() const {return rectangles;}
 

@@ -34,16 +34,27 @@ class Rectangle
           * @param width Width of the rectangle.
           * @param height Height of the rectangle.
           */
-        Rectangle(int32_t x = 0, int32_t y = 0, uint32_t width = 0, uint32_t height = 0);
+        Rectangle(int32_t x = 0, int32_t y = 0, int32_t width = 0, int32_t height = 0);
         ~Rectangle();
         bool operator<(const Rectangle& rhs) const;
+        /** Tests if the rectangle is valid, that is the width and height are not negative.
+          * @return true if the rectangle has positive width and height false otherwise
+          */
+        bool IsValid() const {return width > 0 && height > 0;}
+        /** Gets the top left and bottom right coordinates of this rectangle
+          * @param x1 top left (x)
+          * @param y1 top left (y)
+          * @param x2 bottom right (x + width)
+          * @param y2 bottom right (y + height)
+          */
+        void GetCoords(int64_t& x1, int64_t& y1, int64_t& x2, int64_t& y2) const;
         /** Sets the position and dimensions of the rectangle.
           * @param x X Coordinate.
           * @param y Y Coordinate.
           * @param width Width of the rectangle.
           * @param height Height of the rectangle.
           */
-        void Set(int32_t x, int32_t y, uint32_t width, uint32_t height);
+        void Set(int32_t x, int32_t y, int32_t width, int32_t height);
         /** Moves this rectangle.
           * @param xoffset Horizontal offset.
           */
@@ -69,8 +80,7 @@ class Rectangle
           * @return the area.
           */
         int64_t Area() const;
-        int32_t x, y;
-        uint32_t width, height;
+        int32_t x, y, width, height;
 };
 
 #endif
