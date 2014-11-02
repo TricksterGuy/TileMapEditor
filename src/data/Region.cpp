@@ -215,12 +215,6 @@ void Region::Add(const Rectangle& r)
         DoAdd(r);
 }
 
-void Region::Add(const Region& r)
-{
-    for (const Rectangle& inr : r.GetData())
-        Add(inr);
-}
-
 void Region::Xor(const Rectangle& remove)
 {
     std::vector<Rectangle> newRectangles = rectangles;
