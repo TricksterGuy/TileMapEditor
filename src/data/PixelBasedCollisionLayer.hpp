@@ -43,14 +43,18 @@ class PixelBasedCollisionLayer : public CollisionLayer
 		bool operator==(const PixelBasedCollisionLayer& other);
 
         /** @see CollisionLayer::clear */
-		virtual void Clear();
+		virtual void Clear() {data.Clear();}
 		/** @see CollisionLayer::shift */
 		virtual void Shift(int horizontal, int vertical, bool wrap = false);
 		/** @see CollisionLayer::resize */
 		virtual void Resize(uint32_t width, uint32_t height, bool copy = true);
 
 		const Region& GetData() const {return data;}
-		void Add(const Rectangle& rectangle);
+
+		void Add(const Rectangle& rectangle) {data.Add(rectangle);}
+		void Xor(const Rectangle& rectangle) {data.Xor(rectangle);}
+		void Subtract(const Rectangle& rectangle) {data.Subtract(rectangle);}
+		void Intersect(const Rectangle& rectangle) {data.Intersect(rectangle);}
 
 	protected:
         Region data;
