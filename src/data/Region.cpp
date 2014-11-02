@@ -42,7 +42,6 @@ bool Region::Contains(int32_t x, int32_t y) const
 
 bool Region::Contains(const Rectangle& r) const
 {
-    printf("CONTAINS CALLED\n");
     std::set<Rectangle> intersectSet;
     for (const Rectangle& inr : rectangles)
     {
@@ -224,12 +223,53 @@ void Region::Add(const Region& r)
         Add(inr);
 }
 
-void Region::ExclusiveOr(const Rectangle& r)
+void Region::Xor(const Rectangle& remove)
 {
-    /// TODO Implement
+    std::vector<Rectangle> newRectangles = rectangles;
+    rectangles.clear();
+    for (const Rectangle& rectangle : newRectangles)
+    {
+        Rectangle overlap;
+        // If it doesn't intersect we are ok, but if it does
+        // try to create 4 rectangles.
+        if (rectangle.Intersects(remove, overlap))
+        {
+            int64_t x1i, y1i, x1f, y1f;
+            int64_t x2i, y2i, x2f, y2f;
+            int64_t x3i, y3i, x3f, y3f;
+
+            rectangle.GetCoords(x1i, y1i, x1f, y1f);
+            overlap.GetCoords(x2i, y2i, x2f, y2f);
+            remove.GetCoords(x3i, y3i, x3f, y3f);
+
+            Rectangle top(std::min(x1i, x2i), std::min(y1i, y2i), rectangle.width, y2i - y1i);
+            Rectangle left(std::min(x1i, x2i), std::min(y1i, y2i), x2i - x1i, rectangle.height);
+            Rectangle right(std::min(x1f, x2f), std::min(y1i, y2i), x1f - x2f, rectangle.height);
+            Rectangle bottom(std::min(x1i, x2i), std::min(y1f, y2f), rectangle.width, y1f - y2f);
+
+            Rectangle top2(std::min(x3i, x2i), std::min(y3i, y2i), remove.width, y2i - y3i);
+            Rectangle left2(std::min(x3i, x2i), std::min(y3i, y2i), x2i - x3i, remove.height);
+            Rectangle right2(std::min(x3f, x2f), std::min(y3i, y2i), x3f - x2f, remove.height);
+            Rectangle bottom2(std::min(x3i, x2i), std::min(y3f, y2f), remove.width, y3f - y2f);
+
+            if (top.IsValid()) Add(top);
+            if (left.IsValid()) Add(left);
+            if (right.IsValid()) Add(right);
+            if (bottom.IsValid()) Add(bottom);
+
+            if (top2.IsValid()) Add(top2);
+            if (left2.IsValid()) Add(left2);
+            if (right2.IsValid()) Add(right2);
+            if (bottom2.IsValid()) Add(bottom2);
+        }
+        else
+        {
+            rectangles.push_back(rectangle);
+        }
+    }
 }
 
-void Region::ExclusiveOr(const Region& r)
+void Region::Xor(const Region& r)
 {
     /// TODO Implement
 }

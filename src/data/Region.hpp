@@ -96,11 +96,11 @@ class Region
         /** Xors this region with the rectangle given.
           * @param r Rectangle to xor with.
           */
-        void ExclusiveOr(const Rectangle& r);
+        void Xor(const Rectangle& r);
         /** Xors this region with the region given.
           * @param r Region to xor with.
           */
-        void ExclusiveOr(const Region& r);
+        void Xor(const Region& r);
         /** Calculates the area of this region.
           * @return the area of the region.
           */
