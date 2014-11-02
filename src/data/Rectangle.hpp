@@ -48,6 +48,13 @@ class Rectangle
           * @param y2 bottom right (y + height)
           */
         void GetCoords(int64_t& x1, int64_t& y1, int64_t& x2, int64_t& y2) const;
+        /** Gets the top left and bottom right coordinates of this rectangle
+          * @param x1 top left (x)
+          * @param y1 top left (y)
+          * @param x2 bottom right (x + width)
+          * @param y2 bottom right (y + height)
+          */
+        void GetCoords(int32_t& x1, int32_t& y1, int32_t& x2, int32_t& y2) const;
         /** Sets the position and dimensions of the rectangle.
           * @param x X Coordinate.
           * @param y Y Coordinate.

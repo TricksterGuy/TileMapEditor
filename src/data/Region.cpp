@@ -39,7 +39,6 @@ bool Region::Contains(int32_t x, int32_t y) const
     return false;
 }
 
-
 bool Region::Contains(const Rectangle& r) const
 {
     std::set<Rectangle> intersectSet;
@@ -123,16 +122,25 @@ bool Region::Contains(const Rectangle& r) const
     return area == r.Area();
 }
 
-bool Region::Contains(const Region& r) const
-{
-    /// TODO Implement
-    return false;
-}
-
 Rectangle Region::Bounds() const
 {
-    /// TODO Implement
-    return Rectangle(0, 0, 0, 0);
+    if (rectangles.empty()) return Rectangle();
+
+    int32_t minx, miny, maxx, maxy;
+    rectangles[0].GetCoords(minx, miny, maxx, maxy);
+
+    for (const Rectangle& r : rectangles)
+    {
+        int32_t cix, ciy, cfx, cfy;
+        r.GetCoords(cix, ciy, cfx, cfy);
+
+        if (minx > cix) minx = cix;
+        if (miny > ciy) miny = ciy;
+        if (maxx > cfx) maxx = cfx;
+        if (maxy > cfy) maxy = cfy;
+    }
+
+    return Rectangle(minx, miny, maxx - minx, maxy - miny);
 }
 
 void Region::Intersect(const Rectangle& r)
@@ -146,11 +154,6 @@ void Region::Intersect(const Rectangle& r)
     }
 
     rectangles.assign(intersect.begin(), intersect.end());
-}
-
-void Region::Intersect(const Region& r)
-{
-    /// TODO Implement
 }
 
 bool Region::Intersects(const Rectangle& r)
@@ -198,11 +201,6 @@ void Region::Subtract(const Rectangle& remove)
             rectangles.push_back(rectangle);
         }
     }
-}
-
-void Region::Subtract(const Region& r)
-{
-    /// TODO Implement
 }
 
 void Region::Move(int32_t x, int32_t y)
@@ -267,11 +265,6 @@ void Region::Xor(const Rectangle& remove)
             rectangles.push_back(rectangle);
         }
     }
-}
-
-void Region::Xor(const Region& r)
-{
-    /// TODO Implement
 }
 
 int64_t Region::Area() const

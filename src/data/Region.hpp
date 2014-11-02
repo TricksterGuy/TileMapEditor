@@ -50,11 +50,6 @@ class Region
           * @return true if the rectangle is contained in this region false otherwise.
           */
         bool Contains(const Rectangle& r) const;
-        /** Test if the region is fully contained within this one.
-          * @param r Region to test.
-          * @return true if the region is contained in this one false otherwise.
-          */
-        bool Contains(const Region& r) const;
         /** Gets the bounds of this region.
           * @return The smallest rectangle that fully contains this region.
           */
@@ -63,10 +58,6 @@ class Region
           * @param r Rectangle to intersect this region with.
           */
         void Intersect(const Rectangle& r);
-        /** Intersects the region given with this region.
-          * @param r Region to intersect this region with.
-          */
-        void Intersect(const Region& r);
         /** Tests if the rectangle passed in intersects with any rectangle in the region.
           * @param r Rectangle to test if intersects.
           * @return true if the rectangle intersects any rectangle in the region false otherwise.
@@ -76,10 +67,6 @@ class Region
           * @param r Rectangle to intersect this region with.
           */
         void Subtract(const Rectangle& r);
-        /** Subtracts the region given with this region.
-          * @param r Region to intersect this region with.
-          */
-        void Subtract(const Region& r);
         /** Moves this region.
           * @param x Horizontal Movement.
           * @param y Vertical Movement.
@@ -89,10 +76,6 @@ class Region
           * @param r Rectangle to add.
           */
         void Add(const Rectangle& r);
-        /** Adds a region to this region.
-          * @param r Region to add.
-          */
-        void Add(const Region& r);
         /** Xors this region with the rectangle given.
           * @param r Rectangle to xor with.
           */
