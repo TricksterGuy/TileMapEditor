@@ -80,10 +80,6 @@ class Region
           * @param r Rectangle to xor with.
           */
         void Xor(const Rectangle& r);
-        /** Xors this region with the region given.
-          * @param r Region to xor with.
-          */
-        void Xor(const Region& r);
         /** Calculates the area of this region.
           * @return the area of the region.
           */

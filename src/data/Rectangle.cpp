@@ -45,14 +45,6 @@ bool Rectangle::operator<(const Rectangle& rhs) const
         return false;
 }
 
-void Rectangle::GetCoords(int64_t& x1, int64_t& y1, int64_t& x2, int64_t& y2) const
-{
-    x1 = x;
-    y1 = y;
-    x2 = x + width;
-    y2 = y + height;
-}
-
 void Rectangle::GetCoords(int32_t& x1, int32_t& y1, int32_t& x2, int32_t& y2) const
 {
     x1 = x;

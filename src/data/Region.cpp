@@ -180,8 +180,8 @@ void Region::Subtract(const Rectangle& remove)
         // try to create 4 rectangles.
         if (rectangle.Intersects(remove, overlap))
         {
-            int64_t x1i, y1i, x1f, y1f;
-            int64_t x2i, y2i, x2f, y2f;
+            int32_t x1i, y1i, x1f, y1f;
+            int32_t x2i, y2i, x2f, y2f;
 
             rectangle.GetCoords(x1i, y1i, x1f, y1f);
             overlap.GetCoords(x2i, y2i, x2f, y2f);
@@ -226,9 +226,9 @@ void Region::Xor(const Rectangle& remove)
         // try to create 4 rectangles.
         if (rectangle.Intersects(remove, overlap))
         {
-            int64_t x1i, y1i, x1f, y1f;
-            int64_t x2i, y2i, x2f, y2f;
-            int64_t x3i, y3i, x3f, y3f;
+            int32_t x1i, y1i, x1f, y1f;
+            int32_t x2i, y2i, x2f, y2f;
+            int32_t x3i, y3i, x3f, y3f;
 
             rectangle.GetCoords(x1i, y1i, x1f, y1f);
             overlap.GetCoords(x2i, y2i, x2f, y2f);
