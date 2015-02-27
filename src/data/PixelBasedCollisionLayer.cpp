@@ -21,7 +21,8 @@
 
 #include "PixelBasedCollisionLayer.hpp"
 
-PixelBasedCollisionLayer::PixelBasedCollisionLayer(const std::vector<Rectangle>& rectangles) : CollisionLayer(Collision::PixelBased), data(rectangles)
+PixelBasedCollisionLayer::PixelBasedCollisionLayer(const std::vector<Rectangle>& rectangles)
+: CollisionLayer(Collision::PixelBased), data(rectangles)
 {
 }
 
@@ -33,38 +34,42 @@ PixelBasedCollisionLayer::~PixelBasedCollisionLayer()
 {
 }
 
-PixelBasedCollisionLayer::PixelBasedCollisionLayer(const PixelBasedCollisionLayer& layer) :
-CollisionLayer(layer.type), data(layer.data)
+PixelBasedCollisionLayer::PixelBasedCollisionLayer(const PixelBasedCollisionLayer& layer)
+: CollisionLayer(layer.type), data(layer.data)
 {
 }
 
 PixelBasedCollisionLayer& PixelBasedCollisionLayer::operator=(const PixelBasedCollisionLayer& layer)
 {
-    if (this != &layer)
-    {
-        type = layer.type;
-        data = layer.data;
-    }
-    return *this;
+  if (this != &layer)
+  {
+    type = layer.type;
+    data = layer.data;
+  }
+  return *this;
 }
 
-bool PixelBasedCollisionLayer::operator==(const PixelBasedCollisionLayer& other)
+bool PixelBasedCollisionLayer::operator==(const PixelBasedCollisionLayer& other) const
 {
-    /// TODO implement
-    return true;
+  if (type != other.type)
+    return false;
+  if (data != other.data)
+    return false;
+
+  return true;
 }
 
 void PixelBasedCollisionLayer::Shift(int horizontal, int vertical, bool wrap)
 {
-    for (int i = 0; i < data.Size(); i++)
-    {
-        /// TODO handle the case of wrapping.
-        /// TODO also handle out of bounds rectangles.
-        data.Move(horizontal, vertical);
-    }
+  for (int i = 0; i < data.Size(); i++)
+  {
+    /// TODO handle the case of wrapping.
+    /// TODO also handle out of bounds rectangles.
+    data.Move(horizontal, vertical);
+  }
 }
 
 void PixelBasedCollisionLayer::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
 {
-    /// TODO implement
+  /// TODO implement
 }

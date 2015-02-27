@@ -21,19 +21,20 @@
 
 #include "Background.hpp"
 
-Background::Background(const std::string& _name, const std::string& _filename, uint32_t _mode, int32_t x, int32_t y, const DrawAttributes& attr) :
-DrawAttributes(attr), name(_name), filename(_filename), mode(_mode), speed_x(x), speed_y(y)
+Background::Background(const std::string& _name, const std::string& _filename, uint32_t _mode, int32_t x, int32_t y,
+                       const DrawAttributes& attr)
+: DrawAttributes(attr), name(_name), filename(_filename), mode(_mode), speed_x(x), speed_y(y)
 {
 }
 
 void Background::GetSpeed(int32_t& x, int32_t& y) const
 {
-    x = speed_x;
-    y = speed_y;
+  x = speed_x;
+  y = speed_y;
 }
 
 void Background::SetSpeed(int32_t x, int32_t y)
 {
-    speed_x = x;
-    speed_y = y;
+  speed_x = x;
+  speed_y = y;
 }

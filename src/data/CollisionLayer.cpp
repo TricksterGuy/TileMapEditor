@@ -29,4 +29,3 @@ CollisionLayer::CollisionLayer(Collision::Type _type) : type(_type)
 CollisionLayer::~CollisionLayer()
 {
 }
-

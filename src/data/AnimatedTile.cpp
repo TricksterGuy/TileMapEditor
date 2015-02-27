@@ -21,13 +21,14 @@
 
 #include "AnimatedTile.hpp"
 
-AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times) :
-name(_name), delay(_delay), type(_type), times(_times)//, cachedFrame(0)
+AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times)
+: name(_name), delay(_delay), type(_type), times(_times)  //, cachedFrame(0)
 {
 }
 
-AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times, const std::vector<int32_t>& _frames) :
-name(_name), delay(_delay), type(_type), times(_times), frames(_frames)//, cachedFrame(0)
+AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times,
+                           const std::vector<int32_t>& _frames)
+: name(_name), delay(_delay), type(_type), times(_times), frames(_frames)  //, cachedFrame(0)
 {
 }
 
@@ -37,57 +38,59 @@ AnimatedTile::~AnimatedTile()
 
 AnimatedTile& AnimatedTile::operator=(const AnimatedTile& other)
 {
-    if (this != &other)
-    {
-        name = other.name;
-        delay = other.delay;
-        type = other.type;
-        times = other.times;
-        frames = other.frames;
-    }
+  if (this != &other)
+  {
+    name = other.name;
+    delay = other.delay;
+    type = other.type;
+    times = other.times;
+    frames = other.frames;
+  }
 
-    return *this;
+  return *this;
 }
 
 void AnimatedTile::Add(int32_t frame)
 {
-    frames.push_back(frame);
+  frames.push_back(frame);
 }
 
 int32_t AnimatedTile::GetCurrentFrame(int clock) const
 {
-    int timestep = clock / delay;
-    unsigned int numFrames = frames.size();
-    int frame;
-    int constrained, decrease;
+  int timestep = clock / delay;
+  unsigned int numFrames = frames.size();
+  int frame;
+  int constrained, decrease;
 
-    switch(type)
-    {
-        case Animation::Normal:
-            frame = timestep % numFrames;
-            break;
-        case Animation::Reverse:
-            frame = numFrames - 1 - (timestep % numFrames);
-            break;
-        case Animation::Ping:
-            constrained = timestep % (numFrames * 2 - 2);
-            decrease = constrained / numFrames;
-            frame = constrained % numFrames;
-            if (decrease) frame = numFrames - 2 - frame;
-            break;
-        case Animation::PingReverse:
-            constrained = timestep % (numFrames * 2 - 2);
-            decrease = constrained / numFrames;
-            frame = constrained % numFrames;
-            if (decrease) frame = numFrames - 2 - frame;
-            frame = numFrames - 1 - frame;
-            break;
-        case Animation::Random:
-            frame = rand() % numFrames;
-            break;
-        default:
-            frame = -1;
-    }
+  switch (type)
+  {
+    case Animation::Normal:
+      frame = timestep % numFrames;
+      break;
+    case Animation::Reverse:
+      frame = numFrames - 1 - (timestep % numFrames);
+      break;
+    case Animation::Ping:
+      constrained = timestep % (numFrames * 2 - 2);
+      decrease = constrained / numFrames;
+      frame = constrained % numFrames;
+      if (decrease)
+        frame = numFrames - 2 - frame;
+      break;
+    case Animation::PingReverse:
+      constrained = timestep % (numFrames * 2 - 2);
+      decrease = constrained / numFrames;
+      frame = constrained % numFrames;
+      if (decrease)
+        frame = numFrames - 2 - frame;
+      frame = numFrames - 1 - frame;
+      break;
+    case Animation::Random:
+      frame = rand() % numFrames;
+      break;
+    default:
+      frame = -1;
+  }
 
-    return frames[frame];
+  return frames[frame];
 }

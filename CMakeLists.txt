@@ -92,9 +92,9 @@ pkg_search_module(PROTOBUF REQUIRED protobuf)
 #execute_process(COMMAND sh "${wxWidgets_CONFIG_EXECUTABLE}" --cxxflags)
 
 IF(DEBUG_MODE)
-    set(CMAKE_CXX_FLAGS "-g -Wall -std=c++0x -DwxUSE_GRAPHICS_CONTEXT=1")
+    set(CMAKE_CXX_FLAGS "-g -Wall -std=c++11 -DwxUSE_GRAPHICS_CONTEXT=1")
 ELSE()
-    set(CMAKE_CXX_FLAGS "-O3 -s -Wall -std=c++0x -DwxUSE_GRAPHICS_CONTEXT=1")
+    set(CMAKE_CXX_FLAGS "-O3 -s -Wall -std=c++11 -DwxUSE_GRAPHICS_CONTEXT=1")
 ENDIF(DEBUG_MODE)
 
 set(CMAKE_SKIP_RPATH TRUE)

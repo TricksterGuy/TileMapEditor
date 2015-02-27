@@ -23,41 +23,41 @@
 
 void DrawAttributes::GetPosition(int32_t& _x, int32_t& _y) const
 {
-    _x = x;
-    _y = y;
+  _x = x;
+  _y = y;
 }
 
 void DrawAttributes::SetPosition(int32_t _x, int32_t _y)
 {
-    x = _x;
-    y = _y;
+  x = _x;
+  y = _y;
 }
 
 void DrawAttributes::GetOrigin(int32_t& _x, int32_t& _y) const
 {
-    _x = origin_x;
-    _y = origin_y;
+  _x = origin_x;
+  _y = origin_y;
 }
 
 void DrawAttributes::SetOrigin(int32_t _x, int32_t _y)
 {
-    origin_x = _x;
-    origin_y = _y;
+  origin_x = _x;
+  origin_y = _y;
 }
 
 void DrawAttributes::GetScale(float& _x, float& _y) const
 {
-    _x = scale_x;
-    _y = scale_y;
+  _x = scale_x;
+  _y = scale_y;
 }
 
 void DrawAttributes::SetScale(float _x, float _y)
 {
-    scale_x = _x;
-    scale_y = _y;
+  scale_x = _x;
+  scale_y = _y;
 }
 
 int ZDepthCompare(const DrawAttributes& a, const DrawAttributes& b)
 {
-    return a.GetDepth() < b.GetDepth();
+  return a.GetDepth() < b.GetDepth();
 }

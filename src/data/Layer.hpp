@@ -35,65 +35,68 @@
   */
 class Layer : public DrawAttributes
 {
-	public:
-        /** Creates a new layer with the specified name, width, height and data.
-          * @param name name of the layer.
-          * @param width non-zero width of the layer.
-          * @param height non-zero height of the layer.
-          * @param data data which should be width*height ints.
-          */
-		Layer(const std::string& name, uint32_t width, uint32_t height, const std::vector<int32_t>& data, const DrawAttributes& attr = DrawAttributes(0));
-        /** Creates a new layer with the specified name, width, height and data.
-          * @param name name of the layer.
-          * @param width non-zero width of the layer.
-          * @param height non-zero height of the layer.
-          * @param data data which should be width*height ints.
-          */
-		Layer(const std::string& name, uint32_t width, uint32_t height, const int32_t* data, const DrawAttributes& attr = DrawAttributes(0));
-        /** Creates a new layer with the specified name, width, and height.
-          * @param name name of the layer.
-          * @param width non-zero width of the layer.
-          * @param height non-zero height of the layer.
-          */
-		Layer(const std::string& name = "", uint32_t width = 1, uint32_t height = 1, const DrawAttributes& attr = DrawAttributes(0));
+  public:
+  /** Creates a new layer with the specified name, width, height and data.
+    * @param name name of the layer.
+    * @param width non-zero width of the layer.
+    * @param height non-zero height of the layer.
+    * @param data data which should be width*height ints.
+    */
+  Layer(const std::string& name, uint32_t width, uint32_t height, const std::vector<int32_t>& data,
+        const DrawAttributes& attr = DrawAttributes(0));
+  /** Creates a new layer with the specified name, width, height and data.
+    * @param name name of the layer.
+    * @param width non-zero width of the layer.
+    * @param height non-zero height of the layer.
+    * @param data data which should be width*height ints.
+    */
+  Layer(const std::string& name, uint32_t width, uint32_t height, const int32_t* data,
+        const DrawAttributes& attr = DrawAttributes(0));
+  /** Creates a new layer with the specified name, width, and height.
+    * @param name name of the layer.
+    * @param width non-zero width of the layer.
+    * @param height non-zero height of the layer.
+    */
+  Layer(const std::string& name = "", uint32_t width = 1, uint32_t height = 1,
+        const DrawAttributes& attr = DrawAttributes(0));
 
-		Layer(const Layer& layer);
+  Layer(const Layer& layer);
 
-		Layer& operator=(const Layer& layer);
-		int32_t& operator[](const uint32_t index) {return data[index];}
-		const int32_t& operator[](const uint32_t index) const {return data[index];}
+  Layer& operator=(const Layer& layer);
+  int32_t& operator[](const uint32_t index) { return data[index]; }
+  const int32_t& operator[](const uint32_t index) const { return data[index]; }
 
-        /** Clears the layer. */
-		void Clear();
-        /** Shifts the entire layer in any direction a certain number of tiles.
-          * @param horizontal amount to move left or right (negative = left).
-          * @param vertical amount to move up or down (negative = up).
-          * @param wrap if true any rows/columns will wrap around.
-          */
-		void Shift(int horizontal, int vertical, bool wrap = false);
-        /** Resizes the layer to fit the new dimensions.
-          * @param newwidth the new width of the layer in tiles.
-          * @param newheight the new height of the layer in tiles.
-          * @param copy if true then don't destroy the layer in the process if false then clear out the layer.
-          */
-		void Resize(uint32_t width, uint32_t height, bool copy = true);
+  /** Clears the layer. */
+  void Clear();
+  /** Shifts the entire layer in any direction a certain number of tiles.
+    * @param horizontal amount to move left or right (negative = left).
+    * @param vertical amount to move up or down (negative = up).
+    * @param wrap if true any rows/columns will wrap around.
+    */
+  void Shift(int horizontal, int vertical, bool wrap = false);
+  /** Resizes the layer to fit the new dimensions.
+    * @param newwidth the new width of the layer in tiles.
+    * @param newheight the new height of the layer in tiles.
+    * @param copy if true then don't destroy the layer in the process if false then clear out the layer.
+    */
+  void Resize(uint32_t width, uint32_t height, bool copy = true);
 
-		std::string GetName() const {return name;}
-		uint32_t GetWidth() const {return width;}
-		uint32_t GetHeight() const {return height;}
-		const std::vector<int32_t>& GetData() const {return data;}
-		std::vector<int32_t>& GetData() {return data;}
-		int32_t At(uint32_t x, uint32_t y) const {return At(y * width + x);}
-		int32_t At(uint32_t index) const {return data[index];}
+  std::string GetName() const { return name; }
+  uint32_t GetWidth() const { return width; }
+  uint32_t GetHeight() const { return height; }
+  const std::vector<int32_t>& GetData() const { return data; }
+  std::vector<int32_t>& GetData() { return data; }
+  int32_t At(uint32_t x, uint32_t y) const { return At(y * width + x); }
+  int32_t At(uint32_t index) const { return data[index]; }
 
-		void SetName(const std::string& _name) {name = _name;}
-		void Set(uint32_t x, uint32_t y, int32_t value) {Set(y * width + x, value);}
-		void Set(uint32_t index, int32_t value) {data[index] = value;}
+  void SetName(const std::string& _name) { name = _name; }
+  void Set(uint32_t x, uint32_t y, int32_t value) { Set(y * width + x, value); }
+  void Set(uint32_t index, int32_t value) { data[index] = value; }
 
-	protected:
-		std::string name;
-		uint32_t width, height;
-		std::vector<int32_t> data;
+  protected:
+  std::string name;
+  uint32_t width, height;
+  std::vector<int32_t> data;
 };
 
 #endif
