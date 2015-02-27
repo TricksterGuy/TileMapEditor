@@ -35,26 +35,27 @@
   */
 class Clock : public wxTimer
 {
-    public:
-        Clock(unsigned int rate = 1);
-        ~Clock();
+  public:
+  Clock(unsigned int rate = 1);
+  ~Clock();
 
-        void Add(wxView* owner);
-        void Remove(wxView* owner);
-        void Pause();
-        void Run();
-        void Stop();
-        bool IsPaused();
+  void Add(wxView* owner);
+  void Remove(wxView* owner);
+  void Pause();
+  void Run();
+  void Stop();
+  bool IsPaused();
 
-        unsigned int GetFramerate() const;
-        void SetFramerate(unsigned int rate);
+  unsigned int GetFramerate() const;
+  void SetFramerate(unsigned int rate);
 
-        virtual void Notify();
-    private:
-        unsigned int framerate;
-        bool paused;
-        std::vector<wxView*> owners;
-        MapViewUpdate update;
+  virtual void Notify();
+
+  private:
+  unsigned int framerate;
+  bool paused;
+  std::vector<wxView*> owners;
+  MapViewUpdate update;
 };
 
 #endif

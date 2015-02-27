@@ -27,35 +27,35 @@
   */
 int HandlerUtils::MapToImage(const Map& map, Magick::Image& image)
 {
-    std::vector<Magick::Image> tiles;
+  std::vector<Magick::Image> tiles;
 
-    if (HandlerUtils::GetTiles(map, tiles))
-        return -1;
+  if (HandlerUtils::GetTiles(map, tiles))
+    return -1;
 
-    Magick::Color color = Magick::ColorRGB(0, 0, 0);
-    color.alpha(0);
-    int width = map.GetWidth() * map.GetTileWidth();
-    int height = map.GetHeight() * map.GetTileHeight();
-    image.matte(true);
-    image.resize(Magick::Geometry(width, height));
-    image.backgroundColor(color);
-    image.erase();
+  Magick::Color color = Magick::ColorRGB(0, 0, 0);
+  color.alpha(0);
+  int width = map.GetWidth() * map.GetTileWidth();
+  int height = map.GetHeight() * map.GetTileHeight();
+  image.matte(true);
+  image.resize(Magick::Geometry(width, height));
+  image.backgroundColor(color);
+  image.erase();
 
-    try
+  try
+  {
+    for (unsigned int k = 0; k < map.GetNumLayers(); k++)
     {
-        for (unsigned int k = 0; k < map.GetNumLayers(); k++)
-        {
-            const Layer& layer = map.GetLayer(k);
-            if (HandlerUtils::LayerToImage(map, layer, tiles, image))
-                return -1;
-        }
-    }
-    catch (Magick::Exception &error_ )
-    {
+      const Layer& layer = map.GetLayer(k);
+      if (HandlerUtils::LayerToImage(map, layer, tiles, image))
         return -1;
     }
+  }
+  catch (Magick::Exception& error_)
+  {
+    return -1;
+  }
 
-    return 0;
+  return 0;
 }
 
 /** layerToImage
@@ -64,21 +64,21 @@ int HandlerUtils::MapToImage(const Map& map, Magick::Image& image)
   */
 int HandlerUtils::LayerToImage(const Map& map, const Layer& layer, Magick::Image& image)
 {
-    std::vector<Magick::Image> tiles;
+  std::vector<Magick::Image> tiles;
 
-    if (HandlerUtils::GetTiles(map, tiles))
-        return -1;
+  if (HandlerUtils::GetTiles(map, tiles))
+    return -1;
 
-    Magick::Color color = Magick::ColorRGB(0, 0, 0);
-    color.alpha(0);
-    int width = map.GetWidth() * map.GetTileWidth();
-    int height = map.GetHeight() * map.GetTileHeight();
-    image.matte(true);
-    image.resize(Magick::Geometry(width, height));
-    image.backgroundColor(color);
-    image.erase();
+  Magick::Color color = Magick::ColorRGB(0, 0, 0);
+  color.alpha(0);
+  int width = map.GetWidth() * map.GetTileWidth();
+  int height = map.GetHeight() * map.GetTileHeight();
+  image.matte(true);
+  image.resize(Magick::Geometry(width, height));
+  image.backgroundColor(color);
+  image.erase();
 
-    return HandlerUtils::LayerToImage(map, layer, tiles, image);
+  return HandlerUtils::LayerToImage(map, layer, tiles, image);
 }
 
 /** getTiles
@@ -87,25 +87,25 @@ int HandlerUtils::LayerToImage(const Map& map, const Layer& layer, Magick::Image
   */
 int HandlerUtils::GetTiles(const Map& map, std::vector<Magick::Image>& tiles)
 {
-    Magick::Image tileset(Magick::Geometry(32, 32), Magick::ColorRGB(1, 1, 1));
+  Magick::Image tileset(Magick::Geometry(32, 32), Magick::ColorRGB(1, 1, 1));
 
-    if (HandlerUtils::LoadTileset(map, tileset))
-        return -1;
+  if (HandlerUtils::LoadTileset(map, tileset))
+    return -1;
 
-    int numTilesX = tileset.columns() / map.GetTileWidth();
-    int numTilesY = tileset.rows() / map.GetTileHeight();
-    tiles.reserve(numTilesX * numTilesY);
-    for (int i = 0; i < numTilesY; i++)
+  int numTilesX = tileset.columns() / map.GetTileWidth();
+  int numTilesY = tileset.rows() / map.GetTileHeight();
+  tiles.reserve(numTilesX * numTilesY);
+  for (int i = 0; i < numTilesY; i++)
+  {
+    for (int j = 0; j < numTilesX; j++)
     {
-        for (int j = 0; j < numTilesX; j++)
-        {
-            Magick::Geometry dim(map.GetTileWidth(), map.GetTileHeight(), j * map.GetTileWidth(), i * map.GetTileHeight());
-            int index = i * numTilesX + j;
-            tiles[index] = tileset;
-            tiles[index].crop(dim);
-        }
+      Magick::Geometry dim(map.GetTileWidth(), map.GetTileHeight(), j * map.GetTileWidth(), i * map.GetTileHeight());
+      int index = i * numTilesX + j;
+      tiles[index] = tileset;
+      tiles[index].crop(dim);
     }
-    return 0;
+  }
+  return 0;
 }
 
 /** loadTileset
@@ -114,31 +114,34 @@ int HandlerUtils::GetTiles(const Map& map, std::vector<Magick::Image>& tiles)
   */
 int HandlerUtils::LoadTileset(const Map& map, Magick::Image& image)
 {
-    if (map.GetFilename().empty()) return -1;
+  if (map.GetFilename().empty())
+    return -1;
 
-    image.read(/*RESOURCE_POOL +*/ map.GetFilename());
+  image.read(/*RESOURCE_POOL +*/ map.GetFilename());
 
-    return 0;
+  return 0;
 }
 
 /** layerToImage
   *
   * Converts a layer into an ImageMagick Image
   */
-int HandlerUtils::LayerToImage(const Map& map, const Layer& layer, std::vector<Magick::Image>& tiles, Magick::Image& image)
+int HandlerUtils::LayerToImage(const Map& map, const Layer& layer, std::vector<Magick::Image>& tiles,
+                               Magick::Image& image)
 {
-    for (unsigned int i = 0; i < map.GetHeight(); i++)
+  for (unsigned int i = 0; i < map.GetHeight(); i++)
+  {
+    for (unsigned int j = 0; j < map.GetWidth(); j++)
     {
-        for (unsigned int j = 0; j < map.GetWidth(); j++)
-        {
-            int index = i * map.GetWidth() + j;
-            int tile = layer[index];
-            if (tile == -1) continue;
-            image.composite(tiles[tile], j * map.GetTileWidth(), i * map.GetTileHeight(), Magick::AtopCompositeOp);
-        }
+      int index = i * map.GetWidth() + j;
+      int tile = layer[index];
+      if (tile == -1)
+        continue;
+      image.composite(tiles[tile], j * map.GetTileWidth(), i * map.GetTileHeight(), Magick::AtopCompositeOp);
     }
+  }
 
-    return 0;
+  return 0;
 }
 
 /** getTiles
@@ -147,19 +150,19 @@ int HandlerUtils::LayerToImage(const Map& map, const Layer& layer, std::vector<M
   */
 int HandlerUtils::GetTiles(const Map& map, Magick::Image& tileset, std::vector<Magick::Image>& tiles)
 {
-    int numTilesX = tileset.columns() / map.GetTileWidth();
-    int numTilesY = tileset.rows() / map.GetTileHeight();
-    tiles.reserve(numTilesX * numTilesY);
-    for (int i = 0; i < numTilesY; i++)
+  int numTilesX = tileset.columns() / map.GetTileWidth();
+  int numTilesY = tileset.rows() / map.GetTileHeight();
+  tiles.reserve(numTilesX * numTilesY);
+  for (int i = 0; i < numTilesY; i++)
+  {
+    for (int j = 0; j < numTilesX; j++)
     {
-        for (int j = 0; j < numTilesX; j++)
-        {
-            Magick::Geometry dim(map.GetTileWidth(), map.GetTileHeight(), j * map.GetTileWidth(), i * map.GetTileHeight());
-            int index = i * numTilesX + j;
-            tiles[index] = tileset;
-            tiles[index].crop(dim);
-        }
+      Magick::Geometry dim(map.GetTileWidth(), map.GetTileHeight(), j * map.GetTileWidth(), i * map.GetTileHeight());
+      int index = i * numTilesX + j;
+      tiles[index] = tileset;
+      tiles[index].crop(dim);
     }
+  }
 
-    return 0;
+  return 0;
 }

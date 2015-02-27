@@ -28,416 +28,416 @@
 
 BOOST_AUTO_TEST_CASE(RegionSubtract0Formed)
 {
-    // DDD
-    // D1D
-    // DDD
-    Region r1({Rectangle(5, 5, 5, 5)});
-    r1.Subtract(Rectangle(0, 0, 15, 15));
+  // DDD
+  // D1D
+  // DDD
+  Region r1({Rectangle(5, 5, 5, 5)});
+  r1.Subtract(Rectangle(0, 0, 15, 15));
 
-    BOOST_CHECK(!r1.Contains(Rectangle(5, 5, 5, 5)));
-    BOOST_CHECK(!r1.Intersects(Rectangle(0, 0, 15, 15)));
-    BOOST_CHECK_EQUAL(r1.Size(), 0);
+  BOOST_CHECK(!r1.Contains(Rectangle(5, 5, 5, 5)));
+  BOOST_CHECK(!r1.Intersects(Rectangle(0, 0, 15, 15)));
+  BOOST_CHECK_EQUAL(r1.Size(), 0);
 }
 
 BOOST_AUTO_TEST_CASE(RegionSubtract1Formed)
 {
-    // DDD
-    // 1
-    // 1
-    Region r1({Rectangle(0, 0, 10, 30)});
-    r1.Subtract(Rectangle(0, 0, 30, 10));
+  // DDD
+  // 1
+  // 1
+  Region r1({Rectangle(0, 0, 10, 30)});
+  r1.Subtract(Rectangle(0, 0, 30, 10));
 
-    BOOST_CHECK(!r1.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(!r1.Intersects(Rectangle(0, 0, 30, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 10, 10, 20)));
-    BOOST_CHECK_EQUAL(r1.Size(), 1);
+  BOOST_CHECK(!r1.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(!r1.Intersects(Rectangle(0, 0, 30, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 10, 10, 20)));
+  BOOST_CHECK_EQUAL(r1.Size(), 1);
 
-    // DDD
-    //   1
-    //   1
-    Region r2({Rectangle(0, 0, 10, 30)});
-    r2.Subtract(Rectangle(-20, 0, 30, 10));
+  // DDD
+  //   1
+  //   1
+  Region r2({Rectangle(0, 0, 10, 30)});
+  r2.Subtract(Rectangle(-20, 0, 30, 10));
 
-    BOOST_CHECK(!r2.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(!r2.Intersects(Rectangle(-20, 0, 30, 10)));
-    BOOST_CHECK(r2.Contains(Rectangle(0, 10, 10, 20)));
-    BOOST_CHECK_EQUAL(r2.Size(), 1);
+  BOOST_CHECK(!r2.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(!r2.Intersects(Rectangle(-20, 0, 30, 10)));
+  BOOST_CHECK(r2.Contains(Rectangle(0, 10, 10, 20)));
+  BOOST_CHECK_EQUAL(r2.Size(), 1);
 
-    //   1
-    //   1
-    // DDD
-    Region r3({Rectangle(0, 0, 10, 30)});
-    r3.Subtract(Rectangle(-20, 20, 30, 10));
+  //   1
+  //   1
+  // DDD
+  Region r3({Rectangle(0, 0, 10, 30)});
+  r3.Subtract(Rectangle(-20, 20, 30, 10));
 
-    BOOST_CHECK(!r3.Contains(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK(!r3.Intersects(Rectangle(-20, 20, 30, 10)));
-    BOOST_CHECK(r3.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_CHECK_EQUAL(r3.Size(), 1);
+  BOOST_CHECK(!r3.Contains(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK(!r3.Intersects(Rectangle(-20, 20, 30, 10)));
+  BOOST_CHECK(r3.Contains(Rectangle(0, 0, 10, 20)));
+  BOOST_CHECK_EQUAL(r3.Size(), 1);
 
-    // 1
-    // 1
-    // DDD
-    Region r4({Rectangle(0, 0, 10, 30)});
-    r4.Subtract(Rectangle(0, 20, 30, 10));
+  // 1
+  // 1
+  // DDD
+  Region r4({Rectangle(0, 0, 10, 30)});
+  r4.Subtract(Rectangle(0, 20, 30, 10));
 
-    BOOST_CHECK(!r4.Contains(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK(!r4.Intersects(Rectangle(0, 20, 30, 10)));
-    BOOST_CHECK(r4.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_CHECK_EQUAL(r4.Size(), 1);
+  BOOST_CHECK(!r4.Contains(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK(!r4.Intersects(Rectangle(0, 20, 30, 10)));
+  BOOST_CHECK(r4.Contains(Rectangle(0, 0, 10, 20)));
+  BOOST_CHECK_EQUAL(r4.Size(), 1);
 
 
-    // DDDD
-    //  11
-    Region r5({Rectangle(0, 0, 20, 20)});
-    r5.Subtract(Rectangle(-10, 0, 40, 10));
+  // DDDD
+  //  11
+  Region r5({Rectangle(0, 0, 20, 20)});
+  r5.Subtract(Rectangle(-10, 0, 40, 10));
 
-    BOOST_CHECK(!r5.Contains(Rectangle(0, 0, 20, 10)));
-    BOOST_CHECK(!r5.Intersects(Rectangle(-10, 0, 40, 10)));
-    BOOST_CHECK(r5.Contains(Rectangle(0, 10, 20, 10)));
-    BOOST_CHECK_EQUAL(r5.Size(), 1);
+  BOOST_CHECK(!r5.Contains(Rectangle(0, 0, 20, 10)));
+  BOOST_CHECK(!r5.Intersects(Rectangle(-10, 0, 40, 10)));
+  BOOST_CHECK(r5.Contains(Rectangle(0, 10, 20, 10)));
+  BOOST_CHECK_EQUAL(r5.Size(), 1);
 
-    //  11
-    // DDDD
-    Region r6({Rectangle(0, 0, 20, 20)});
-    r6.Subtract(Rectangle(-10, 10, 40, 10));
+  //  11
+  // DDDD
+  Region r6({Rectangle(0, 0, 20, 20)});
+  r6.Subtract(Rectangle(-10, 10, 40, 10));
 
-    BOOST_CHECK(!r6.Contains(Rectangle(0, 10, 20, 10)));
-    BOOST_CHECK(!r6.Intersects(Rectangle(-10, 10, 40, 10)));
-    BOOST_CHECK(r6.Contains(Rectangle(0, 0, 20, 10)));
-    BOOST_CHECK_EQUAL(r6.Size(), 1);
+  BOOST_CHECK(!r6.Contains(Rectangle(0, 10, 20, 10)));
+  BOOST_CHECK(!r6.Intersects(Rectangle(-10, 10, 40, 10)));
+  BOOST_CHECK(r6.Contains(Rectangle(0, 0, 20, 10)));
+  BOOST_CHECK_EQUAL(r6.Size(), 1);
 
-    // D
-    // D1
-    // D1
-    // D
-    Region r7({Rectangle(0, 0, 20, 20)});
-    r7.Subtract(Rectangle(0, -10, 10, 40));
+  // D
+  // D1
+  // D1
+  // D
+  Region r7({Rectangle(0, 0, 20, 20)});
+  r7.Subtract(Rectangle(0, -10, 10, 40));
 
-    BOOST_CHECK(!r7.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_CHECK(!r7.Intersects(Rectangle(0, -10, 10, 40)));
-    BOOST_CHECK(r7.Contains(Rectangle(10, 0, 10, 20)));
-    BOOST_CHECK_EQUAL(r7.Size(), 1);
+  BOOST_CHECK(!r7.Contains(Rectangle(0, 0, 10, 20)));
+  BOOST_CHECK(!r7.Intersects(Rectangle(0, -10, 10, 40)));
+  BOOST_CHECK(r7.Contains(Rectangle(10, 0, 10, 20)));
+  BOOST_CHECK_EQUAL(r7.Size(), 1);
 
-    //  D
-    // 1D
-    // 1D
-    //  D
-    Region r8({Rectangle(0, 0, 10, 30)});
-    r8.Subtract(Rectangle(10, -10, 10, 40));
+  //  D
+  // 1D
+  // 1D
+  //  D
+  Region r8({Rectangle(0, 0, 10, 30)});
+  r8.Subtract(Rectangle(10, -10, 10, 40));
 
-    BOOST_CHECK(!r8.Contains(Rectangle(10, 0, 10, 20)));
-    BOOST_CHECK(!r8.Intersects(Rectangle(10, -10, 10, 40)));
-    BOOST_CHECK(r8.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_CHECK_EQUAL(r8.Size(), 1);
+  BOOST_CHECK(!r8.Contains(Rectangle(10, 0, 10, 20)));
+  BOOST_CHECK(!r8.Intersects(Rectangle(10, -10, 10, 40)));
+  BOOST_CHECK(r8.Contains(Rectangle(0, 0, 10, 20)));
+  BOOST_CHECK_EQUAL(r8.Size(), 1);
 }
 
 BOOST_AUTO_TEST_CASE(RegionSubtract2Formed)
 {
-    //  1
-    // DDD
-    //  1
-    Region r1({Rectangle(0, 0, 10, 30)});
-    r1.Subtract(Rectangle(-10, 10, 30, 10));
+  //  1
+  // DDD
+  //  1
+  Region r1({Rectangle(0, 0, 10, 30)});
+  r1.Subtract(Rectangle(-10, 10, 30, 10));
 
-    BOOST_CHECK(!r1.Contains(Rectangle(0, 10, 10, 10)));
-    BOOST_CHECK(!r1.Intersects(Rectangle(-10, 10, 30, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK_EQUAL(r1.Size(), 2);
+  BOOST_CHECK(!r1.Contains(Rectangle(0, 10, 10, 10)));
+  BOOST_CHECK(!r1.Intersects(Rectangle(-10, 10, 30, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK_EQUAL(r1.Size(), 2);
 
-    //  D
-    // 1D1
-    //  D
-    Region r2({Rectangle(0, 0, 30, 10)});
-    r2.Subtract(Rectangle(10, -10, 10, 30));
+  //  D
+  // 1D1
+  //  D
+  Region r2({Rectangle(0, 0, 30, 10)});
+  r2.Subtract(Rectangle(10, -10, 10, 30));
 
-    BOOST_CHECK(!r2.Contains(Rectangle(10, 0, 10, 10)));
-    BOOST_CHECK(!r2.Intersects(Rectangle(10, -10, 10, 30)));
-    BOOST_CHECK(r2.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(r2.Contains(Rectangle(20, 0, 10, 10)));
-    BOOST_CHECK_EQUAL(r2.Size(), 2);
+  BOOST_CHECK(!r2.Contains(Rectangle(10, 0, 10, 10)));
+  BOOST_CHECK(!r2.Intersects(Rectangle(10, -10, 10, 30)));
+  BOOST_CHECK(r2.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(r2.Contains(Rectangle(20, 0, 10, 10)));
+  BOOST_CHECK_EQUAL(r2.Size(), 2);
 
-    //  DD
-    // 1DD
-    // 11
-    Region r3({Rectangle(0, 0, 20, 20)});
-    r3.Subtract(Rectangle(10, -10, 20, 20));
+  //  DD
+  // 1DD
+  // 11
+  Region r3({Rectangle(0, 0, 20, 20)});
+  r3.Subtract(Rectangle(10, -10, 20, 20));
 
-    BOOST_CHECK(!r3.Contains(Rectangle(10, 0, 10, 10)));
-    BOOST_CHECK(!r3.Intersects(Rectangle(10, -10, 20, 20)));
-    BOOST_CHECK(r3.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_CHECK(r3.Contains(Rectangle(0, 10, 20, 10)));
-    BOOST_CHECK_EQUAL(r3.Size(), 2);
+  BOOST_CHECK(!r3.Contains(Rectangle(10, 0, 10, 10)));
+  BOOST_CHECK(!r3.Intersects(Rectangle(10, -10, 20, 20)));
+  BOOST_CHECK(r3.Contains(Rectangle(0, 0, 10, 20)));
+  BOOST_CHECK(r3.Contains(Rectangle(0, 10, 20, 10)));
+  BOOST_CHECK_EQUAL(r3.Size(), 2);
 
-    // DD
-    // DD1
-    //  11
-    Region r4({Rectangle(0, 0, 20, 20)});
-    r4.Subtract(Rectangle(-10, -10, 20, 20));
+  // DD
+  // DD1
+  //  11
+  Region r4({Rectangle(0, 0, 20, 20)});
+  r4.Subtract(Rectangle(-10, -10, 20, 20));
 
-    BOOST_CHECK(!r4.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(!r4.Intersects(Rectangle(-10, -10, 20, 20)));
-    BOOST_CHECK(r4.Contains(Rectangle(10, 0, 10, 20)));
-    BOOST_CHECK(r4.Contains(Rectangle(0, 10, 20, 10)));
-    BOOST_CHECK_EQUAL(r4.Size(), 2);
+  BOOST_CHECK(!r4.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(!r4.Intersects(Rectangle(-10, -10, 20, 20)));
+  BOOST_CHECK(r4.Contains(Rectangle(10, 0, 10, 20)));
+  BOOST_CHECK(r4.Contains(Rectangle(0, 10, 20, 10)));
+  BOOST_CHECK_EQUAL(r4.Size(), 2);
 
-    // 11
-    // 1DD
-    //  DD
-    Region r5({Rectangle(0, 0, 20, 20)});
-    r5.Subtract(Rectangle(10, 10, 20, 20));
+  // 11
+  // 1DD
+  //  DD
+  Region r5({Rectangle(0, 0, 20, 20)});
+  r5.Subtract(Rectangle(10, 10, 20, 20));
 
-    BOOST_CHECK(!r5.Contains(Rectangle(10, 10, 10, 10)));
-    BOOST_CHECK(!r5.Intersects(Rectangle(10, 10, 20, 20)));
-    BOOST_CHECK(r5.Contains(Rectangle(0, 0, 20, 10)));
-    BOOST_CHECK(r5.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_CHECK_EQUAL(r5.Size(), 2);
+  BOOST_CHECK(!r5.Contains(Rectangle(10, 10, 10, 10)));
+  BOOST_CHECK(!r5.Intersects(Rectangle(10, 10, 20, 20)));
+  BOOST_CHECK(r5.Contains(Rectangle(0, 0, 20, 10)));
+  BOOST_CHECK(r5.Contains(Rectangle(0, 0, 10, 20)));
+  BOOST_CHECK_EQUAL(r5.Size(), 2);
 
-    //  11
-    // DD1
-    // DD
-    Region r6({Rectangle(0, 0, 20, 20)});
-    r6.Subtract(Rectangle(-10, 10, 20, 20));
+  //  11
+  // DD1
+  // DD
+  Region r6({Rectangle(0, 0, 20, 20)});
+  r6.Subtract(Rectangle(-10, 10, 20, 20));
 
-    BOOST_CHECK(!r6.Contains(Rectangle(0, 10, 10, 10)));
-    BOOST_CHECK(!r6.Intersects(Rectangle(-10, 10, 20, 20)));
-    BOOST_CHECK(r6.Contains(Rectangle(0, 0, 20, 10)));
-    BOOST_CHECK(r6.Contains(Rectangle(10, 0, 10, 20)));
-    BOOST_CHECK_EQUAL(r6.Size(), 2);
+  BOOST_CHECK(!r6.Contains(Rectangle(0, 10, 10, 10)));
+  BOOST_CHECK(!r6.Intersects(Rectangle(-10, 10, 20, 20)));
+  BOOST_CHECK(r6.Contains(Rectangle(0, 0, 20, 10)));
+  BOOST_CHECK(r6.Contains(Rectangle(10, 0, 10, 20)));
+  BOOST_CHECK_EQUAL(r6.Size(), 2);
 }
 
 BOOST_AUTO_TEST_CASE(RegionSubtract3Formed)
 {
-    // 11
-    // 2DD
-    // 33
-    Region r1({Rectangle(0, 0, 10, 30)});
-    r1.Subtract(Rectangle(5, 10, 30, 10));
+  // 11
+  // 2DD
+  // 33
+  Region r1({Rectangle(0, 0, 10, 30)});
+  r1.Subtract(Rectangle(5, 10, 30, 10));
 
-    BOOST_CHECK(!r1.Contains(Rectangle(5, 10, 5, 10)));
-    BOOST_CHECK(!r1.Intersects(Rectangle(5, 10, 30, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 10, 5, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK_EQUAL(r1.Size(), 3);
+  BOOST_CHECK(!r1.Contains(Rectangle(5, 10, 5, 10)));
+  BOOST_CHECK(!r1.Intersects(Rectangle(5, 10, 30, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 10, 5, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK_EQUAL(r1.Size(), 3);
 
-    //  11
-    // DD2
-    //  33
-    Region r2({Rectangle(0, 0, 10, 30)});
-    r2.Subtract(Rectangle(-25, 10, 30, 10));
-    BOOST_CHECK(!r2.Contains(Rectangle(0, 10, 5, 10)));
-    BOOST_CHECK(!r2.Intersects(Rectangle(-25, 10, 30, 10)));
-    BOOST_CHECK(r2.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(r2.Contains(Rectangle(5, 10, 5, 10)));
-    BOOST_CHECK(r2.Contains(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK_EQUAL(r2.Size(), 3);
+  //  11
+  // DD2
+  //  33
+  Region r2({Rectangle(0, 0, 10, 30)});
+  r2.Subtract(Rectangle(-25, 10, 30, 10));
+  BOOST_CHECK(!r2.Contains(Rectangle(0, 10, 5, 10)));
+  BOOST_CHECK(!r2.Intersects(Rectangle(-25, 10, 30, 10)));
+  BOOST_CHECK(r2.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(r2.Contains(Rectangle(5, 10, 5, 10)));
+  BOOST_CHECK(r2.Contains(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK_EQUAL(r2.Size(), 3);
 
-    // 123
-    // 1D3
-    //  D
-    Region r3({Rectangle(0, 0, 30, 10)});
-    r3.Subtract(Rectangle(10, 5, 10, 30));
-    BOOST_CHECK(!r3.Contains(Rectangle(10, 5, 10, 5)));
-    BOOST_CHECK(!r3.Intersects(Rectangle(10, 5, 10, 30)));
-    BOOST_CHECK(r3.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(r3.Contains(Rectangle(10, 0, 10, 5)));
-    BOOST_CHECK(r3.Contains(Rectangle(20, 0, 10, 10)));
-    BOOST_CHECK_EQUAL(r3.Size(), 3);
+  // 123
+  // 1D3
+  //  D
+  Region r3({Rectangle(0, 0, 30, 10)});
+  r3.Subtract(Rectangle(10, 5, 10, 30));
+  BOOST_CHECK(!r3.Contains(Rectangle(10, 5, 10, 5)));
+  BOOST_CHECK(!r3.Intersects(Rectangle(10, 5, 10, 30)));
+  BOOST_CHECK(r3.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(r3.Contains(Rectangle(10, 0, 10, 5)));
+  BOOST_CHECK(r3.Contains(Rectangle(20, 0, 10, 10)));
+  BOOST_CHECK_EQUAL(r3.Size(), 3);
 
-    //  D
-    // 1D3
-    // 123
-    Region r4({Rectangle(0, 0, 30, 10)});
-    r4.Subtract(Rectangle(10, -25, 10, 30));
-    BOOST_CHECK(!r4.Contains(Rectangle(10, 0, 10, 5)));
-    BOOST_CHECK(!r4.Intersects(Rectangle(10, -25, 10, 30)));
-    BOOST_CHECK(r4.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(r4.Contains(Rectangle(10, 5, 10, 5)));
-    BOOST_CHECK(r4.Contains(Rectangle(20, 0, 10, 10)));
-    BOOST_CHECK_EQUAL(r4.Size(), 3);
+  //  D
+  // 1D3
+  // 123
+  Region r4({Rectangle(0, 0, 30, 10)});
+  r4.Subtract(Rectangle(10, -25, 10, 30));
+  BOOST_CHECK(!r4.Contains(Rectangle(10, 0, 10, 5)));
+  BOOST_CHECK(!r4.Intersects(Rectangle(10, -25, 10, 30)));
+  BOOST_CHECK(r4.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(r4.Contains(Rectangle(10, 5, 10, 5)));
+  BOOST_CHECK(r4.Contains(Rectangle(20, 0, 10, 10)));
+  BOOST_CHECK_EQUAL(r4.Size(), 3);
 }
 
 BOOST_AUTO_TEST_CASE(RegionSubtract4Formed)
 {
-    // 111
-    // 3D2
-    // 444
-    Region r1({Rectangle(0, 0, 30, 30)});
-    r1.Subtract(Rectangle(10, 10, 10, 10));
+  // 111
+  // 3D2
+  // 444
+  Region r1({Rectangle(0, 0, 30, 30)});
+  r1.Subtract(Rectangle(10, 10, 10, 10));
 
-    BOOST_CHECK(!r1.Contains(Rectangle(10, 10, 10, 10)));
-    BOOST_CHECK(!r1.Intersects(Rectangle(10, 10, 10, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 0, 30, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 0, 10, 30)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 20, 30, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(20, 0, 10, 30)));
-    BOOST_CHECK_EQUAL(r1.Size(), 4);
+  BOOST_CHECK(!r1.Contains(Rectangle(10, 10, 10, 10)));
+  BOOST_CHECK(!r1.Intersects(Rectangle(10, 10, 10, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 0, 30, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 0, 10, 30)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 20, 30, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(20, 0, 10, 30)));
+  BOOST_CHECK_EQUAL(r1.Size(), 4);
 }
 
 BOOST_AUTO_TEST_CASE(RegionXor0Formed)
 {
-    // Same rectangle
-    Region r1({Rectangle(5, 5, 5, 5)});
-    r1.Xor(Rectangle(5, 5, 5, 5));
+  // Same rectangle
+  Region r1({Rectangle(5, 5, 5, 5)});
+  r1.Xor(Rectangle(5, 5, 5, 5));
 
-    BOOST_CHECK(!r1.Contains(Rectangle(5, 5, 5, 5)));
-    BOOST_CHECK(!r1.Intersects(Rectangle(5, 5, 5, 5)));
-    BOOST_CHECK_EQUAL(r1.Size(), 0);
+  BOOST_CHECK(!r1.Contains(Rectangle(5, 5, 5, 5)));
+  BOOST_CHECK(!r1.Intersects(Rectangle(5, 5, 5, 5)));
+  BOOST_CHECK_EQUAL(r1.Size(), 0);
 }
 
 BOOST_AUTO_TEST_CASE(RegionXor1Formed)
 {
-    // D
-    // 1
-    // 1
-    Region r1({Rectangle(0, 0, 10, 30)});
-    r1.Xor(Rectangle(0, 0, 10, 10));
+  // D
+  // 1
+  // 1
+  Region r1({Rectangle(0, 0, 10, 30)});
+  r1.Xor(Rectangle(0, 0, 10, 10));
 
-    BOOST_CHECK(!r1.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(!r1.Intersects(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 10, 10, 20)));
-    BOOST_CHECK_EQUAL(r1.Size(), 1);
+  BOOST_CHECK(!r1.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(!r1.Intersects(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 10, 10, 20)));
+  BOOST_CHECK_EQUAL(r1.Size(), 1);
 
-    // 1
-    // 1
-    // D
-    Region r2({Rectangle(0, 0, 10, 30)});
-    r2.Xor(Rectangle(0, 20, 10, 10));
+  // 1
+  // 1
+  // D
+  Region r2({Rectangle(0, 0, 10, 30)});
+  r2.Xor(Rectangle(0, 20, 10, 10));
 
-    BOOST_CHECK(!r2.Contains(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK(!r2.Intersects(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK(r2.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_CHECK_EQUAL(r2.Size(), 1);
+  BOOST_CHECK(!r2.Contains(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK(!r2.Intersects(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK(r2.Contains(Rectangle(0, 0, 10, 20)));
+  BOOST_CHECK_EQUAL(r2.Size(), 1);
 
-    // D11
-    Region r3({Rectangle(0, 0, 30, 10)});
-    r3.Xor(Rectangle(0, 0, 10, 10));
+  // D11
+  Region r3({Rectangle(0, 0, 30, 10)});
+  r3.Xor(Rectangle(0, 0, 10, 10));
 
-    BOOST_CHECK(!r3.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(!r3.Intersects(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(r3.Contains(Rectangle(10, 0, 20, 10)));
-    BOOST_CHECK_EQUAL(r3.Size(), 1);
+  BOOST_CHECK(!r3.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(!r3.Intersects(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(r3.Contains(Rectangle(10, 0, 20, 10)));
+  BOOST_CHECK_EQUAL(r3.Size(), 1);
 
-    // 11D
-    Region r4({Rectangle(0, 0, 30, 10)});
-    r4.Xor(Rectangle(20, 0, 10, 10));
+  // 11D
+  Region r4({Rectangle(0, 0, 30, 10)});
+  r4.Xor(Rectangle(20, 0, 10, 10));
 
-    BOOST_CHECK(!r4.Contains(Rectangle(20, 0, 10, 10)));
-    BOOST_CHECK(!r4.Intersects(Rectangle(20, 0, 10, 10)));
-    BOOST_CHECK(r4.Contains(Rectangle(0, 0, 20, 10)));
-    BOOST_CHECK_EQUAL(r4.Size(), 1);
+  BOOST_CHECK(!r4.Contains(Rectangle(20, 0, 10, 10)));
+  BOOST_CHECK(!r4.Intersects(Rectangle(20, 0, 10, 10)));
+  BOOST_CHECK(r4.Contains(Rectangle(0, 0, 20, 10)));
+  BOOST_CHECK_EQUAL(r4.Size(), 1);
 }
 
 BOOST_AUTO_TEST_CASE(RegionXor2Formed)
 {
-    VerboseLog("RegionXor2Formed");
-    // DDD
-    // 1
-    // 1
-    Region r1({Rectangle(0, 0, 10, 30)});
-    r1.Xor(Rectangle(0, 0, 30, 10));
+  VerboseLog("RegionXor2Formed");
+  // DDD
+  // 1
+  // 1
+  Region r1({Rectangle(0, 0, 10, 30)});
+  r1.Xor(Rectangle(0, 0, 30, 10));
 
-    BOOST_CHECK(!r1.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(!r1.Intersects(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 10, 10, 20)));
-    BOOST_CHECK(r1.Contains(Rectangle(10, 0, 20, 10)));
-    BOOST_CHECK_EQUAL(r1.Size(), 2);
+  BOOST_CHECK(!r1.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(!r1.Intersects(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 10, 10, 20)));
+  BOOST_CHECK(r1.Contains(Rectangle(10, 0, 20, 10)));
+  BOOST_CHECK_EQUAL(r1.Size(), 2);
 
-    // DDD
-    //   1
-    //   1
-    Region r2({Rectangle(0, 0, 10, 30)});
-    r2.Xor(Rectangle(-20, 0, 30, 10));
+  // DDD
+  //   1
+  //   1
+  Region r2({Rectangle(0, 0, 10, 30)});
+  r2.Xor(Rectangle(-20, 0, 30, 10));
 
-    BOOST_CHECK(!r2.Contains(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(!r2.Intersects(Rectangle(0, 0, 10, 10)));
-    BOOST_CHECK(r2.Contains(Rectangle(0, 10, 10, 20)));
-    BOOST_CHECK(r2.Contains(Rectangle(-20, 0, 20, 10)));
-    BOOST_CHECK_EQUAL(r2.Size(), 2);
+  BOOST_CHECK(!r2.Contains(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(!r2.Intersects(Rectangle(0, 0, 10, 10)));
+  BOOST_CHECK(r2.Contains(Rectangle(0, 10, 10, 20)));
+  BOOST_CHECK(r2.Contains(Rectangle(-20, 0, 20, 10)));
+  BOOST_CHECK_EQUAL(r2.Size(), 2);
 
-    //   1
-    //   1
-    // DDD
-    Region r3({Rectangle(0, 0, 10, 30)});
-    r3.Xor(Rectangle(-20, 20, 30, 10));
+  //   1
+  //   1
+  // DDD
+  Region r3({Rectangle(0, 0, 10, 30)});
+  r3.Xor(Rectangle(-20, 20, 30, 10));
 
-    BOOST_CHECK(!r3.Contains(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK(!r3.Intersects(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK(r3.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_CHECK(r3.Contains(Rectangle(-20, 20, 20, 10)));
-    BOOST_CHECK_EQUAL(r3.Size(), 2);
+  BOOST_CHECK(!r3.Contains(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK(!r3.Intersects(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK(r3.Contains(Rectangle(0, 0, 10, 20)));
+  BOOST_CHECK(r3.Contains(Rectangle(-20, 20, 20, 10)));
+  BOOST_CHECK_EQUAL(r3.Size(), 2);
 
-    // 1
-    // 1
-    // DDD
-    Region r4({Rectangle(0, 0, 10, 30)});
-    r4.Xor(Rectangle(0, 20, 30, 10));
+  // 1
+  // 1
+  // DDD
+  Region r4({Rectangle(0, 0, 10, 30)});
+  r4.Xor(Rectangle(0, 20, 30, 10));
 
-    BOOST_CHECK(!r4.Contains(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK(!r4.Intersects(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK(r4.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_CHECK(r4.Contains(Rectangle(10, 20, 20, 10)));
-    BOOST_CHECK_EQUAL(r4.Size(), 2);
+  BOOST_CHECK(!r4.Contains(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK(!r4.Intersects(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK(r4.Contains(Rectangle(0, 0, 10, 20)));
+  BOOST_CHECK(r4.Contains(Rectangle(10, 20, 20, 10)));
+  BOOST_CHECK_EQUAL(r4.Size(), 2);
 
-    // 1
-    // 1
-    // D
-    // D
-    // D
-    Region r5({Rectangle(0, 0, 10, 30)});
-    r5.Xor(Rectangle(0, 20, 10, 30));
+  // 1
+  // 1
+  // D
+  // D
+  // D
+  Region r5({Rectangle(0, 0, 10, 30)});
+  r5.Xor(Rectangle(0, 20, 10, 30));
 
-    BOOST_CHECK(!r5.Contains(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK(!r5.Intersects(Rectangle(0, 20, 10, 10)));
-    BOOST_CHECK(r5.Contains(Rectangle(0, 0, 10, 20)));
-    BOOST_CHECK(r5.Contains(Rectangle(0, 30, 10, 20)));
-    BOOST_CHECK_EQUAL(r5.Size(), 2);
+  BOOST_CHECK(!r5.Contains(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK(!r5.Intersects(Rectangle(0, 20, 10, 10)));
+  BOOST_CHECK(r5.Contains(Rectangle(0, 0, 10, 20)));
+  BOOST_CHECK(r5.Contains(Rectangle(0, 30, 10, 20)));
+  BOOST_CHECK_EQUAL(r5.Size(), 2);
 }
 
 BOOST_AUTO_TEST_CASE(RegionXor3Formed)
 {
-    // DDDD
-    //  11
-    Region r1({Rectangle(0, 0, 20, 20)});
-    r1.Xor(Rectangle(-10, 0, 40, 10));
+  // DDDD
+  //  11
+  Region r1({Rectangle(0, 0, 20, 20)});
+  r1.Xor(Rectangle(-10, 0, 40, 10));
 
-    BOOST_CHECK(!r1.Contains(Rectangle(0, 0, 20, 10)));
-    BOOST_CHECK(!r1.Intersects(Rectangle(0, 0, 20, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 10, 20, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(-10, 0, 10, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(20, 0, 10, 10)));
-    BOOST_CHECK_EQUAL(r1.Size(), 3);
+  BOOST_CHECK(!r1.Contains(Rectangle(0, 0, 20, 10)));
+  BOOST_CHECK(!r1.Intersects(Rectangle(0, 0, 20, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 10, 20, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(-10, 0, 10, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(20, 0, 10, 10)));
+  BOOST_CHECK_EQUAL(r1.Size(), 3);
 }
 
 BOOST_AUTO_TEST_CASE(RegionXor4Formed)
 {
-    // 111
-    // 3D2
-    // 444
-    Region r1({Rectangle(0, 0, 30, 30)});
-    r1.Xor(Rectangle(10, 10, 10, 10));
+  // 111
+  // 3D2
+  // 444
+  Region r1({Rectangle(0, 0, 30, 30)});
+  r1.Xor(Rectangle(10, 10, 10, 10));
 
-    BOOST_CHECK(!r1.Contains(Rectangle(10, 10, 10, 10)));
-    BOOST_CHECK(!r1.Intersects(Rectangle(10, 10, 10, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 0, 30, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 0, 10, 30)));
-    BOOST_CHECK(r1.Contains(Rectangle(0, 20, 30, 10)));
-    BOOST_CHECK(r1.Contains(Rectangle(20, 0, 10, 30)));
-    BOOST_CHECK_EQUAL(r1.Size(), 4);
+  BOOST_CHECK(!r1.Contains(Rectangle(10, 10, 10, 10)));
+  BOOST_CHECK(!r1.Intersects(Rectangle(10, 10, 10, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 0, 30, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 0, 10, 30)));
+  BOOST_CHECK(r1.Contains(Rectangle(0, 20, 30, 10)));
+  BOOST_CHECK(r1.Contains(Rectangle(20, 0, 10, 30)));
+  BOOST_CHECK_EQUAL(r1.Size(), 4);
 
-    // Opposite of above case
-    // DDD
-    // D1D
-    // DDD
-    Region r2({Rectangle(10, 10, 10, 10)});
-    r2.Xor(Rectangle(0, 0, 30, 30));
+  // Opposite of above case
+  // DDD
+  // D1D
+  // DDD
+  Region r2({Rectangle(10, 10, 10, 10)});
+  r2.Xor(Rectangle(0, 0, 30, 30));
 
-    BOOST_CHECK(!r2.Contains(Rectangle(10, 10, 10, 10)));
-    BOOST_CHECK(!r2.Intersects(Rectangle(10, 10, 10, 10)));
-    BOOST_CHECK(r2.Contains(Rectangle(0, 0, 30, 10)));
-    BOOST_CHECK(r2.Contains(Rectangle(0, 0, 10, 30)));
-    BOOST_CHECK(r2.Contains(Rectangle(0, 20, 30, 10)));
-    BOOST_CHECK(r2.Contains(Rectangle(20, 0, 10, 30)));
-    BOOST_CHECK_EQUAL(r2.Size(), 4);
+  BOOST_CHECK(!r2.Contains(Rectangle(10, 10, 10, 10)));
+  BOOST_CHECK(!r2.Intersects(Rectangle(10, 10, 10, 10)));
+  BOOST_CHECK(r2.Contains(Rectangle(0, 0, 30, 10)));
+  BOOST_CHECK(r2.Contains(Rectangle(0, 0, 10, 30)));
+  BOOST_CHECK(r2.Contains(Rectangle(0, 20, 30, 10)));
+  BOOST_CHECK(r2.Contains(Rectangle(20, 0, 10, 30)));
+  BOOST_CHECK_EQUAL(r2.Size(), 4);
 }

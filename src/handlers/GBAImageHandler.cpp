@@ -28,7 +28,8 @@
 
 /// TODO Rewrite this class hint brandontools
 
-GBAImageHandler::GBAImageHandler() : BaseMapHandler("GBA Image Export", "c", "Exports the map's image in GBA format modes (3-5)", false)
+GBAImageHandler::GBAImageHandler()
+: BaseMapHandler("GBA Image Export", "c", "Exports the map's image in GBA format modes (3-5)", false)
 {
 }
 
@@ -38,35 +39,35 @@ GBAImageHandler::~GBAImageHandler()
 
 void GBAImageHandler::Save(std::ostream& filename, const Map& map)
 {
-    int mode;
-    wxArrayString choices;
-    choices.Add("Mode 3");
-    choices.Add("Mode 4");
-    mode = wxGetSingleChoiceIndex("Which mode do you want the image to be usable for?", "GBA Image Export", choices, 0);
+  int mode;
+  wxArrayString choices;
+  choices.Add("Mode 3");
+  choices.Add("Mode 4");
+  mode = wxGetSingleChoiceIndex("Which mode do you want the image to be usable for?", "GBA Image Export", choices, 0);
 
-    if (mode == -1)
-        throw "No GBA Mode Selected";
+  if (mode == -1)
+    throw "No GBA Mode Selected";
 
-    mode += 3;
+  mode += 3;
 
 
-    Magick::Image image;
+  Magick::Image image;
 
-    if (HandlerUtils::MapToImage(map, image))
-        throw "Could not convert map to image";
+  if (HandlerUtils::MapToImage(map, image))
+    throw "Could not convert map to image";
 
-    // GBA colors are 16bit ubbbbbgggggrrrrr
-    // u = unused
-    image.fx("round(round(b*255)*31/255)/255", Magick::RedChannel);
-    image.fx("round(round(g*255)*31/255)/255", Magick::GreenChannel);
-    image.fx("round(round(r*255)*31/255)/255", Magick::BlueChannel);
-    // If we are in mode 4 mode then we need to generate a palette
-    if (mode == 4)
-    {
-        image.classType(Magick::PseudoClass);
-        image.type(Magick::PaletteType);
-        image.syncPixels();
-    }
+  // GBA colors are 16bit ubbbbbgggggrrrrr
+  // u = unused
+  image.fx("round(round(b*255)*31/255)/255", Magick::RedChannel);
+  image.fx("round(round(g*255)*31/255)/255", Magick::GreenChannel);
+  image.fx("round(round(r*255)*31/255)/255", Magick::BlueChannel);
+  // If we are in mode 4 mode then we need to generate a palette
+  if (mode == 4)
+  {
+    image.classType(Magick::PseudoClass);
+    image.type(Magick::PaletteType);
+    image.syncPixels();
+  }
 
 #if 0
     if (mode != 4)

@@ -28,8 +28,8 @@ using namespace Magick;
 
 ImageMapHandler::ImageMapHandler() : BaseMapHandler("Map Image Writer", "png", "Exports the map as an image", false)
 {
-    alternatives.insert("bmp");
-    alternatives.insert("jpg");
+  alternatives.insert("bmp");
+  alternatives.insert("jpg");
 }
 
 ImageMapHandler::~ImageMapHandler()
@@ -38,14 +38,14 @@ ImageMapHandler::~ImageMapHandler()
 
 int ImageMapHandler::Init()
 {
-    InitializeMagick(NULL);
-    return 0;
+  InitializeMagick(NULL);
+  return 0;
 }
 
 void ImageMapHandler::Save(std::ostream& file, const Map& map)
 {
-    Image image;
-    if (HandlerUtils::MapToImage(map, image))
-        throw "Failed to convert map to an image";
-    //image.write(file);
+  Image image;
+  if (HandlerUtils::MapToImage(map, image))
+    throw "Failed to convert map to an image";
+  // image.write(file);
 }

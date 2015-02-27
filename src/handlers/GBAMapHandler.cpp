@@ -26,53 +26,54 @@
 #include "GBAMapHandler.hpp"
 #include "HandlerUtils.hpp"
 
-///TODO Rewrite this.
+/// TODO Rewrite this.
 
-GBAMapHandler::GBAMapHandler() : BaseMapHandler("GBA Map Export", "c", "Exports the map in GBA modes (0-2) format", false, false)
+GBAMapHandler::GBAMapHandler()
+: BaseMapHandler("GBA Map Export", "c", "Exports the map in GBA modes (0-2) format", false, false)
 {
-    /// TODO Not implemented so disable
-    readable = false;
-    writeable = false;
+  /// TODO Not implemented so disable
+  readable = false;
+  writeable = false;
 }
 
 GBAMapHandler::~GBAMapHandler()
 {
-
 }
 
 void GBAMapHandler::Save(std::ostream& file, const Map& map)
 {
-    wxString warnings = "";
-    if (map.GetTileWidth() != 8 || map.GetTileHeight() != 8)
-        warnings.Append("Map Tile Dimensions are incorrect tiles need to be 8x8 pixels\n");
-    if (map.GetWidth() > 128 || map.GetWidth() < 16 || map.GetHeight() > 128 || map.GetHeight() < 16)
-        warnings.Append("Map Dimensions are incorrect map dimensions needs to be between 256x256 to 128x128");
-    if (!warnings.IsEmpty())
-        wxMessageBox(warnings, "Warning!", wxOK | wxCANCEL);
+  wxString warnings = "";
+  if (map.GetTileWidth() != 8 || map.GetTileHeight() != 8)
+    warnings.Append("Map Tile Dimensions are incorrect tiles need to be 8x8 pixels\n");
+  if (map.GetWidth() > 128 || map.GetWidth() < 16 || map.GetHeight() > 128 || map.GetHeight() < 16)
+    warnings.Append("Map Dimensions are incorrect map dimensions needs to be between 256x256 to 128x128");
+  if (!warnings.IsEmpty())
+    wxMessageBox(warnings, "Warning!", wxOK | wxCANCEL);
 
-    Magick::Image tileset;
-    if (HandlerUtils::LoadTileset(map, tileset))
-        throw "Failed to load tileset";
+  Magick::Image tileset;
+  if (HandlerUtils::LoadTileset(map, tileset))
+    throw "Failed to load tileset";
 
-    tileset.fx("round(round(r*255)*31/255)/255", Magick::RedChannel);
-    tileset.fx("round(round(g*255)*31/255)/255", Magick::GreenChannel);
-    tileset.fx("round(round(b*255)*31/255)/255", Magick::BlueChannel);
-    tileset.classType(Magick::PseudoClass);
-    tileset.type(Magick::PaletteType);
-    tileset.syncPixels();
+  tileset.fx("round(round(r*255)*31/255)/255", Magick::RedChannel);
+  tileset.fx("round(round(g*255)*31/255)/255", Magick::GreenChannel);
+  tileset.fx("round(round(b*255)*31/255)/255", Magick::BlueChannel);
+  tileset.classType(Magick::PseudoClass);
+  tileset.type(Magick::PaletteType);
+  tileset.syncPixels();
 
-    // Get Palette
-    tileset.getConstPixels(0, 0, tileset.columns(), tileset.rows());
-    const Magick::IndexPacket* pixels = tileset.getConstIndexes();
+  // Get Palette
+  tileset.getConstPixels(0, 0, tileset.columns(), tileset.rows());
+  const Magick::IndexPacket* pixels = tileset.getConstIndexes();
 
-    std::vector<Magick::Image> tiles;
-    // Get Tiles
-    if (HandlerUtils::GetTiles(map, tileset, tiles))
-        throw "Failed to get tiles";
+  std::vector<Magick::Image> tiles;
+  // Get Tiles
+  if (HandlerUtils::GetTiles(map, tileset, tiles))
+    throw "Failed to get tiles";
 
-    WriteC(file, map, pixels, tiles);
+  WriteC(file, map, pixels, tiles);
 }
 
-void GBAMapHandler::WriteC(std::ostream& file, const Map& map, const Magick::IndexPacket* pixels, std::vector<Magick::Image> tiles)
+void GBAMapHandler::WriteC(std::ostream& file, const Map& map, const Magick::IndexPacket* pixels,
+                           std::vector<Magick::Image> tiles)
 {
 }

@@ -28,16 +28,16 @@
 /** GBA Image Handler saves the entire map to a .c file */
 class GBAImageHandler : public BaseMapHandler
 {
-	public:
-		GBAImageHandler();
-		~GBAImageHandler();
+  public:
+  GBAImageHandler();
+  ~GBAImageHandler();
 
-        /** @see BaseMapHandler::Save */
-        virtual void Save(std::ostream& file, const Map& map);
+  /** @see BaseMapHandler::Save */
+  virtual void Save(std::ostream& file, const Map& map);
 
-	private:
-        void WriteCMode3(std::ostream& file, Magick::Image& image);
-        void WriteCMode4(std::ostream& file, Magick::Image& image);
+  private:
+  void WriteCMode3(std::ostream& file, Magick::Image& image);
+  void WriteCMode4(std::ostream& file, Magick::Image& image);
 };
 
 #endif

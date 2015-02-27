@@ -26,18 +26,20 @@
 #include <wx/docview.h>
 
 /**
-  * This class represents a view of the map.  The user is allowed to click inside of this widget and place tiles using Tools.
+  * This class represents a view of the map.  The user is allowed to click inside of this widget and place tiles using
+ * Tools.
   */
 class MapCanvas : public wxScrolledCanvas
 {
-	public:
-	    /** Creates a map canvas. */
-		MapCanvas(wxView* view, wxWindow* Parent = NULL, wxWindowID Id = wxID_ANY, const wxPoint& Position = wxDefaultPosition, const wxSize& Size = wxDefaultSize, long Style = wxVSCROLL);
-		~MapCanvas();
-		void OnDraw(wxDC& dc);
-    private:
-        wxView* view;
+  public:
+  /** Creates a map canvas. */
+  MapCanvas(wxView* view, wxWindow* Parent = NULL, wxWindowID Id = wxID_ANY,
+            const wxPoint& Position = wxDefaultPosition, const wxSize& Size = wxDefaultSize, long Style = wxVSCROLL);
+  ~MapCanvas();
+  void OnDraw(wxDC& dc);
 
+  private:
+  wxView* view;
 };
 
 

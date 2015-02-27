@@ -5,9 +5,9 @@
 
 class GridSizeDialog : public GridSizeGUI
 {
-    public:
-        GridSizeDialog(int gridx, int gridy);
-        void GetGridSize(int& width, int& height);
+  public:
+  GridSizeDialog(int gridx, int gridy);
+  void GetGridSize(int& width, int& height);
 };
 
 #endif

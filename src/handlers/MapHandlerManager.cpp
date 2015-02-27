@@ -27,131 +27,131 @@
 
 using namespace std;
 
- MapHandlerManager::~MapHandlerManager()
+MapHandlerManager::~MapHandlerManager()
 {
-    list<BaseMapHandler*>::iterator it;
+  list<BaseMapHandler*>::iterator it;
 
-    for (it = handlers.begin(); it != handlers.end(); ++it)
-    {
-        delete *it;
-    }
-	handlers.clear();
+  for (it = handlers.begin(); it != handlers.end(); ++it)
+  {
+    delete *it;
+  }
+  handlers.clear();
 }
 
 void MapHandlerManager::Add(BaseMapHandler* handler)
 {
-    handlers.push_back(handler);
+  handlers.push_back(handler);
 }
 
 void MapHandlerManager::Remove(BaseMapHandler* handler)
 {
-    handlers.remove(handler);
+  handlers.remove(handler);
 }
 
 void MapHandlerManager::Load(const std::string& file, Map& map, BaseMapHandler* handler)
 {
-    std::string::size_type idx;
-    std::string filename = ConvertFilename(file);
-    std::string extension = GetExtension(filename, idx);
-    transform(filename.begin() + idx, filename.end(), filename.begin() + idx, (int(*)(int)) std::tolower);
-    if (!handler)
-        handler = FindHandler(extension);
+  std::string::size_type idx;
+  std::string filename = ConvertFilename(file);
+  std::string extension = GetExtension(filename, idx);
+  transform(filename.begin() + idx, filename.end(), filename.begin() + idx, (int (*)(int))std::tolower);
+  if (!handler)
+    handler = FindHandler(extension);
 
-    if (!handler)
-        throw "Handler not found for extension";
+  if (!handler)
+    throw "Handler not found for extension";
 
-    map.Destroy();
-    handler->Load(filename, map);
+  map.Destroy();
+  handler->Load(filename, map);
 }
 
 void MapHandlerManager::Save(const std::string& file, Map& map, BaseMapHandler* handler)
 {
-    std::string::size_type idx;
-    std::string filename = ConvertFilename(file);
-    std::string extension = GetExtension(filename, idx);
-    transform(filename.begin() + idx, filename.end(), filename.begin() + idx, (int(*)(int)) std::tolower);
+  std::string::size_type idx;
+  std::string filename = ConvertFilename(file);
+  std::string extension = GetExtension(filename, idx);
+  transform(filename.begin() + idx, filename.end(), filename.begin() + idx, (int (*)(int))std::tolower);
 
-    if (!handler)
-        handler = FindHandler(extension);
+  if (!handler)
+    handler = FindHandler(extension);
 
-    if (!handler)
-        throw "Handler not found for extension";
+  if (!handler)
+    throw "Handler not found for extension";
 
-    handler->Save(filename, map);
+  handler->Save(filename, map);
 }
 
 BaseMapHandler* MapHandlerManager::FindHandler(const std::string& extension)
 {
-    // Check all main extensions
-    list<BaseMapHandler*>::iterator it;
+  // Check all main extensions
+  list<BaseMapHandler*>::iterator it;
 
-    for (it = handlers.begin(); it != handlers.end(); ++it)
-    {
-        BaseMapHandler* handler = *it;
-        if (extension == handler->GetExtension())
-            return handler;
-    }
+  for (it = handlers.begin(); it != handlers.end(); ++it)
+  {
+    BaseMapHandler* handler = *it;
+    if (extension == handler->GetExtension())
+      return handler;
+  }
 
-    // Check all alternative extensions for each handler
-    for (it = handlers.begin(); it != handlers.end(); ++it)
-    {
-        BaseMapHandler* handler = *it;
-        const std::set<std::string> extensions = handler->GetAltExtensions();
-        if (extensions.find(extension) != extensions.end())
-            return handler;
-    }
+  // Check all alternative extensions for each handler
+  for (it = handlers.begin(); it != handlers.end(); ++it)
+  {
+    BaseMapHandler* handler = *it;
+    const std::set<std::string> extensions = handler->GetAltExtensions();
+    if (extensions.find(extension) != extensions.end())
+      return handler;
+  }
 
-    return NULL;
+  return NULL;
 }
 
 std::list<BaseMapHandler*> MapHandlerManager::GetWriteableHandlers()
 {
-    std::list<BaseMapHandler*> writeable;
-    list<BaseMapHandler*>::iterator it;
+  std::list<BaseMapHandler*> writeable;
+  list<BaseMapHandler*>::iterator it;
 
-    for (it = handlers.begin(); it != handlers.end(); ++it)
-    {
-        BaseMapHandler* handler = *it;
-        if (handler->CanWrite())
-            writeable.push_back(handler);
-    }
+  for (it = handlers.begin(); it != handlers.end(); ++it)
+  {
+    BaseMapHandler* handler = *it;
+    if (handler->CanWrite())
+      writeable.push_back(handler);
+  }
 
-    return writeable;
+  return writeable;
 }
 
 std::list<BaseMapHandler*> MapHandlerManager::GetReadableHandlers()
 {
-    std::list<BaseMapHandler*> readable;
-    list<BaseMapHandler*>::iterator it;
+  std::list<BaseMapHandler*> readable;
+  list<BaseMapHandler*>::iterator it;
 
-    for (it = handlers.begin(); it != handlers.end(); ++it)
-    {
-        BaseMapHandler* handler = *it;
-        if (handler->CanRead())
-            readable.push_back(handler);
-    }
+  for (it = handlers.begin(); it != handlers.end(); ++it)
+  {
+    BaseMapHandler* handler = *it;
+    if (handler->CanRead())
+      readable.push_back(handler);
+  }
 
-    return readable;
+  return readable;
 }
 
 const std::string MapHandlerManager::GetExtension(const std::string& filename, std::string::size_type& idx)
 {
-    idx = filename.rfind('.');
-    std::string extension;
+  idx = filename.rfind('.');
+  std::string extension;
 
-    if (idx != std::string::npos)
-        extension = filename.substr(idx + 1);
-    else
-        extension = "";
+  if (idx != std::string::npos)
+    extension = filename.substr(idx + 1);
+  else
+    extension = "";
 
-    transform(extension.begin(), extension.end(), extension.begin(), (int(*)(int)) std::tolower);
+  transform(extension.begin(), extension.end(), extension.begin(), (int (*)(int))std::tolower);
 
-    return extension;
+  return extension;
 }
 
 const string MapHandlerManager::ConvertFilename(const std::string& filename)
 {
-    //boost::filesystem::path pathFrom = boost::filesystem::path(filename);
-    //return pathFrom.string();
-    return filename;
+  // boost::filesystem::path pathFrom = boost::filesystem::path(filename);
+  // return pathFrom.string();
+  return filename;
 }

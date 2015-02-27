@@ -37,64 +37,65 @@
   */
 class BaseMapHandler
 {
-	public:
-	    /** Creates a handler.
-	      * @param name Name of the handler.
-	      * @param extension Main extension this handler handles.
-	      * @param description Description of what this handler does.
-	      * @param readable Is this handler able to load files.
-	      * @param writeable Is this handler able to save files.
-	      * @param alternatives Extra extensions this handler handles.
-	      */
-		BaseMapHandler(const std::string& name = "", const std::string& extension = "", const std::string& description = "",
-                       bool readable = true, bool writeable = true, const std::set<std::string>& alternatives = std::set<std::string>());
-		virtual ~BaseMapHandler();
+  public:
+  /** Creates a handler.
+    * @param name Name of the handler.
+    * @param extension Main extension this handler handles.
+    * @param description Description of what this handler does.
+    * @param readable Is this handler able to load files.
+    * @param writeable Is this handler able to save files.
+    * @param alternatives Extra extensions this handler handles.
+    */
+  BaseMapHandler(const std::string& name = "", const std::string& extension = "", const std::string& description = "",
+                 bool readable = true, bool writeable = true,
+                 const std::set<std::string>& alternatives = std::set<std::string>());
+  virtual ~BaseMapHandler();
 
-        /** Initializes the handler. Called by MapHandlerManager
-          * If nonzero is returned the handler will not be able to be used.
-          * @return 0 on success.
-          */
-        virtual int Init();
-        /** Loads a map given a filename
-          * @param filename Path to the file to load
-          * @param map Map object to load the map to.
-          */
-        virtual void Load(const std::string& filename, Map& map);
-        /** Loads a map given a stream object
-          * @param file Stream object to load data from
-          * @param map Map object to load the map to.
-          */
-        virtual void Load(std::istream& file, Map& map);
-        /** Saves a map given a filename
-          * @param filename Path to the file to save to.
-          * @param map Map object to save.
-          */
-        virtual void Save(const std::string& filename, const Map& map);
-        /** Saves a map given a stream object
-          * @param file Stream object to save data to.
-          * @param map Map object to save.
-          */
-        virtual void Save(std::ostream& file, const Map& map);
+  /** Initializes the handler. Called by MapHandlerManager
+    * If nonzero is returned the handler will not be able to be used.
+    * @return 0 on success.
+    */
+  virtual int Init();
+  /** Loads a map given a filename
+    * @param filename Path to the file to load
+    * @param map Map object to load the map to.
+    */
+  virtual void Load(const std::string& filename, Map& map);
+  /** Loads a map given a stream object
+    * @param file Stream object to load data from
+    * @param map Map object to load the map to.
+    */
+  virtual void Load(std::istream& file, Map& map);
+  /** Saves a map given a filename
+    * @param filename Path to the file to save to.
+    * @param map Map object to save.
+    */
+  virtual void Save(const std::string& filename, const Map& map);
+  /** Saves a map given a stream object
+    * @param file Stream object to save data to.
+    * @param map Map object to save.
+    */
+  virtual void Save(std::ostream& file, const Map& map);
 
-        const std::string& GetName() const {return name;}
-        const std::string& GetExtension() const {return extension;}
-        const std::string& GetDescription() const {return description;}
-        bool CanRead() const {return readable;}
-        bool CanWrite() const {return writeable;}
-        const std::set<std::string>& GetAltExtensions() const {return alternatives;}
+  const std::string& GetName() const { return name; }
+  const std::string& GetExtension() const { return extension; }
+  const std::string& GetDescription() const { return description; }
+  bool CanRead() const { return readable; }
+  bool CanWrite() const { return writeable; }
+  const std::set<std::string>& GetAltExtensions() const { return alternatives; }
 
-        void SetName(const std::string& _name) {name = _name;}
-        void SetExtension(const std::string& _extension) {extension = _extension;}
-        void SetDescription(const std::string& _description) {description = _description;}
-        void SetAltExtensions(const std::set<std::string>& alts) {alternatives = alts;}
+  void SetName(const std::string& _name) { name = _name; }
+  void SetExtension(const std::string& _extension) { extension = _extension; }
+  void SetDescription(const std::string& _description) { description = _description; }
+  void SetAltExtensions(const std::set<std::string>& alts) { alternatives = alts; }
 
-	protected:
-        std::string name;
-        std::string extension;
-        std::string description;
-        bool readable;
-        bool writeable;
-        std::set<std::string> alternatives;
+  protected:
+  std::string name;
+  std::string extension;
+  std::string description;
+  bool readable;
+  bool writeable;
+  std::set<std::string> alternatives;
 };
 
 #endif

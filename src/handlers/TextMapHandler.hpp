@@ -28,19 +28,20 @@
 /** Saves the map as a text file */
 class TextMapHandler : public BaseMapHandler
 {
-	public:
-		TextMapHandler();
-		~TextMapHandler();
-		/** @see BaseMapHandler::Load */
-        virtual void Load(std::istream& file, Map& map);
-        /** @see BaseMapHandler::Save */
-        virtual void Save(std::ostream& file, const Map& map);
-	private:
-        void ReadProperties(std::istream& file, Map& map);
-        void ReadLayers(std::istream& file, Map& map);
-        void ReadBackgrounds(std::istream& file, Map& map);
-        void ReadAnimations(std::istream& file, Map& map);
-        void ReadCollision(std::istream& file, Map& map);
+  public:
+  TextMapHandler();
+  ~TextMapHandler();
+  /** @see BaseMapHandler::Load */
+  virtual void Load(std::istream& file, Map& map);
+  /** @see BaseMapHandler::Save */
+  virtual void Save(std::ostream& file, const Map& map);
+
+  private:
+  void ReadProperties(std::istream& file, Map& map);
+  void ReadLayers(std::istream& file, Map& map);
+  void ReadBackgrounds(std::istream& file, Map& map);
+  void ReadAnimations(std::istream& file, Map& map);
+  void ReadCollision(std::istream& file, Map& map);
 };
 
 #endif

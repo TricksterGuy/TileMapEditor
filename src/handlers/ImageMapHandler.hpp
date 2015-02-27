@@ -28,14 +28,14 @@
 /** Saves the entire map as an image */
 class ImageMapHandler : public BaseMapHandler
 {
-	public:
-		ImageMapHandler();
-		~ImageMapHandler();
+  public:
+  ImageMapHandler();
+  ~ImageMapHandler();
 
-        /** See BaseMapHandler::Init */
-        virtual int Init();
-        /** @see BaseMapHandler::Save */
-        virtual void Save(std::ostream& file, const Map& map);
+  /** See BaseMapHandler::Init */
+  virtual int Init();
+  /** @see BaseMapHandler::Save */
+  virtual void Save(std::ostream& file, const Map& map);
 };
 
 #endif

@@ -27,12 +27,13 @@
 
 class TilemapEditorApp : public wxApp
 {
-    public:
-        TilemapEditorApp() : frame(NULL) {}
-        virtual bool OnInit();
-        wxFrame* CreateChildFrame(wxView* view);
-    private:
-        TilemapEditorFrame* frame;
+  public:
+  TilemapEditorApp() : frame(NULL) {}
+  virtual bool OnInit();
+  wxFrame* CreateChildFrame(wxView* view);
+
+  private:
+  TilemapEditorFrame* frame;
 };
 
 DECLARE_APP(TilemapEditorApp);

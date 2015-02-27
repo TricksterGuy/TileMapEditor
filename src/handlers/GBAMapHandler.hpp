@@ -28,15 +28,15 @@
 /** Saves each layer of the map as a background appropriate for gba modes 0-2 */
 class GBAMapHandler : public BaseMapHandler
 {
-	public:
-		GBAMapHandler();
-		~GBAMapHandler();
+  public:
+  GBAMapHandler();
+  ~GBAMapHandler();
 
-        /** @see BaseMapHandler::Save */
-        virtual void Save(std::ostream& file, const Map& map);
+  /** @see BaseMapHandler::Save */
+  virtual void Save(std::ostream& file, const Map& map);
 
-	private:
-        void WriteC(std::ostream& file, const Map& map, const Magick::IndexPacket* pixels, std::vector<Magick::Image> tiles);
+  private:
+  void WriteC(std::ostream& file, const Map& map, const Magick::IndexPacket* pixels, std::vector<Magick::Image> tiles);
 };
 
 #endif

@@ -28,25 +28,26 @@
 /** Saves the map as an xml file see documentation for format */
 class XmlMapHandler : public BaseMapHandler
 {
-	public:
-		XmlMapHandler();
-		~XmlMapHandler();
-		/** @see BaseMapHandler::Load */
-        virtual void Load(std::istream& file, Map& map);
-        /** @see BaseMapHandler::Save */
-        virtual void Save(std::ostream& file, const Map& map);
-	private:
-        void ReadProperties(wxXmlNode* root, Map& map);
-        void ReadLayer(wxXmlNode* root, Map& map);
-        void ReadBackground(wxXmlNode* root, Map& map);
-        void ReadAnimation(wxXmlNode* root, Map& map);
-        void ReadCollision(wxXmlNode* root, Map& map);
-        void WriteProperties(wxXmlNode* root, const Map& map);
-        void WriteLayer(wxXmlNode* root, const Map& map, const Layer& layer);
-        void WriteBackground(wxXmlNode* root, const Map& map, const Background& background);
-        void WriteAnimation(wxXmlNode* root, const Map& map, const AnimatedTile& animatedTile);
-        void WriteCollision(wxXmlNode* root, const Map& map);
-        void WriteAttributes(wxXmlNode* root, const DrawAttributes& attr);
+  public:
+  XmlMapHandler();
+  ~XmlMapHandler();
+  /** @see BaseMapHandler::Load */
+  virtual void Load(std::istream& file, Map& map);
+  /** @see BaseMapHandler::Save */
+  virtual void Save(std::ostream& file, const Map& map);
+
+  private:
+  void ReadProperties(wxXmlNode* root, Map& map);
+  void ReadLayer(wxXmlNode* root, Map& map);
+  void ReadBackground(wxXmlNode* root, Map& map);
+  void ReadAnimation(wxXmlNode* root, Map& map);
+  void ReadCollision(wxXmlNode* root, Map& map);
+  void WriteProperties(wxXmlNode* root, const Map& map);
+  void WriteLayer(wxXmlNode* root, const Map& map, const Layer& layer);
+  void WriteBackground(wxXmlNode* root, const Map& map, const Background& background);
+  void WriteAnimation(wxXmlNode* root, const Map& map, const AnimatedTile& animatedTile);
+  void WriteCollision(wxXmlNode* root, const Map& map);
+  void WriteAttributes(wxXmlNode* root, const DrawAttributes& attr);
 };
 
 #endif
