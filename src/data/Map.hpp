@@ -1,14 +1,35 @@
+/******************************************************************************************************
+ * Tile Map Editor
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ *
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * excluding commercial applications, and to alter it and redistribute it freely,
+ * subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented;
+ *    you must not claim that you wrote the original software.
+ *    An acknowledgement in your documentation and link to the original version is required.
+ *
+ * 2. Altered source versions must be plainly marked as such,
+ *    and must not be misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution.
+ ******************************************************************************************************/
 #ifndef MAP_HPP
 #define MAP_HPP
 
+#include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
-#include <cstdint>
-#include <boost/scoped_ptr.hpp>
-#include "Layer.hpp"
-#include "CollisionLayer.hpp"
-#include "Background.hpp"
+
 #include "AnimatedTile.hpp"
+#include "Background.hpp"
+#include "CollisionLayer.hpp"
+#include "Layer.hpp"
 
 #define MIN_TILE_SIZE ((uint32_t)4)
 #define MAX_TILE_SIZE ((uint32_t)256)
@@ -30,14 +51,9 @@ class Map
     */
   Map(const std::string& name = "", const std::string& filename = "", uint32_t width = 1, uint32_t height = 1,
       uint32_t tile_width = 8, uint32_t tile_height = 8);
-  Map(const Map& map);
-  ~Map();
-  Map& operator=(const Map& map);
 
   /** Clears the map. */
   void Clear();
-  /** Destroys the map releasing any resources it owns */
-  void Destroy();
   /** Shifts the entire map in any direction a certain number of tiles.
     * @param horizontal amount to move left or right (negative = left).
     * @param vertical amount to move up or down (negative = up).
@@ -82,7 +98,7 @@ class Map
   const AnimatedTile& GetAnimatedTile(const uint32_t index) const { return animated_tiles[index]; }
 
   CollisionLayer* GetCollisionLayer() const { return collision_layer.get(); }
-  bool HasCollisionLayer() const { return collision_layer != NULL; }
+  bool HasCollisionLayer() const { return collision_layer != nullptr; }
 
   void SetFilename(const std::string& _filename) { filename = _filename; }
   void SetName(const std::string& _name) { name = _name; }

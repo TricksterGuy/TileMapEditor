@@ -1,6 +1,9 @@
+// *** ADDED BY HEADER FIXUP ***
+#include "istream"
+// *** END ***
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,11 +21,12 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
+#include "BinaryMapHandler.hpp"
 
-#include <iostream>
-#include <fstream>
-#include <cstring>
 #include <algorithm>
+#include <cstring>
+#include <fstream>
+#include <iostream>
 
 #ifdef LINUX
 #include <netinet/in.h>
@@ -33,10 +37,9 @@
 #endif
 #endif
 
-#include "BinaryMapHandler.hpp"
-#include "TileBasedCollisionLayer.hpp"
-#include "PixelBasedCollisionLayer.hpp"
 #include "AnimatedTile.hpp"
+#include "PixelBasedCollisionLayer.hpp"
+#include "TileBasedCollisionLayer.hpp"
 
 #define MAJOR 2
 #define MINOR 0
@@ -47,11 +50,6 @@ BinaryMapHandler::BinaryMapHandler()
 : BaseMapHandler("Official Map Format", "map", "Basic format this program recognizes")
 {
 }
-
-BinaryMapHandler::~BinaryMapHandler()
-{
-}
-
 
 void BinaryMapHandler::Load(const std::string& mapfile, Map& map)
 {

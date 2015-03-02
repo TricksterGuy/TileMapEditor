@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,7 +18,6 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
 #include "DrawAttributes.hpp"
 
 void DrawAttributes::GetPosition(int32_t& _x, int32_t& _y) const
@@ -27,28 +26,28 @@ void DrawAttributes::GetPosition(int32_t& _x, int32_t& _y) const
   _y = y;
 }
 
-void DrawAttributes::SetPosition(int32_t _x, int32_t _y)
-{
-  x = _x;
-  y = _y;
-}
-
 void DrawAttributes::GetOrigin(int32_t& _x, int32_t& _y) const
 {
   _x = origin_x;
   _y = origin_y;
 }
 
-void DrawAttributes::SetOrigin(int32_t _x, int32_t _y)
-{
-  origin_x = _x;
-  origin_y = _y;
-}
-
 void DrawAttributes::GetScale(float& _x, float& _y) const
 {
   _x = scale_x;
   _y = scale_y;
+}
+
+void DrawAttributes::SetPosition(int32_t _x, int32_t _y)
+{
+  x = _x;
+  y = _y;
+}
+
+void DrawAttributes::SetOrigin(int32_t _x, int32_t _y)
+{
+  origin_x = _x;
+  origin_y = _y;
 }
 
 void DrawAttributes::SetScale(float _x, float _y)

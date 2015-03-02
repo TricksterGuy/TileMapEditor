@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,7 +18,6 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
 #include "MapView.hpp"
 
 #include "TilemapEditorApp.hpp"
@@ -30,15 +29,10 @@ bool MapView::OnCreate(wxDocument* doc, long flags)
   if (!wxView::OnCreate(doc, flags))
     return false;
 
-  // reuse the existing window and canvas
   wxFrame* frame = wxGetApp().CreateChildFrame(this);
   mapCanvas = new MapCanvas(this, frame);
   SetFrame(frame);
   frame->Show();
-
-  // Initialize the edit menu Undo and Redo items
-  // doc->GetCommandProcessor()->SetEditMenu(app.GetMainWindowEditMenu());
-  // doc->GetCommandProcessor()->Initialize();
 
   return true;
 }
@@ -65,7 +59,7 @@ void MapView::OnDraw(wxDC* dc)
 
 
   // Draw all backgrounds
-  for (ParallaxBackground& background : backgrounds)
+  for (auto& background : backgrounds)
   {
     background.Update(gcdc);
     background.Draw(gcdc);
@@ -88,7 +82,7 @@ void MapView::OnDraw(wxDC* dc)
   for (unsigned int k = 0; k < map.GetNumLayers(); k++)
   {
     /*if (!viewLayer[k]) continue;*/
-    DrawLayer(gcdc, k, vxi, vyi, vxf, vyf);
+    DrawLayer(gcdc, map.GetLayer(k), vxi, vyi, vxf, vyf);
   }
 
   // Draw Collision Layer
@@ -128,7 +122,7 @@ void MapView::OnUpdate(wxView* sender, wxObject* hint)
   {
     // Update Backgrounds
     backgrounds.clear();
-    for (const Background& background : map.GetBackgrounds())
+    for (const auto& background : map.GetBackgrounds())
     {
       wxFileName bg_file(GetDocument()->GetFilename());
       bg_file.SetFullName(background.GetFilename());
@@ -194,10 +188,9 @@ void MapView::TransformScreenToTile(int x, int y, int& outx, int& outy, bool bou
   }
 }
 
-void MapView::DrawLayer(wxGCDC& dc, int id, int sxi, int syi, int sxf, int syf)
+void MapView::DrawLayer(wxGCDC& dc, const Layer& layer, int sxi, int syi, int sxf, int syf)
 {
   Map& map = GetMap();
-  Layer& layer = map.GetLayer(id);
 
   wxBitmap layerBitmap((layer.GetWidth()) * map.GetTileWidth(), (layer.GetHeight()) * map.GetTileHeight(), 32);
   wxMemoryDC layerDc(layerBitmap);

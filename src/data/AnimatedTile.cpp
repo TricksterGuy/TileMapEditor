@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,36 +18,17 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
 #include "AnimatedTile.hpp"
 
 AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times)
-: name(_name), delay(_delay), type(_type), times(_times)  //, cachedFrame(0)
+: name(_name), delay(_delay), type(_type), times(_times)
 {
 }
 
 AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times,
                            const std::vector<int32_t>& _frames)
-: name(_name), delay(_delay), type(_type), times(_times), frames(_frames)  //, cachedFrame(0)
+: name(_name), delay(_delay), type(_type), times(_times), frames(_frames)
 {
-}
-
-AnimatedTile::~AnimatedTile()
-{
-}
-
-AnimatedTile& AnimatedTile::operator=(const AnimatedTile& other)
-{
-  if (this != &other)
-  {
-    name = other.name;
-    delay = other.delay;
-    type = other.type;
-    times = other.times;
-    frames = other.frames;
-  }
-
-  return *this;
 }
 
 void AnimatedTile::Add(int32_t frame)

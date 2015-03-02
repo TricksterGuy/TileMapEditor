@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,13 +18,12 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
 #ifndef LAYER_HPP
 #define LAYER_HPP
 
-#include <vector>
-#include <string>
 #include <cstdint>
+#include <string>
+#include <vector>
 
 #include "DrawAttributes.hpp"
 
@@ -60,9 +59,6 @@ class Layer : public DrawAttributes
   Layer(const std::string& name = "", uint32_t width = 1, uint32_t height = 1,
         const DrawAttributes& attr = DrawAttributes(0));
 
-  Layer(const Layer& layer);
-
-  Layer& operator=(const Layer& layer);
   int32_t& operator[](const uint32_t index) { return data[index]; }
   const int32_t& operator[](const uint32_t index) const { return data[index]; }
 

@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,13 +18,12 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
+#ifndef ANIMATED_TILE_HPP
+#define ANIMATED_TILE_HPP
 
-#ifndef ANIMATEDTILE_HPP
-#define ANIMATEDTILE_HPP
-
-#include <vector>
 #include <cstdint>
 #include <string>
+#include <vector>
 
 
 namespace Animation
@@ -78,9 +77,7 @@ class AnimatedTile
     */
   AnimatedTile(const std::string& name, int32_t delay, Animation::Type type, int32_t times,
                const std::vector<int32_t>& frames);
-  ~AnimatedTile();
 
-  AnimatedTile& operator=(const AnimatedTile& other);
   int32_t& operator[](const int index) { return frames[index]; }
   const int32_t& operator[](const int index) const { return frames[index]; }
 

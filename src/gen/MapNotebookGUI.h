@@ -1,3 +1,6 @@
+// *** ADDED BY HEADER FIXUP ***
+#include "string"
+// *** END ***
 ///////////////////////////////////////////////////////////////////////////
 // C++ code generated with wxFormBuilder (version Nov  5 2013)
 // http://www.wxformbuilder.org/

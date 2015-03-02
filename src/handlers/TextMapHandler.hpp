@@ -1,6 +1,9 @@
+// *** ADDED BY HEADER FIXUP ***
+#include "istream"
+// *** END ***
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,11 +21,11 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
-#ifndef TEXTMAPHANDLER_HPP
-#define TEXTMAPHANDLER_HPP
+#ifndef TEXT_MAP_HANDLER_HPP
+#define TEXT_MAP_HANDLER_HPP
 
 #include <iostream>
+
 #include "BaseMapHandler.hpp"
 
 /** Saves the map as a text file */
@@ -30,7 +33,6 @@ class TextMapHandler : public BaseMapHandler
 {
   public:
   TextMapHandler();
-  ~TextMapHandler();
   /** @see BaseMapHandler::Load */
   virtual void Load(std::istream& file, Map& map);
   /** @see BaseMapHandler::Save */

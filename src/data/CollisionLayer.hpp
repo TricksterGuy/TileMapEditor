@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,9 +18,8 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
-#ifndef COLLISIONLAYER_HPP
-#define COLLISIONLAYER_HPP
+#ifndef COLLISION_LAYER_HPP
+#define COLLISION_LAYER_HPP
 
 #include <cstdint>
 
@@ -60,9 +59,9 @@ class CollisionLayer
   public:
   /** Creates a new empty collision layer.
     * @param type Type of collision layer to create.
-*/
-  CollisionLayer(Collision::Type type = Collision::TileBased);
-  virtual ~CollisionLayer();
+    */
+  CollisionLayer(Collision::Type _type = Collision::TileBased) : type(_type) {}
+  virtual ~CollisionLayer() {}
 
   /** Clears the collision layer. */
   virtual void Clear() = 0;

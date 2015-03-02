@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,14 +18,13 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
 #ifndef CLOCK_HPP
 #define CLOCK_HPP
 
 #include <vector>
+#include <wx/docview.h>
 #include <wx/timer.h>
 #include <wx/wx.h>
-#include <wx/docview.h>
 
 #include "MapViewUpdate.hpp"
 
@@ -37,7 +36,6 @@ class Clock : public wxTimer
 {
   public:
   Clock(unsigned int rate = 1);
-  ~Clock();
 
   void Add(wxView* owner);
   void Remove(wxView* owner);

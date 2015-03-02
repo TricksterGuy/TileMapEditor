@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,11 +18,10 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
 #include "PixelBasedCollisionLayer.hpp"
 
 PixelBasedCollisionLayer::PixelBasedCollisionLayer(const std::vector<Rectangle>& rectangles)
-: CollisionLayer(Collision::PixelBased), data(rectangles)
+: CollisionLayer(Collision::PixelBased), region(rectangles)
 {
 }
 
@@ -30,30 +29,11 @@ PixelBasedCollisionLayer::PixelBasedCollisionLayer() : CollisionLayer(Collision:
 {
 }
 
-PixelBasedCollisionLayer::~PixelBasedCollisionLayer()
-{
-}
-
-PixelBasedCollisionLayer::PixelBasedCollisionLayer(const PixelBasedCollisionLayer& layer)
-: CollisionLayer(layer.type), data(layer.data)
-{
-}
-
-PixelBasedCollisionLayer& PixelBasedCollisionLayer::operator=(const PixelBasedCollisionLayer& layer)
-{
-  if (this != &layer)
-  {
-    type = layer.type;
-    data = layer.data;
-  }
-  return *this;
-}
-
 bool PixelBasedCollisionLayer::operator==(const PixelBasedCollisionLayer& other) const
 {
   if (type != other.type)
     return false;
-  if (data != other.data)
+  if (region != other.region)
     return false;
 
   return true;
@@ -61,11 +41,11 @@ bool PixelBasedCollisionLayer::operator==(const PixelBasedCollisionLayer& other)
 
 void PixelBasedCollisionLayer::Shift(int horizontal, int vertical, bool wrap)
 {
-  for (int i = 0; i < data.Size(); i++)
+  for (int i = 0; i < region.Size(); i++)
   {
     /// TODO handle the case of wrapping.
     /// TODO also handle out of bounds rectangles.
-    data.Move(horizontal, vertical);
+    region.Move(horizontal, vertical);
   }
 }
 

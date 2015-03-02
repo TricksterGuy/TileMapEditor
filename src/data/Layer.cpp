@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,9 +18,9 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
 #include "Layer.hpp"
-#include <cstring>
+
+#include <cstring> // for memset
 
 Layer::Layer(const std::string& _name, uint32_t _width, uint32_t _height, const std::vector<int32_t>& _data,
              const DrawAttributes& attr)
@@ -37,34 +37,6 @@ Layer::Layer(const std::string& _name, uint32_t _width, uint32_t _height, const 
 Layer::Layer(const std::string& _name, uint32_t _width, uint32_t _height, const DrawAttributes& attr)
 : DrawAttributes(attr), name(_name), width(_width), height(_height), data(width * height, -1)
 {
-}
-
-Layer::Layer(const Layer& layer)
-: DrawAttributes(layer), name(layer.name), width(layer.width), height(layer.height), data(layer.data)
-{
-}
-
-Layer& Layer::operator=(const Layer& layer)
-{
-  if (this != &layer)
-  {
-    name = layer.name;
-    width = layer.width;
-    height = layer.height;
-    data = layer.data;
-    depth = layer.depth;
-    x = layer.x;
-    y = layer.y;
-    origin_x = layer.origin_x;
-    origin_y = layer.origin_y;
-    scale_x = layer.scale_x;
-    scale_y = layer.scale_y;
-    rotation = layer.rotation;
-    opacity = layer.opacity;
-    blend_mode = layer.blend_mode;
-    blend_color = layer.blend_color;
-  }
-  return *this;
 }
 
 void Layer::Resize(uint32_t newwidth, uint32_t newheight, bool copy)

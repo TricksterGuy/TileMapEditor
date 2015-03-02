@@ -1,5 +1,11 @@
+// *** ADDED BY HEADER FIXUP ***
+#include "string"
+// *** END ***
+#ifndef HEADER_C96C729E7C84CA42
+#define HEADER_C96C729E7C84CA42
+
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  4 2014)
+// C++ code generated with wxFormBuilder (version Jan  4 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -36,10 +42,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class TilemapEditorGUI
 ///////////////////////////////////////////////////////////////////////////////
-class TilemapEditorGUI : public wxDocMDIParentFrame 
+class TilemapEditorGUI : public wxDocMDIParentFrame
 {
 	private:
-	
+
 	protected:
 		wxMenuBar* menubar;
 		wxMenu* fileMenu;
@@ -47,7 +53,7 @@ class TilemapEditorGUI : public wxDocMDIParentFrame
 		wxMenu* editMenu;
 		wxMenu* helpMenu;
 		wxStatusBar* statusBar;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnImportText( wxCommandEvent& event ) { event.Skip(); }
@@ -59,14 +65,16 @@ class TilemapEditorGUI : public wxDocMDIParentFrame
 		virtual void OnExportLayersAsImages( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
+
 		TilemapEditorGUI( wxDocManager* manager, wxFrame* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("TilemapEditor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 481,466 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-		
+
 		~TilemapEditorGUI();
-	
+
 };
 
 #endif //__TILEMAPEDITORGUI_H__
+#endif // header guard 
+

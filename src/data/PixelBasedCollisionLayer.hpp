@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,11 +18,11 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
-#ifndef PIXELBASEDCOLLISIONLAYER_HPP
-#define PIXELBASEDCOLLISIONLAYER_HPP
+#ifndef PIXEL_BASED_COLLISION_LAYER_HPP
+#define PIXEL_BASED_COLLISION_LAYER_HPP
 
 #include <vector>
+
 #include "CollisionLayer.hpp"
 #include "Rectangle.hpp"
 #include "Region.hpp"
@@ -37,28 +37,25 @@ class PixelBasedCollisionLayer : public CollisionLayer
   PixelBasedCollisionLayer(const std::vector<Rectangle>& rectangles);
   /** Creates an empty collision layer that is pixel based */
   PixelBasedCollisionLayer();
-  ~PixelBasedCollisionLayer();
-  PixelBasedCollisionLayer(const PixelBasedCollisionLayer& layer);
-  PixelBasedCollisionLayer& operator=(const PixelBasedCollisionLayer& layer);
   bool operator==(const PixelBasedCollisionLayer& other) const;
   bool operator!=(const PixelBasedCollisionLayer& other) const { return !(*this == other); }
 
   /** @see CollisionLayer::clear */
-  virtual void Clear() { data.Clear(); }
+  virtual void Clear() { region.Clear(); }
   /** @see CollisionLayer::shift */
   virtual void Shift(int horizontal, int vertical, bool wrap = false);
   /** @see CollisionLayer::resize */
   virtual void Resize(uint32_t width, uint32_t height, bool copy = true);
 
-  const Region& GetData() const { return data; }
+  const Region& GetData() const { return region; }
 
-  void Add(const Rectangle& rectangle) { data.Add(rectangle); }
-  void Xor(const Rectangle& rectangle) { data.Xor(rectangle); }
-  void Subtract(const Rectangle& rectangle) { data.Subtract(rectangle); }
-  void Intersect(const Rectangle& rectangle) { data.Intersect(rectangle); }
+  void Add(const Rectangle& rectangle) { region.Add(rectangle); }
+  void Xor(const Rectangle& rectangle) { region.Xor(rectangle); }
+  void Subtract(const Rectangle& rectangle) { region.Subtract(rectangle); }
+  void Intersect(const Rectangle& rectangle) { region.Intersect(rectangle); }
 
   protected:
-  Region data;
+  Region region;
 };
 
 #endif

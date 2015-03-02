@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,10 +18,9 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
 #include "HandlerUtils.hpp"
 
-/** mapToImage
+/** MapToImage
   *
   * Converts a map into an ImageMagick Image
   */
@@ -34,8 +33,10 @@ int HandlerUtils::MapToImage(const Map& map, Magick::Image& image)
 
   Magick::Color color = Magick::ColorRGB(0, 0, 0);
   color.alpha(0);
+
   int width = map.GetWidth() * map.GetTileWidth();
   int height = map.GetHeight() * map.GetTileHeight();
+
   image.matte(true);
   image.resize(Magick::Geometry(width, height));
   image.backgroundColor(color);
@@ -43,9 +44,8 @@ int HandlerUtils::MapToImage(const Map& map, Magick::Image& image)
 
   try
   {
-    for (unsigned int k = 0; k < map.GetNumLayers(); k++)
+    for (const auto& layer : map.GetLayers())
     {
-      const Layer& layer = map.GetLayer(k);
       if (HandlerUtils::LayerToImage(map, layer, tiles, image))
         return -1;
     }

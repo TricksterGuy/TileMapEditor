@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,11 +18,12 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
+#include "Region.hpp"
 
 #include <algorithm>
-#include <set>
 #include <list>
-#include "Region.hpp"
+#include <set>
+
 #include "Logger.hpp"
 
 Region::Region(const std::vector<Rectangle>& _rectangles) : rectangles(_rectangles)
@@ -47,7 +48,7 @@ bool Region::Contains(int32_t x, int32_t y) const
 bool Region::Contains(const Rectangle& r) const
 {
   std::set<Rectangle> intersectSet;
-  for (const Rectangle& inr : rectangles)
+  for (const auto& inr : rectangles)
   {
     Rectangle overlap;
     if (r.Intersects(inr, overlap))
@@ -62,14 +63,13 @@ bool Region::Contains(const Rectangle& r) const
   int64_t total = 0;
   for (const Rectangle& inr : intersect) total += inr.Area();
 
-
   // If the of the inner rectangles is less than the rectangles area then we know it doesn't cover the rectangle
   if (total < r.Area())
     return false;
 
   std::sort(intersect.begin(), intersect.end());
   std::set<int32_t> events;
-  for (const Rectangle& inr : intersect)
+  for (const auto& inr : intersect)
   {
     events.insert(inr.x);
     events.insert(inr.x + inr.width);
@@ -86,19 +86,19 @@ bool Region::Contains(const Rectangle& r) const
     if (!activeSet.empty())
     {
       std::set<int> events;
-      for (const Rectangle& inr : activeSet)
+      for (const auto& inr : activeSet)
       {
         events.insert(inr.y);
         events.insert(inr.y + inr.height);
       }
       int prevEvent = 0;
       int overlap = 0;
-      for (const int32_t& event2 : events)
+      for (const auto& event2 : events)
       {
         if (overlap != 0)
           cutlength += event2 - prevEvent;
 
-        for (const Rectangle& inr : activeSet)
+        for (const auto& inr : activeSet)
         {
           // Enter event
           if (inr.y == event2)
@@ -113,10 +113,7 @@ bool Region::Contains(const Rectangle& r) const
     area += cutlength * (event - lastevent);
 
     // Leave event? remove rectangles.
-    activeSet.remove_if([&event](const Rectangle& inr)
-                        {
-                          return inr.x + inr.width == event;
-                        });
+    activeSet.remove_if([&event](const Rectangle& inr) { return inr.x + inr.width == event; });
 
     // Enter event add rectangles to active set.
     while (rptr < (int)intersect.size() && intersect[rptr].x == event)
@@ -138,7 +135,7 @@ Rectangle Region::Bounds() const
   int32_t minx, miny, maxx, maxy;
   rectangles[0].GetCoords(minx, miny, maxx, maxy);
 
-  for (const Rectangle& r : rectangles)
+  for (const auto& r : rectangles)
   {
     int32_t cix, ciy, cfx, cfy;
     r.GetCoords(cix, ciy, cfx, cfy);
@@ -159,7 +156,7 @@ Rectangle Region::Bounds() const
 void Region::Intersect(const Rectangle& r)
 {
   std::set<Rectangle> intersect;
-  for (const Rectangle& inr : rectangles)
+  for (const auto& inr : rectangles)
   {
     Rectangle overlap;
     if (r.Intersects(inr, overlap))
@@ -171,7 +168,7 @@ void Region::Intersect(const Rectangle& r)
 
 bool Region::Intersects(const Rectangle& r)
 {
-  for (const Rectangle& inr : rectangles)
+  for (const auto& inr : rectangles)
   {
     Rectangle overlap;
     if (r.Intersects(inr, overlap))
@@ -186,7 +183,7 @@ void Region::Subtract(const Rectangle& remove)
 {
   std::vector<Rectangle> newRectangles = rectangles;
   rectangles.clear();
-  for (const Rectangle& rectangle : newRectangles)
+  for (const auto& rectangle : newRectangles)
   {
     Rectangle overlap;
     // If it doesn't intersect we are ok, but if it does
@@ -214,9 +211,7 @@ void Region::Subtract(const Rectangle& remove)
         Add(bottom);
     }
     else
-    {
       rectangles.push_back(rectangle);
-    }
   }
 }
 
@@ -235,7 +230,7 @@ void Region::Xor(const Rectangle& remove)
 {
   std::vector<Rectangle> newRectangles = rectangles;
   rectangles.clear();
-  for (const Rectangle& rectangle : newRectangles)
+  for (const auto& rectangle : newRectangles)
   {
     Rectangle overlap;
     // If it doesn't intersect we are ok, but if it does
@@ -279,9 +274,7 @@ void Region::Xor(const Rectangle& remove)
         Add(bottom2);
     }
     else
-    {
       rectangles.push_back(rectangle);
-    }
   }
 }
 
@@ -289,7 +282,7 @@ int64_t Region::Area() const
 {
   sort(rectangles.begin(), rectangles.end());
   std::set<int32_t> events;
-  for (const Rectangle& inr : rectangles)
+  for (const auto& inr : rectangles)
   {
     events.insert(inr.x);
     events.insert(inr.x + inr.width);
@@ -299,26 +292,26 @@ int64_t Region::Area() const
   int lastevent = 0;
   int64_t area = 0;
   std::list<Rectangle> activeSet;
-  for (const int32_t& event : events)
+  for (const auto& event : events)
   {
     int32_t cutlength = 0;
     // Get Area and add it.
     if (!activeSet.empty())
     {
       std::set<int32_t> events;
-      for (const Rectangle& inr : activeSet)
+      for (const auto& inr : activeSet)
       {
         events.insert(inr.y);
         events.insert(inr.y + inr.height);
       }
       int prevEvent = 0;
       int overlap = 0;
-      for (const int32_t& event2 : events)
+      for (const auto& event2 : events)
       {
         if (overlap != 0)
           cutlength += event2 - prevEvent;
 
-        for (const Rectangle& inr : activeSet)
+        for (const auto& inr : activeSet)
         {
           // Enter event
           if (inr.y == event2)
@@ -333,10 +326,7 @@ int64_t Region::Area() const
     area += cutlength * (event - lastevent);
 
     // Leave event? remove rectangles.
-    activeSet.remove_if([&event](const Rectangle& inr)
-                        {
-                          return inr.x + inr.width == event;
-                        });
+    activeSet.remove_if([&event](const Rectangle& inr) { return inr.x + inr.width == event; });
 
     // Enter event add rectangles to active set.
     while (rptr < (int)rectangles.size() && rectangles[rptr].x == event)
@@ -363,10 +353,8 @@ void Region::Clear()
 void Region::DoAdd(const Rectangle& r)
 {
   VerboseLog("Adding rectangle(%d %d %d %d)", r.x, r.y, r.width, r.height);
-  std::vector<Rectangle>::iterator it = remove_if(rectangles.begin(), rectangles.end(), [&r](Rectangle& inr)
-                                                  {
-    return r.Contains(inr);
-  });
+  std::vector<Rectangle>::iterator it = remove_if(rectangles.begin(), rectangles.end(),
+                                                  [&r](Rectangle& inr) { return r.Contains(inr); });
   rectangles.erase(it, rectangles.end());
   rectangles.push_back(r);
 }

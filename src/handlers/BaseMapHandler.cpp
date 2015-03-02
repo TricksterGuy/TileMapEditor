@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,9 +18,10 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
 #include "BaseMapHandler.hpp"
+
 #include <fstream>
+
 #include "Logger.hpp"
 
 BaseMapHandler::BaseMapHandler(const std::string& _name, const std::string& _extension, const std::string& _description,
@@ -29,10 +30,6 @@ BaseMapHandler::BaseMapHandler(const std::string& _name, const std::string& _ext
   alternatives(_alternatives)
 {
   DebugLog("Init %s %s handles: %s", name.c_str(), description.c_str(), extension.c_str());
-}
-
-BaseMapHandler::~BaseMapHandler()
-{
 }
 
 int BaseMapHandler::Init()

@@ -39,7 +39,6 @@
 		<Unit filename="src/data/AnimatedTile.hpp" />
 		<Unit filename="src/data/Background.cpp" />
 		<Unit filename="src/data/Background.hpp" />
-		<Unit filename="src/data/CollisionLayer.cpp" />
 		<Unit filename="src/data/CollisionLayer.hpp" />
 		<Unit filename="src/data/DrawAttributes.cpp" />
 		<Unit filename="src/data/DrawAttributes.hpp" />

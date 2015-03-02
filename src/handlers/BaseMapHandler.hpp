@@ -1,6 +1,9 @@
+// *** ADDED BY HEADER FIXUP ***
+#include "istream"
+// *** END ***
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,13 +21,13 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
+#ifndef BASE_MAP_HANDLER_HPP
+#define BASE_MAP_HANDLER_HPP
 
-#ifndef BASEMAPHANDLER_HPP
-#define BASEMAPHANDLER_HPP
-
-#include <string>
-#include <set>
 #include <iostream>
+#include <set>
+#include <string>
+
 #include "Map.hpp"
 
 /** Base class for all map handlers
@@ -49,7 +52,7 @@ class BaseMapHandler
   BaseMapHandler(const std::string& name = "", const std::string& extension = "", const std::string& description = "",
                  bool readable = true, bool writeable = true,
                  const std::set<std::string>& alternatives = std::set<std::string>());
-  virtual ~BaseMapHandler();
+  virtual ~BaseMapHandler() {}
 
   /** Initializes the handler. Called by MapHandlerManager
     * If nonzero is returned the handler will not be able to be used.

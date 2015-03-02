@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,12 +18,12 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
-#ifndef TILEBASEDCOLLISIONLAYER_HPP
-#define TILEBASEDCOLLISIONLAYER_HPP
+#ifndef TILE_BASED_COLLISION_LAYER_HPP
+#define TILE_BASED_COLLISION_LAYER_HPP
 
 #include <cstdint>
 #include <vector>
+
 #include "CollisionLayer.hpp"
 #include "DrawAttributes.hpp"
 
@@ -51,10 +51,8 @@ class TileBasedCollisionLayer : public CollisionLayer
     * @param height Nonzero Height of the collision layer.
     */
   TileBasedCollisionLayer(int width = 1, int height = 1);
-  TileBasedCollisionLayer(const TileBasedCollisionLayer& layer);
-  ~TileBasedCollisionLayer();
-  TileBasedCollisionLayer& operator=(const TileBasedCollisionLayer& layer);
   bool operator==(const TileBasedCollisionLayer& other);
+  bool operator!=(const TileBasedCollisionLayer& other) { return !(*this == other); }
   const int32_t& operator[](const uint32_t index) const { return data[index]; }
   int32_t& operator[](const uint32_t index) { return data[index]; }
 

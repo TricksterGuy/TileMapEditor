@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,61 +18,79 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
+#include "MapHandlerManager.hpp"
 
 #include <algorithm>
 #include <cctype>
 #include <cstdio>
 //#include <boost/filesystem.hpp>
-#include "MapHandlerManager.hpp"
 
-using namespace std;
-
-MapHandlerManager::~MapHandlerManager()
+std::string GetExtension(const std::string& filename, std::string::size_type& idx)
 {
-  list<BaseMapHandler*>::iterator it;
+  std::string extension;
 
-  for (it = handlers.begin(); it != handlers.end(); ++it)
-  {
-    delete *it;
-  }
-  handlers.clear();
+  idx = filename.rfind('.');
+  if (idx != std::string::npos)
+    extension = filename.substr(idx + 1);
+
+  std::transform(extension.begin(), extension.end(), extension.begin(), (int (*)(int))std::tolower);
+
+  return extension;
+}
+
+std::string ConvertFilename(const std::string& filename)
+{
+  // boost::filesystem::path pathFrom = boost::filesystem::path(filename);
+  // return pathFrom.string();
+  return filename;
 }
 
 void MapHandlerManager::Add(BaseMapHandler* handler)
 {
-  handlers.push_back(handler);
+  handlers.emplace(handler->GetName(), std::unique_ptr<BaseMapHandler>(handler));
 }
 
-void MapHandlerManager::Remove(BaseMapHandler* handler)
+void MapHandlerManager::Remove(const std::string& name)
 {
-  handlers.remove(handler);
+  handlers.erase(name);
 }
 
-void MapHandlerManager::Load(const std::string& file, Map& map, BaseMapHandler* handler)
+void MapHandlerManager::Load(const std::string& file, Map& map, const std::string& name)
 {
   std::string::size_type idx;
   std::string filename = ConvertFilename(file);
   std::string extension = GetExtension(filename, idx);
-  transform(filename.begin() + idx, filename.end(), filename.begin() + idx, (int (*)(int))std::tolower);
+  std::transform(filename.begin() + idx, filename.end(), filename.begin() + idx, (int (*)(int))std::tolower);
+
+  BaseMapHandler* handler = NULL;
+
+  if (!name.empty())
+    handler = FindHandlerByName(name);
+
   if (!handler)
-    handler = FindHandler(extension);
+    handler = FindHandlerByExtension(extension);
 
   if (!handler)
     throw "Handler not found for extension";
 
-  map.Destroy();
+  //map.Destroy();
   handler->Load(filename, map);
 }
 
-void MapHandlerManager::Save(const std::string& file, Map& map, BaseMapHandler* handler)
+void MapHandlerManager::Save(const std::string& file, Map& map, const std::string& name)
 {
   std::string::size_type idx;
   std::string filename = ConvertFilename(file);
   std::string extension = GetExtension(filename, idx);
   transform(filename.begin() + idx, filename.end(), filename.begin() + idx, (int (*)(int))std::tolower);
 
+  BaseMapHandler* handler = NULL;
+
+  if (!name.empty())
+    handler = FindHandlerByName(name);
+
   if (!handler)
-    handler = FindHandler(extension);
+    handler = FindHandlerByExtension(extension);
 
   if (!handler)
     throw "Handler not found for extension";
@@ -80,40 +98,45 @@ void MapHandlerManager::Save(const std::string& file, Map& map, BaseMapHandler* 
   handler->Save(filename, map);
 }
 
-BaseMapHandler* MapHandlerManager::FindHandler(const std::string& extension)
+BaseMapHandler* MapHandlerManager::FindHandlerByExtension(const std::string& extension)
 {
   // Check all main extensions
-  list<BaseMapHandler*>::iterator it;
-
-  for (it = handlers.begin(); it != handlers.end(); ++it)
+  for (const auto& name_handler : handlers)
   {
-    BaseMapHandler* handler = *it;
+    const auto& handler = name_handler.second;
     if (extension == handler->GetExtension())
-      return handler;
+      return handler.get();
   }
 
   // Check all alternative extensions for each handler
-  for (it = handlers.begin(); it != handlers.end(); ++it)
+  for (const auto& name_handler : handlers)
   {
-    BaseMapHandler* handler = *it;
+    const auto& handler = name_handler.second;
     const std::set<std::string> extensions = handler->GetAltExtensions();
     if (extensions.find(extension) != extensions.end())
-      return handler;
+      return handler.get();
   }
 
   return NULL;
 }
 
+BaseMapHandler* MapHandlerManager::FindHandlerByName(const std::string& name)
+{
+  if (handlers.find(name) == handlers.end())
+    return NULL;
+
+  return handlers.at(name).get();
+}
+
 std::list<BaseMapHandler*> MapHandlerManager::GetWriteableHandlers()
 {
   std::list<BaseMapHandler*> writeable;
-  list<BaseMapHandler*>::iterator it;
 
-  for (it = handlers.begin(); it != handlers.end(); ++it)
+  for (const auto& name_handler : handlers)
   {
-    BaseMapHandler* handler = *it;
+    const auto& handler = name_handler.second;
     if (handler->CanWrite())
-      writeable.push_back(handler);
+      writeable.push_back(handler.get());
   }
 
   return writeable;
@@ -122,36 +145,27 @@ std::list<BaseMapHandler*> MapHandlerManager::GetWriteableHandlers()
 std::list<BaseMapHandler*> MapHandlerManager::GetReadableHandlers()
 {
   std::list<BaseMapHandler*> readable;
-  list<BaseMapHandler*>::iterator it;
 
-  for (it = handlers.begin(); it != handlers.end(); ++it)
+  for (const auto& name_handler : handlers)
   {
-    BaseMapHandler* handler = *it;
+    const auto& handler = name_handler.second;
     if (handler->CanRead())
-      readable.push_back(handler);
+      readable.push_back(handler.get());
   }
 
   return readable;
 }
 
-const std::string MapHandlerManager::GetExtension(const std::string& filename, std::string::size_type& idx)
+std::list<BaseMapHandler*> MapHandlerManager::GetHandlers()
 {
-  idx = filename.rfind('.');
-  std::string extension;
+  std::list<BaseMapHandler*> handler_list;
 
-  if (idx != std::string::npos)
-    extension = filename.substr(idx + 1);
-  else
-    extension = "";
+  for (const auto& name_handler : handlers)
+  {
+    const auto& handler = name_handler.second;
+    if (handler->CanRead() || handler->CanWrite())
+      handler_list.push_back(handler.get());
+  }
 
-  transform(extension.begin(), extension.end(), extension.begin(), (int (*)(int))std::tolower);
-
-  return extension;
-}
-
-const string MapHandlerManager::ConvertFilename(const std::string& filename)
-{
-  // boost::filesystem::path pathFrom = boost::filesystem::path(filename);
-  // return pathFrom.string();
-  return filename;
+  return handler_list;
 }

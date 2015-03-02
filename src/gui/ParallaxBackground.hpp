@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,15 +18,13 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
+#ifndef PARALLAX_BACKGROUND_HPP
+#define PARALLAX_BACKGROUND_HPP
 
 #include <vector>
-#include <wx/dcgraph.h>
-#include <wx/dcgraph.h>
-#include <wx/dc.h>
 #include <wx/bitmap.h>
-
-#ifndef PARALLAXBACKGROUND_HPP
-#define PARALLAXBACKGROUND_HPP
+#include <wx/dc.h>
+#include <wx/dcgraph.h>
 
 #include "Background.hpp"
 
@@ -35,7 +33,6 @@ class ParallaxBackground
   public:
   /** Creates a ParallaxBackground from the background passed in */
   ParallaxBackground(const wxString& filename, const Background& background);
-  ~ParallaxBackground();
   /** Draws the background onto the screen */
   void Draw(wxGCDC& dc);
   /** Updates the background repositioning if necessary
@@ -55,8 +52,9 @@ class ParallaxBackground
   int32_t x, y;
   DrawAttributes attr;
   bool needUpdateImage;
-  void UpdateImage();
   wxBitmap image;
+
+  void UpdateImage();
 };
 
 #endif

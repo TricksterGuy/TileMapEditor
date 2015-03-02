@@ -1,5 +1,27 @@
+/******************************************************************************************************
+ * Tile Map Editor
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ *
+ * This software is provided 'as-is', without any express or implied warranty.
+ * In no event will the authors be held liable for any damages arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * excluding commercial applications, and to alter it and redistribute it freely,
+ * subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented;
+ *    you must not claim that you wrote the original software.
+ *    An acknowledgement in your documentation and link to the original version is required.
+ *
+ * 2. Altered source versions must be plainly marked as such,
+ *    and must not be misrepresented as being the original software.
+ *
+ * 3. This notice may not be removed or altered from any source distribution.
+ ******************************************************************************************************/
 #include "Map.hpp"
+
 #include <iostream>
+#include <istream>
 #include <fstream>
 #include <cassert>
 
@@ -11,65 +33,19 @@ Map::Map(const std::string& _name, const std::string& _filename, uint32_t _width
 {
 }
 
-Map::Map(const Map& map)
-: name(map.name), filename(map.filename), tile_width(map.tile_width), tile_height(map.tile_height), layers(map.layers),
-  animated_tiles(map.animated_tiles), backgrounds(map.backgrounds)
-{
-  // if (map.collision_layer != NULL)
-  //    collision_layer.reset(new CollisionLayer(*(map.collision_layer)));
-}
-
-Map::~Map()
-{
-  Destroy();
-}
-
-Map& Map::operator=(const Map& map)
-{
-  if (this != &map)
-  {
-    collision_layer.reset();
-    tile_width = map.tile_width;
-    tile_height = map.tile_height;
-    filename = map.filename;
-    name = map.name;
-    layers.clear();
-    backgrounds.clear();
-
-    for (unsigned int i = 0; i < map.layers.size(); i++) layers.push_back(map.layers[i]);
-    for (unsigned int i = 0; i < map.backgrounds.size(); i++) backgrounds.push_back(map.backgrounds[i]);
-    // if (map.collision_layer != NULL)
-    //    collision_layer.reset(new CollisionLayer(*(map.collision_layer)));
-  }
-  return *this;
-}
-
 void Map::Clear()
 {
-  for (unsigned int i = 0; i < layers.size(); i++) layers[i].Clear();
+  for (auto& layer : layers)
+    layer.Clear();
 
   if (HasCollisionLayer())
     collision_layer->Clear();
 }
 
-void Map::Destroy()
-{
-  name = "";
-  filename = "";
-  tile_width = 8;
-  tile_height = 8;
-  layers.clear();
-  backgrounds.clear();
-  animated_tiles.clear();
-  collision_layer.reset();
-}
-
 void Map::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
 {
-  for (unsigned int i = 0; i < layers.size(); i++)
-  {
-    layers[i].Resize(newwidth, newheight, copy);
-  }
+  for (auto& layer : layers)
+    layer.Resize(newwidth, newheight, copy);
   if (collision_layer)
   {
     if (collision_layer->GetType() == Collision::PixelBased)
@@ -81,14 +57,10 @@ void Map::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
 
 void Map::Shift(int horizontal, int vertical, bool wrap)
 {
-  for (unsigned int i = 0; i < layers.size(); i++)
-  {
-    layers[i].Shift(horizontal, vertical, wrap);
-  }
+  for (auto& layer : layers)
+    layer.Shift(horizontal, vertical, wrap);
   if (collision_layer)
-  {
     collision_layer->Shift(horizontal, vertical, wrap);
-  }
 }
 
 void Map::Add(const Layer& layer)

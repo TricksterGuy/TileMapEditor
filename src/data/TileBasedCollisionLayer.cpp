@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,11 +18,11 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
-#include <cstring>
-#include <cassert>
-#include <cstdio>
 #include "TileBasedCollisionLayer.hpp"
+
+#include <cassert>
+#include <cstring> // for memset
+#include <cstdio>
 
 TileBasedCollisionLayer::TileBasedCollisionLayer(int _width, int _height, const std::vector<int32_t>& _data)
 : CollisionLayer(Collision::TileBased), width(_width), height(_height), data(_data)
@@ -37,27 +37,6 @@ TileBasedCollisionLayer::TileBasedCollisionLayer(int _width, int _height, const 
 TileBasedCollisionLayer::TileBasedCollisionLayer(int _width, int _height)
 : CollisionLayer(Collision::TileBased), width(_width), height(_height), data(width * height, -1)
 {
-}
-
-TileBasedCollisionLayer::TileBasedCollisionLayer(const TileBasedCollisionLayer& layer)
-: CollisionLayer(layer.type), width(layer.width), height(layer.height), data(layer.data)
-{
-}
-
-TileBasedCollisionLayer::~TileBasedCollisionLayer()
-{
-}
-
-TileBasedCollisionLayer& TileBasedCollisionLayer::operator=(const TileBasedCollisionLayer& layer)
-{
-  if (this != &layer)
-  {
-    type = layer.type;
-    width = layer.width;
-    height = layer.height;
-    data = layer.data;
-  }
-  return *this;
 }
 
 bool TileBasedCollisionLayer::operator==(const TileBasedCollisionLayer& other)

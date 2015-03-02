@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,16 +18,15 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
-#ifndef TILEMAPEDITORFRAME_HPP
-#define TILEMAPEDITORFRAME_HPP
+#ifndef TILEMAP_EDITOR_FRAME_HPP
+#define TILEMAP_EDITOR_FRAME_HPP
 
 #include <wx/docview.h>
 
-#include "TilemapEditorFrame.hpp"
-#include "TilemapEditorGUI.h"
 #include "Clock.hpp"
 #include "MapCanvas.hpp"
+#include "TilemapEditorFrame.hpp"
+#include "TilemapEditorGUI.h"
 
 /**
   *  Represents the main class of the application

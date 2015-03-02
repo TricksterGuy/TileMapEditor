@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Tile Map Editor
- * Copyright (C) 2009-2014 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
+ * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from the use of this software.
@@ -18,11 +18,11 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
-#ifndef GBAIMAGEHANDLER_HPP
-#define GBAIMAGEHANDLER_HPP
+#ifndef GBA_IMAGE_HANDLER_HPP
+#define GBA_IMAGE_HANDLER_HPP
 
 #include <Magick++.h>
+
 #include "BaseMapHandler.hpp"
 
 /** GBA Image Handler saves the entire map to a .c file */
@@ -30,14 +30,10 @@ class GBAImageHandler : public BaseMapHandler
 {
   public:
   GBAImageHandler();
-  ~GBAImageHandler();
 
   /** @see BaseMapHandler::Save */
   virtual void Save(std::ostream& file, const Map& map);
 
-  private:
-  void WriteCMode3(std::ostream& file, Magick::Image& image);
-  void WriteCMode4(std::ostream& file, Magick::Image& image);
 };
 
 #endif
