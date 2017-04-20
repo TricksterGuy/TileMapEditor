@@ -1,6 +1,3 @@
-// *** ADDED BY HEADER FIXUP ***
-#include "istream"
-// *** END ***
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>

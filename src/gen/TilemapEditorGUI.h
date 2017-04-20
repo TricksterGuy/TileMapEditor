@@ -1,6 +1,3 @@
-// *** ADDED BY HEADER FIXUP ***
-#include "string"
-// *** END ***
 #ifndef HEADER_C96C729E7C84CA42
 #define HEADER_C96C729E7C84CA42
 
@@ -76,5 +73,5 @@ class TilemapEditorGUI : public wxDocMDIParentFrame
 };
 
 #endif //__TILEMAPEDITORGUI_H__
-#endif // header guard 
+#endif // header guard
 

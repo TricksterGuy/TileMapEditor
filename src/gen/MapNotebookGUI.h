@@ -1,6 +1,3 @@
-// *** ADDED BY HEADER FIXUP ***
-#include "string"
-// *** END ***
 ///////////////////////////////////////////////////////////////////////////
 // C++ code generated with wxFormBuilder (version Nov  5 2013)
 // http://www.wxformbuilder.org/
@@ -34,23 +31,23 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class MapNotebookPanel
 ///////////////////////////////////////////////////////////////////////////////
-class MapNotebookPanel : public wxPanel 
+class MapNotebookPanel : public wxPanel
 {
 	private:
-	
+
 	protected:
-		wxFlatNotebook* docNotebook; 
+		wxFlatNotebook* docNotebook;
 		wxPanel* startPage;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClosePage( wxFlatNotebookEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		MapNotebookPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
+
+		MapNotebookPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
 		~MapNotebookPanel();
-	
+
 };
 
 #endif //__MAPNOTEBOOKGUI_H__
