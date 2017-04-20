@@ -1,5 +1,5 @@
-#include "scanner.hpp"
-#include "logger.hpp"
+#include "Scanner.hpp"
+#include "Logger.hpp"
 
 bool Scanner::Next(int& var, int base)
 {

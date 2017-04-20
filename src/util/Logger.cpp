@@ -1,4 +1,4 @@
-#include "logger.hpp"
+#include "Logger.hpp"
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>

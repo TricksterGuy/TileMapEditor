@@ -41,12 +41,9 @@ bool PixelBasedCollisionLayer::operator==(const PixelBasedCollisionLayer& other)
 
 void PixelBasedCollisionLayer::Shift(int horizontal, int vertical, bool wrap)
 {
-  for (int i = 0; i < region.Size(); i++)
-  {
     /// TODO handle the case of wrapping.
     /// TODO also handle out of bounds rectangles.
     region.Move(horizontal, vertical);
-  }
 }
 
 void PixelBasedCollisionLayer::Resize(uint32_t newwidth, uint32_t newheight, bool copy)

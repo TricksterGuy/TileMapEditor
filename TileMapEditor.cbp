@@ -105,7 +105,6 @@
 		<Unit filename="src/util/Logger.cpp" />
 		<Unit filename="src/util/Logger.hpp" />
 		<Unit filename="src/util/NullLogger.hpp" />
-		<Unit filename="src/util/ResourceManager.hpp" />
 		<Unit filename="src/util/Scanner.cpp" />
 		<Unit filename="src/util/Scanner.hpp" />
 		<Extensions>

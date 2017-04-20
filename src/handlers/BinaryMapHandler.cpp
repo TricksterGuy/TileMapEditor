@@ -1,6 +1,3 @@
-// *** ADDED BY HEADER FIXUP ***
-#include "istream"
-// *** END ***
 /******************************************************************************************************
  * Tile Map Editor
  * Copyright (C) 2009-2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
@@ -27,6 +24,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <istream>
 
 #ifdef LINUX
 #include <netinet/in.h>
@@ -38,6 +36,7 @@
 #endif
 
 #include "AnimatedTile.hpp"
+#include "Logger.hpp"
 #include "PixelBasedCollisionLayer.hpp"
 #include "TileBasedCollisionLayer.hpp"
 
@@ -63,6 +62,8 @@ void BinaryMapHandler::Load(const std::string& mapfile, Map& map)
 
 void BinaryMapHandler::Save(const std::string& mapfile, const Map& map)
 {
+  EventLog l(__func__);
+
   std::ofstream file(mapfile.c_str(), std::ios::binary);
   if (!file.good())
     throw "Could not open file";
@@ -73,6 +74,8 @@ void BinaryMapHandler::Save(const std::string& mapfile, const Map& map)
 
 void BinaryMapHandler::Load(std::istream& file, Map& map)
 {
+  EventLog l(__func__);
+
   int32_t num_layers = -1;
   int32_t num_backgrounds = -1;
 
@@ -82,6 +85,7 @@ void BinaryMapHandler::Load(std::istream& file, Map& map)
     uint32_t size;
 
     ReadChunkName(file, chunkname, size);
+    VerboseLog("Read chunk name %s size %zd", chunkname.c_str(), size);
 
     unsigned int start = file.tellg();
 
@@ -111,22 +115,20 @@ void BinaryMapHandler::Load(std::istream& file, Map& map)
       break;
     else
     {
-      fprintf(stderr, "Unknown Chunk id %s skipping\n", chunkname.c_str());
+      VerboseLog("Unknown Chunk id %s skipping\n", chunkname.c_str());
       file.seekg(size, std::ios_base::cur);
     }
 
     unsigned int end = file.tellg();
 
     if (end - start != size)
-    {
-      fprintf(stderr, "Malformed Chunk or size incorrect id %s size = %d read = %d\n", chunkname.c_str(), size,
-              end - start);
-    }
+      VerboseLog("Malformed Chunk or size incorrect id %s size = %d read = %d\n", chunkname.c_str(), size, end - start);
   }
 }
 
 void BinaryMapHandler::Save(std::ostream& file, const Map& map)
 {
+  EventLog l(__func__);
   WriteHEAD(file, map);
   WriteMAPP(file, map);
   WriteLYRS(file, map);
@@ -168,6 +170,7 @@ void BinaryMapHandler::Save(std::ostream& file, const Map& map)
 
 void BinaryMapHandler::ReadChunkName(std::istream& file, std::string& name, uint32_t& size)
 {
+  EventLog l(__func__);
   char chunk[5];
 
   file.read(chunk, sizeof(char) * 4);
@@ -184,6 +187,7 @@ void BinaryMapHandler::ReadChunkName(std::istream& file, std::string& name, uint
 
 void BinaryMapHandler::ReadHEAD(std::istream& file, Map& map)
 {
+  EventLog l(__func__);
   char major;
   char minor;
   char filemagic[14];
@@ -208,6 +212,7 @@ void BinaryMapHandler::ReadHEAD(std::istream& file, Map& map)
 
 void BinaryMapHandler::ReadMAPP(std::istream& file, Map& map, int32_t& num_layers, int32_t& num_backgrounds)
 {
+  EventLog l(__func__);
   uint32_t tile_width;
   uint32_t tile_height;
   std::string name;
@@ -250,6 +255,7 @@ void BinaryMapHandler::ReadMAPP(std::istream& file, Map& map, int32_t& num_layer
 
 void BinaryMapHandler::ReadLYRS(std::istream& file, Map& map, int32_t& num_layers)
 {
+  EventLog l(__func__);
   uint32_t texture_size;
   uint32_t width = map.GetWidth();
   uint32_t height = map.GetHeight();
@@ -279,6 +285,7 @@ void BinaryMapHandler::ReadLYRS(std::istream& file, Map& map, int32_t& num_layer
 
 void BinaryMapHandler::ReadBGDS(std::istream& file, Map& map, int32_t& num_backgrounds)
 {
+  EventLog l(__func__);
   uint32_t texture_size;
   char* temp;
 
@@ -330,6 +337,7 @@ void BinaryMapHandler::ReadBGDS(std::istream& file, Map& map, int32_t& num_backg
 
 void BinaryMapHandler::ReadMTCL(std::istream& file, Map& map)
 {
+  EventLog l(__func__);
   uint32_t width = map.GetWidth();
   uint32_t height = map.GetHeight();
   int32_t* data = new int32_t[width * height];
@@ -345,6 +353,7 @@ void BinaryMapHandler::ReadMTCL(std::istream& file, Map& map)
 
 void BinaryMapHandler::ReadMDCL(std::istream& file, Map& map)
 {
+  EventLog l(__func__);
   uint32_t width = map.GetWidth();
   uint32_t height = map.GetHeight();
   int32_t* data = new int32_t[width * height];
@@ -360,6 +369,7 @@ void BinaryMapHandler::ReadMDCL(std::istream& file, Map& map)
 
 void BinaryMapHandler::ReadMPCL(std::istream& file, Map& map)
 {
+  EventLog l(__func__);
   int32_t numrects;
   file.read((char*)(&numrects), sizeof(int32_t));
   numrects = ntohl(numrects);
@@ -389,21 +399,25 @@ void BinaryMapHandler::ReadMPCL(std::istream& file, Map& map)
 
 void BinaryMapHandler::ReadTTCI(std::istream& file, Map& map)
 {
+  EventLog l(__func__);
   throw "Failed to read the TTCI chunk";
 }
 
 void BinaryMapHandler::ReadTDCI(std::istream& file, Map& map)
 {
+  EventLog l(__func__);
   throw "Failed to read the TDCI chunk";
 }
 
 void BinaryMapHandler::ReadTPCI(std::istream& file, Map& map)
 {
+  EventLog l(__func__);
   throw "Failed to read the TPCI chunk";
 }
 
 void BinaryMapHandler::ReadANIM(std::istream& file, Map& map)
 {
+  EventLog l(__func__);
   uint32_t numanimations;
   file.read((char*)&numanimations, sizeof(uint32_t));
   numanimations = ntohl(numanimations);

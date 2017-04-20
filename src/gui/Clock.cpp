@@ -20,6 +20,8 @@
  ******************************************************************************************************/
 #include "Clock.hpp"
 
+#include "Logger.hpp"
+
 Clock::Clock(unsigned int rate) : framerate(rate), paused(true), update()
 {
   update.SetNeedRefresh(true);

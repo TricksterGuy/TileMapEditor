@@ -217,7 +217,8 @@ void Region::Subtract(const Rectangle& remove)
 
 void Region::Move(int32_t x, int32_t y)
 {
-  for (Rectangle& r : rectangles) r.Move(x, y);
+  for (Rectangle& r : rectangles)
+    r.Move(x, y);
 }
 
 void Region::Add(const Rectangle& r)
