@@ -20,7 +20,7 @@ static void DrawButton(wxDC& dc,
 {
     // Define the rounded rectangle base on the given rect
     // we need an array of 9 points for it
-    wxPoint regPts[9];
+    //wxPoint regPts[9];
 
     // Define the middle points
     wxPoint leftPt, rightPt;
@@ -1368,7 +1368,7 @@ void wxFNBRendererVC8::DrawTabs(wxWindow *pageContainer, wxDC &dc, wxEvent &even
     boldFont.SetWeight(wxFONTWEIGHT_BOLD);
 
     // Calculate the number of rows required for drawing the tabs
-    wxRect rect = pc->GetClientRect();
+    //wxRect rect = pc->GetClientRect();
 
     // Set the maximum client size
 #ifdef __WXMAC__

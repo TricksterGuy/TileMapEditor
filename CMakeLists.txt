@@ -70,6 +70,7 @@ set(SRC_MAP
     src/data/Rectangle.cpp
     src/data/Region.cpp
     src/data/TileBasedCollisionLayer.cpp
+    src/data/Tileset.cpp
 )
 
 set(SRC_HANDLERS
@@ -79,7 +80,7 @@ set(SRC_HANDLERS
     #src/handlers/GBAMapHandler.cpp
     #src/handlers/HandlerUtils.cpp
     #src/handlers/ImageMapHandler.cpp
-    #src/handlers/MapHandlerManager.cpp
+    src/handlers/MapHandlerManager.cpp
     #src/handlers/TextMapHandler.cpp
     #src/handlers/XmlMapHandler.cpp
 )
@@ -121,6 +122,9 @@ include_directories(${tilemapeditor_SOURCE_DIR}/lib/wxFlatNotebook)
 include_directories(${ImageMagick_INCLUDE_DIRS})
 include_directories(${Boost_INCLUDE_DIR})
 include_directories(${PROTOBUF_INCLUDEDIR})
+
+add_definitions(-DMAGICKCORE_HDRI_ENABLE=0 -DMAGICKCORE_QUANTUM_DEPTH=16)
+
 
 add_executable(
 	tilemapeditor

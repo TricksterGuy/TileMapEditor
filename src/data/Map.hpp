@@ -46,7 +46,7 @@ public:
       * dimensions (1, 1)
       * tile dimensions (8, 8)
       */
-    Map(const std::string& _name) : name(_name) {}
+    Map(const std::string& _name = "") : name(_name) {}
 
     /** Clears the map. */
     void Clear();

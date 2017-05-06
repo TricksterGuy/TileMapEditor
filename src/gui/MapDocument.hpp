@@ -34,6 +34,9 @@ public:
     Map& GetMap() {
         return map;
     }
+    Tileset& GetTileset() {
+        return map.GetTileset();
+    }
 
 private:
     Map map;

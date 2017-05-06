@@ -32,11 +32,11 @@ bool TilemapEditorApp::OnInit()
     wxInitAllImageHandlers();
 
     MapHandlerManager().Add(new BinaryMapHandler());
-    MapHandlerManager().Add(new TextMapHandler());
-    MapHandlerManager().Add(new ImageMapHandler());
-    MapHandlerManager().Add(new GBAImageHandler());
-    MapHandlerManager().Add(new GBAMapHandler());
-    MapHandlerManager().Add(new XmlMapHandler());
+    //MapHandlerManager().Add(new TextMapHandler());
+    //MapHandlerManager().Add(new ImageMapHandler());
+    //MapHandlerManager().Add(new GBAImageHandler());
+    //MapHandlerManager().Add(new GBAMapHandler());
+    //MapHandlerManager().Add(new XmlMapHandler());
 
     // Fill in the application information fields before creating wxConfig.
     SetVendorName("wxWidgets");

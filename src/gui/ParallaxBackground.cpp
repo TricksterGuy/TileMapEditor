@@ -25,9 +25,9 @@
 // extern const std::string& RESOURCE_POOL;
 
 ParallaxBackground::ParallaxBackground(const wxString& filename, const Background& back)
-    : name(back.GetName()), filename(filename.ToStdString()), mode(back.GetMode()), speedx(back.GetSpeedX()),
-      speedy(back.GetSpeedY()), x(0), y(0), attr(back), needUpdateImage(true)
+    : name(back.GetName()), filename(filename.ToStdString()), mode(back.GetMode()), x(0), y(0), attr(back), needUpdateImage(true)
 {
+    back.GetSpeed(speedx, speedy);
 }
 
 void ParallaxBackground::Update(wxGCDC& dc)

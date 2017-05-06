@@ -21,6 +21,7 @@
 #include "MapView.hpp"
 
 #include "TilemapEditorApp.hpp"
+#include "Logger.hpp"
 
 IMPLEMENT_DYNAMIC_CLASS(MapView, wxView)
 
@@ -116,7 +117,8 @@ void MapView::OnUpdate(wxView* sender, wxObject* hint)
     wxView::OnUpdate(sender, hint);
     MapViewUpdate* update = wxDynamicCast(hint, MapViewUpdate);
 
-    Map& map = GetMap();
+    const Map& map = GetMap();
+
 
     if (!update || update->GetUpdateBackgrounds() || update->GetUpdateMap())
     {
@@ -132,14 +134,16 @@ void MapView::OnUpdate(wxView* sender, wxObject* hint)
 
     if (!update || update->GetUpdateTileset() || update->GetUpdateMap())
     {
-        if (map.GetFilename().empty())
+        const Tileset& tileset = map.GetTileset();
+        const std::string filename = tileset.GetFilename();
+        if (filename.empty())
             return;
 
         wxFileName image_file(GetDocument()->GetFilename());
-        image_file.SetFullName(map.GetFilename());
+        image_file.SetFullName(filename);
         if (!image.LoadFile(image_file.GetFullPath()))
         {
-            wxPrintf("Could not load image %s\n", image_file.GetFullPath());
+            WarnLog("Could not load image %s\n", image_file.GetFullPath());
             return;
         }
 
@@ -161,18 +165,26 @@ MapDocument* MapView::GetDocument()
 void MapView::GetViewableCoords(int& vxi, int& vyi, int& vxf, int& vyf)
 {
     const Map& map = GetMap();
+    const Tileset& tileset = map.GetTileset();
+    uint32_t tile_width, tile_height;
+    tileset.GetTileDimensions(tile_width, tile_height);
+
     // TODO Reimplement when scrolling after resize tiles bug fixed
     int w, h;
     mapCanvas->GetSize(&w, &h);
     TransformScreenToTile(0, 0, vxi, vyi);
-    TransformScreenToTile(w + map.GetTileWidth(), h + map.GetTileHeight(), vxf, vyf);
+    TransformScreenToTile(w + tile_width, h + tile_height, vxf, vyf);
 }
 
 void MapView::TransformScreenToTile(int x, int y, int& outx, int& outy, bool bounds, bool neg1)
 {
     const Map& map = GetMap();
-    outx = static_cast<int>(x / map.GetTileWidth());
-    outy = static_cast<int>(y / map.GetTileHeight());
+    const Tileset& tileset = map.GetTileset();
+    uint32_t tile_width, tile_height;
+    tileset.GetTileDimensions(tile_width, tile_height);
+
+    outx = static_cast<int>(x / tile_width);
+    outy = static_cast<int>(y / tile_height);
 
     if (bounds)
     {
@@ -181,9 +193,9 @@ void MapView::TransformScreenToTile(int x, int y, int& outx, int& outy, bool bou
         if (outy < 0)
             outy = 0;
 
-        if ((unsigned int)outx >= map.GetWidth())
+        if ((unsigned int) outx >= map.GetWidth())
             outx = neg1 ? -1 : map.GetWidth() - 1;
-        if ((unsigned int)outy >= map.GetHeight())
+        if ((unsigned int) outy >= map.GetHeight())
             outy = neg1 ? -1 : map.GetHeight() - 1;
     }
 }
@@ -191,8 +203,12 @@ void MapView::TransformScreenToTile(int x, int y, int& outx, int& outy, bool bou
 void MapView::DrawLayer(wxGCDC& dc, const Layer& layer, int sxi, int syi, int sxf, int syf)
 {
     Map& map = GetMap();
+    const Tileset& tileset = map.GetTileset();
+    uint32_t tile_width, tile_height;
+    tileset.GetTileDimensions(tile_width, tile_height);
+    const auto& animated_tiles = tileset.GetAnimatedTiles();
 
-    wxBitmap layerBitmap((layer.GetWidth()) * map.GetTileWidth(), (layer.GetHeight()) * map.GetTileHeight(), 32);
+    wxBitmap layerBitmap(layer.GetWidth() * tile_width, layer.GetHeight() * tile_height, 32);
     wxMemoryDC layerDc(layerBitmap);
     wxGraphicsContext* gtx = wxGraphicsContext::Create(layerDc);
 
@@ -218,8 +234,8 @@ void MapView::DrawLayer(wxGCDC& dc, const Layer& layer, int sxi, int syi, int sx
             if ((uint32_t)j >= layer.GetWidth())
                 break;
             int index = i * layer.GetWidth() + j;
-            float x = j * map.GetTileWidth();
-            float y = i * map.GetTileHeight();
+            float x = j * tile_width;
+            float y = i * tile_height;
 
             int tile = layer[index];
             if (tile == -1)
@@ -227,13 +243,13 @@ void MapView::DrawLayer(wxGCDC& dc, const Layer& layer, int sxi, int syi, int sx
             else if (tile < -1)
             {
                 tile &= ~(1 << 31);
-                assert(tile < (int)map.GetNumAnimatedTiles());
-                AnimatedTile& anim = map.GetAnimatedTile(tile);
+                assert(tile < (int)animated_tiles.size());
+                const AnimatedTile& anim = animated_tiles[tile];
                 tile = anim.GetCurrentFrame(clock);
             }
             assert((unsigned int)tile < tiles.size());
             wxBitmap& obj = tiles[tile];
-            gtx->DrawBitmap(obj, x, y, map.GetTileWidth(), map.GetTileHeight());
+            gtx->DrawBitmap(obj, x, y, tile_width, tile_height);
         }
     }
 
@@ -261,9 +277,13 @@ void MapView::DrawLayer(wxGCDC& dc, const Layer& layer, int sxi, int syi, int sx
 void MapView::UpdateTiles()
 {
     Map& map = GetMap();
+    const Tileset& tileset = map.GetTileset();
+    uint32_t tile_width, tile_height;
+    tileset.GetTileDimensions(tile_width, tile_height);
+
     wxSize size = image.GetSize();
-    int numTilesX = size.GetWidth() / map.GetTileWidth();
-    int numTilesY = size.GetHeight() / map.GetTileHeight();
+    int numTilesX = size.GetWidth() / tile_width;
+    int numTilesY = size.GetHeight() / tile_height;
     unsigned int totalTiles = numTilesX * numTilesY;
     if (totalTiles != tiles.size())
     {
@@ -273,9 +293,9 @@ void MapView::UpdateTiles()
 
     for (unsigned int i = 0; i < totalTiles; i++)
     {
-        int sx = i % numTilesX * map.GetTileWidth();
-        int sy = i / numTilesX * map.GetTileHeight();
+        int sx = i % numTilesX * tile_width;
+        int sy = i / numTilesX * tile_height;
 
-        tiles[i] = image.GetSubBitmap(wxRect(sx, sy, map.GetTileWidth(), map.GetTileHeight()));
+        tiles[i] = image.GetSubBitmap(wxRect(sx, sy, tile_width, tile_height));
     }
 }
