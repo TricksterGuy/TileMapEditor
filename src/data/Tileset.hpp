@@ -18,21 +18,26 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-#ifndef GBA_IMAGE_HANDLER_HPP
-#define GBA_IMAGE_HANDLER_HPP
+#ifndef TILESET_HPP
+#define TILESET_HPP
 
-#include <Magick++.h>
+#include "AnimatedTile.hpp"
 
-#include "BaseMapHandler.hpp"
-
-/** GBA Image Handler saves the entire map to a .c file */
-class GBAImageHandler : public BaseMapHandler {
+class Tileset {
 public:
-    GBAImageHandler();
-
-    /** @see BaseMapHandler::Save */
-    virtual void Save(std::ostream& file, const Map& map);
-
+    Tileset(const std::string& filename = "", uint32_t tile_width = MIN_TILE_SIZE, uint32_t tile_height = MIN_TILE_SIZE);
+    void SetFilename(const std::string& _filename) { filename = _filename; }
+    void SetTileDimensions(uint32_t tile_width, uint32_t tile_height);
+    void SetAnimatedTiles(const std::vector<AnimatedTile>& tiles) { animated_tiles = tiles; }
+    const std::string& GetFilename() const { return filename; }
+    void GetTileDimensions(uint32_t& tile_width, uint32_t& tile_height) const;
+    const std::vector<AnimatedTile>& GetAnimatedTiles() const { return animated_tiles; }
+    static constexpr uint32_t MIN_TILE_SIZE = 4;
+    static constexpr uint32_t MAX_TILE_SIZE = 256;
+private:
+    std::string filename;
+    uint32_t tile_width, tile_height;
+    std::vector<AnimatedTile> animated_tiles;
 };
 
 #endif

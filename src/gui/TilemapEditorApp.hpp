@@ -24,15 +24,14 @@
 #include <wx/app.h>
 #include "TilemapEditorFrame.hpp"
 
-class TilemapEditorApp : public wxApp
-{
-  public:
-  TilemapEditorApp() : frame(NULL) {}
-  virtual bool OnInit();
-  wxFrame* CreateChildFrame(wxView* view);
+class TilemapEditorApp : public wxApp {
+public:
+    TilemapEditorApp() : frame(NULL) {}
+    virtual bool OnInit();
+    wxFrame* CreateChildFrame(wxView* view);
 
-  private:
-  TilemapEditorFrame* frame;
+private:
+    TilemapEditorFrame* frame;
 };
 
 DECLARE_APP(TilemapEditorApp);

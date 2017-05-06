@@ -30,11 +30,11 @@
 /// TODO Rewrite this class
 
 GBAImageHandler::GBAImageHandler()
-: BaseMapHandler("GBA Image Export", "c", "Exports the map's image in GBA format modes (3-5)", false, false)
+    : BaseMapHandler("GBA Image Export", "c", "Exports the map's image in GBA format modes (3-5)", false, false)
 {
 }
 
 void GBAImageHandler::Save(std::ostream& filename, const Map& map)
 {
-  BaseMapHandler::Save(filename, map);
+    BaseMapHandler::Save(filename, map);
 }

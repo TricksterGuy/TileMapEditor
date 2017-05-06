@@ -30,11 +30,11 @@
 /// TODO Rewrite this.
 
 GBAMapHandler::GBAMapHandler()
-: BaseMapHandler("GBA Map Export", "c", "Exports the map in GBA modes (0-2) format", false, false)
+    : BaseMapHandler("GBA Map Export", "c", "Exports the map in GBA modes (0-2) format", false, false)
 {
 }
 
 void GBAMapHandler::Save(std::ostream& file, const Map& map)
 {
-  BaseMapHandler::Save(file, map);
+    BaseMapHandler::Save(file, map);
 }

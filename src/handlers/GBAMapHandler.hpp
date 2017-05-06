@@ -26,13 +26,12 @@
 #include "BaseMapHandler.hpp"
 
 /** Saves each layer of the map as a background appropriate for gba modes 0-2 */
-class GBAMapHandler : public BaseMapHandler
-{
-  public:
-  GBAMapHandler();
+class GBAMapHandler : public BaseMapHandler {
+public:
+    GBAMapHandler();
 
-  /** @see BaseMapHandler::Save */
-  virtual void Save(std::ostream& file, const Map& map);
+    /** @see BaseMapHandler::Save */
+    virtual void Save(std::ostream& file, const Map& map);
 
 };
 

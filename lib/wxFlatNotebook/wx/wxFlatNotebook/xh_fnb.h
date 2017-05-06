@@ -25,7 +25,7 @@ class WXDLLIMPEXP_FNB wxFlatNotebook;
 
 class WXDLLIMPEXP_FNB wxFlatNotebookXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxFlatNotebookXmlHandler)
+    DECLARE_DYNAMIC_CLASS(wxFlatNotebookXmlHandler)
 public:
     wxFlatNotebookXmlHandler();
     virtual wxObject *DoCreateResource();

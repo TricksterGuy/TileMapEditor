@@ -54,6 +54,8 @@
 		<Unit filename="src/data/Region.hpp" />
 		<Unit filename="src/data/TileBasedCollisionLayer.cpp" />
 		<Unit filename="src/data/TileBasedCollisionLayer.hpp" />
+		<Unit filename="src/data/Tileset.cpp" />
+		<Unit filename="src/data/Tileset.hpp" />
 		<Unit filename="src/gen/MapNotebookGUI.cpp" />
 		<Unit filename="src/gen/MapNotebookGUI.h" />
 		<Unit filename="src/gen/TilemapEditorGUI.cpp" />
@@ -78,6 +80,8 @@
 		<Unit filename="src/handlers/BaseMapHandler.hpp" />
 		<Unit filename="src/handlers/BinaryMapHandler.cpp" />
 		<Unit filename="src/handlers/BinaryMapHandler.hpp" />
+		<Unit filename="src/handlers/ChunkStream.cpp" />
+		<Unit filename="src/handlers/ChunkStream.hpp" />
 		<Unit filename="src/handlers/GBAImageHandler.cpp" />
 		<Unit filename="src/handlers/GBAImageHandler.hpp" />
 		<Unit filename="src/handlers/GBAMapHandler.cpp" />
@@ -94,6 +98,7 @@
 		<Unit filename="src/handlers/XmlMapHandler.cpp" />
 		<Unit filename="src/handlers/XmlMapHandler.hpp" />
 		<Unit filename="src/testing/BasicHandlersTest.cpp" />
+		<Unit filename="src/testing/ChunkStreamTest.cpp" />
 		<Unit filename="src/testing/GlobalTest.cpp" />
 		<Unit filename="src/testing/LayerTest.cpp" />
 		<Unit filename="src/testing/MapTest.cpp" />
@@ -102,9 +107,10 @@
 		<Unit filename="src/testing/TestUtil.hpp" />
 		<Unit filename="src/testing/TextMapHandlerTest.cpp" />
 		<Unit filename="src/testing/XmlMapHandlerTest.cpp" />
+		<Unit filename="src/util/ChunkStream.cpp" />
+		<Unit filename="src/util/ChunkStream.hpp" />
 		<Unit filename="src/util/Logger.cpp" />
 		<Unit filename="src/util/Logger.hpp" />
-		<Unit filename="src/util/NullLogger.hpp" />
 		<Unit filename="src/util/Scanner.cpp" />
 		<Unit filename="src/util/Scanner.hpp" />
 		<Extensions>

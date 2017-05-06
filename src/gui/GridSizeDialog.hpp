@@ -3,11 +3,10 @@
 
 #include "GridSizeGUI.h"
 
-class GridSizeDialog : public GridSizeGUI
-{
-  public:
-  GridSizeDialog(int gridx, int gridy);
-  void GetGridSize(int& width, int& height);
+class GridSizeDialog : public GridSizeGUI {
+public:
+    GridSizeDialog(int gridx, int gridy);
+    void GetGridSize(int& width, int& height);
 };
 
 #endif

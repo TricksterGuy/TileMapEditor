@@ -1,4 +1,4 @@
-#ifndef _WX_FNB_DROP_TARGET_H 
+#ifndef _WX_FNB_DROP_TARGET_H
 #define _WX_FNB_DROP_TARGET_H
 
 #include <wx/wx.h>
@@ -9,37 +9,42 @@
 */
 class wxFNBDragInfo
 {
-	wxWindow * m_Container;
-	int m_PageIndex;	
-public:		
-	/**
-	Constructor
-	\param container - pointer to wxPageContainer object which contains dragged page
-	\param pageindex - index of dragged page
-	*/
-	wxFNBDragInfo(wxWindow * container, int pageindex) : m_Container(container), m_PageIndex(pageindex){}	
+    wxWindow * m_Container;
+    int m_PageIndex;
+public:
+    /**
+    Constructor
+    \param container - pointer to wxPageContainer object which contains dragged page
+    \param pageindex - index of dragged page
+    */
+    wxFNBDragInfo(wxWindow * container, int pageindex) : m_Container(container), m_PageIndex(pageindex) {}
 
-	/**
-	 * \brief default constructor
-	 */
-	wxFNBDragInfo() : m_Container(0), m_PageIndex(0){} 
+    /**
+     * \brief default constructor
+     */
+    wxFNBDragInfo() : m_Container(0), m_PageIndex(0) {}
 
-	/**
-	Returns wxPageContainer object which contains dragged page
-	*/
-	wxWindow * GetContainer() {return m_Container;}
+    /**
+    Returns wxPageContainer object which contains dragged page
+    */
+    wxWindow * GetContainer()
+    {
+        return m_Container;
+    }
 
-	/**
-	Returns the index of dragged page
-	*/
-	int GetPageIndex() {return m_PageIndex;}
+    /**
+    Returns the index of dragged page
+    */
+    int GetPageIndex()
+    {
+        return m_PageIndex;
+    }
 };
 
 class wxFNBDragInfoDataObject : public wxDataObjectSimple
 {
 public:
-    wxFNBDragInfoDataObject(const wxDataFormat& format):wxDataObjectSimple(format)
-    {}
+    wxFNBDragInfoDataObject(const wxDataFormat& format):wxDataObjectSimple(format) {}
 
     wxFNBDragInfo DragInfo;
 
@@ -50,7 +55,9 @@ public:
 
     // get the size of our data
     virtual size_t GetDataSize() const
-    { return sizeof(wxFNBDragInfo); }
+    {
+        return sizeof(wxFNBDragInfo);
+    }
 
     // copy our data to the buffer
     virtual bool GetDataHere(void *buf) const
@@ -75,44 +82,44 @@ template <class T>
 class wxFNBDropTarget : public wxDropTarget
 {
 private:
-	typedef wxDragResult (T::*pt2Func)(wxCoord, wxCoord, int, wxWindow *);
-	T* m_pParent;
-	pt2Func m_pt2CallbackFunc;
-	wxFNBDragInfoDataObject * m_DataObject;
+    typedef wxDragResult (T::*pt2Func)(wxCoord, wxCoord, int, wxWindow *);
+    T* m_pParent;
+    pt2Func m_pt2CallbackFunc;
+    wxFNBDragInfoDataObject * m_DataObject;
 public:
-	/**
-	\brief Constructor
-	\param pParent - Object that will handle drag-n-drop operation
-	\param pt2CallbackFunc - Pointer to callback method which should be called after dragging the notebook page
-	*/
+    /**
+    \brief Constructor
+    \param pParent - Object that will handle drag-n-drop operation
+    \param pt2CallbackFunc - Pointer to callback method which should be called after dragging the notebook page
+    */
     wxFNBDropTarget(T* pParent, pt2Func pt2CallbackFunc)
-		: m_pParent(pParent)
-		, m_pt2CallbackFunc(pt2CallbackFunc)
-		, m_DataObject(NULL)
-	{
-		m_DataObject = new wxFNBDragInfoDataObject(wxDataFormat(wxT("wxFNB")));
-		SetDataObject(m_DataObject);
-	}
-	/**
-	\brief Virtual Destructor
-	*/
-	virtual ~wxFNBDropTarget(void) {}
-	/**
-	\brief Used for processing drop operation
-	\param x - X-coordinate
-	\param y - Y-coordinate
-	\param def - Result of drag-n-drop operation
-	*/
+        : m_pParent(pParent)
+        , m_pt2CallbackFunc(pt2CallbackFunc)
+        , m_DataObject(NULL)
+    {
+        m_DataObject = new wxFNBDragInfoDataObject(wxDataFormat(wxT("wxFNB")));
+        SetDataObject(m_DataObject);
+    }
+    /**
+    \brief Virtual Destructor
+    */
+    virtual ~wxFNBDropTarget(void) {}
+    /**
+    \brief Used for processing drop operation
+    \param x - X-coordinate
+    \param y - Y-coordinate
+    \param def - Result of drag-n-drop operation
+    */
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult WXUNUSED(def))
-	{		
-		GetData();
-		wxFNBDragInfo * draginfo = (wxFNBDragInfo *)m_DataObject->GetData();
-		if(!draginfo) 
-		{
-			return wxDragNone;
-		}
-		return (m_pParent->*m_pt2CallbackFunc)(x, y, draginfo->GetPageIndex(), (T *)draginfo->GetContainer()); 	
-	}
+    {
+        GetData();
+        wxFNBDragInfo * draginfo = (wxFNBDragInfo *)m_DataObject->GetData();
+        if(!draginfo)
+        {
+            return wxDragNone;
+        }
+        return (m_pParent->*m_pt2CallbackFunc)(x, y, draginfo->GetPageIndex(), (T *)draginfo->GetContainer());
+    }
 };
 
 /**
@@ -127,35 +134,31 @@ public:
  *
  * \author Eran
  */
-class wxFNBDropSource : public wxDropSource 
+class wxFNBDropSource : public wxDropSource
 {
-	wxWindow* m_win;
+    wxWindow* m_win;
 public:
-	/**
-	 * Parameterized constructor
-	 * \param win 
-	 * \param iconCopy 
-	 * \param iconMove 
-	 * \param iconNone 
-	 */
-	wxFNBDropSource(wxWindow* win = NULL)
-	: wxDropSource(win)
-		, m_win( win )
-	{
-	}
+    /**
+     * Parameterized constructor
+     * \param win
+     * \param iconCopy
+     * \param iconMove
+     * \param iconNone
+     */
+    wxFNBDropSource(wxWindow* win = NULL)
+        : wxDropSource(win)
+        , m_win( win ) {}
 
-	/**
-	 * Destructor
-	 */
-	virtual ~wxFNBDropSource()
-	{
-	}
+    /**
+     * Destructor
+     */
+    virtual ~wxFNBDropSource() {}
 
-	/**
-	 * give some custom UI feedback during the drag and drop operation in this function. It is called on each mouse move, so your implementation must not be too slow
-	 * \param effect The effect to implement. One of wxDragCopy, wxDragMove, wxDragLink and wxDragNone
-	 * \return 
-	 */
-	virtual bool GiveFeedback(wxDragResult effect);
+    /**
+     * give some custom UI feedback during the drag and drop operation in this function. It is called on each mouse move, so your implementation must not be too slow
+     * \param effect The effect to implement. One of wxDragCopy, wxDragMove, wxDragLink and wxDragNone
+     * \return
+     */
+    virtual bool GiveFeedback(wxDragResult effect);
 };
 #endif

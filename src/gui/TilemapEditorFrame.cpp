@@ -31,40 +31,40 @@
 
 TilemapEditorFrame::TilemapEditorFrame(wxFrame* window) : wxDocManager(), TilemapEditorGUI(this, window)
 {
-  new wxDocTemplate(this, "Map", "*.map", ".", "map", "Map Doc", "Map Canvas", CLASSINFO(MapDocument),
-                    CLASSINFO(MapView));
-  new wxDocTemplate(this, "Map", "*.txt", ".", "txt", "Map Doc", "Map Canvas", CLASSINFO(MapDocument),
-                    CLASSINFO(MapView));
+    new wxDocTemplate(this, "Map", "*.map", ".", "map", "Map Doc", "Map Canvas", CLASSINFO(MapDocument),
+                      CLASSINFO(MapView));
+    new wxDocTemplate(this, "Map", "*.txt", ".", "txt", "Map Doc", "Map Canvas", CLASSINFO(MapDocument),
+                      CLASSINFO(MapView));
 
-  FileHistoryLoad(*wxConfig::Get());
-  FileHistoryUseMenu(menuRecent);
-  FileHistoryAddFilesToMenu();
+    FileHistoryLoad(*wxConfig::Get());
+    FileHistoryUseMenu(menuRecent);
+    FileHistoryAddFilesToMenu();
 
-  clock.SetFramerate(60);
-  clock.Run();
+    clock.SetFramerate(60);
+    clock.Run();
 
-  statusBar->SetStatusText("Hello Code::Blocks user!", 0);
-  statusBar->SetStatusText("", 1);
+    statusBar->SetStatusText("Hello Code::Blocks user!", 0);
+    statusBar->SetStatusText("", 1);
 }
 
 
 TilemapEditorFrame::~TilemapEditorFrame()
 {
-  FileHistorySave(*wxConfig::Get());
+    FileHistorySave(*wxConfig::Get());
 }
 
 wxFrame* TilemapEditorFrame::CreateChildFrame(wxView* view)
 {
-  // create a child frame of appropriate class for the current mode
-  wxFrame* subframe;
-  wxDocument* doc = view->GetDocument();
-  subframe = new wxDocMDIChildFrame(doc, view, this, wxID_ANY, "Child Frame", wxDefaultPosition, wxSize(300, 300));
+    // create a child frame of appropriate class for the current mode
+    wxFrame* subframe;
+    wxDocument* doc = view->GetDocument();
+    subframe = new wxDocMDIChildFrame(doc, view, this, wxID_ANY, "Child Frame", wxDefaultPosition, wxSize(300, 300));
 
-  clock.Add(view);
-  // doc->GetCommandProcessor()->SetEditMenu(editMenu);
-  // doc->GetCommandProcessor()->Initialize();
+    clock.Add(view);
+    // doc->GetCommandProcessor()->SetEditMenu(editMenu);
+    // doc->GetCommandProcessor()->Initialize();
 
-  return subframe;
+    return subframe;
 }
 
 void TilemapEditorFrame::OnImportText(wxCommandEvent& event)
@@ -101,11 +101,11 @@ void TilemapEditorFrame::OnExport(wxCommandEvent& event)
 
 void TilemapEditorFrame::OnClose(wxCloseEvent& event)
 {
-  Destroy();
+    Destroy();
 }
 
 void TilemapEditorFrame::OnAbout(wxCommandEvent& event)
 {
-  wxString msg = "";
-  wxMessageBox(msg, "Welcome to...");
+    wxString msg = "";
+    wxMessageBox(msg, "Welcome to...");
 }

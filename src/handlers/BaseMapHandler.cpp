@@ -26,45 +26,45 @@
 
 BaseMapHandler::BaseMapHandler(const std::string& _name, const std::string& _extension, const std::string& _description,
                                bool _readable, bool _writeable, const std::set<std::string>& _alternatives)
-: name(_name), extension(_extension), description(_description), readable(_readable), writeable(_writeable),
-  alternatives(_alternatives)
+    : name(_name), extension(_extension), description(_description), readable(_readable), writeable(_writeable),
+      alternatives(_alternatives)
 {
-  DebugLog("Init %s %s handles: %s", name.c_str(), description.c_str(), extension.c_str());
+    DebugLog("Init %s %s handles: %s", name.c_str(), description.c_str(), extension.c_str());
 }
 
 int BaseMapHandler::Init()
 {
-  return 0;
+    return 0;
 }
 
 void BaseMapHandler::Load(const std::string& filename, Map& map)
 {
-  DebugLog("Loading %s using %s", filename.c_str(), name.c_str());
-  // Checking to see if the file can be loaded to.
-  std::ifstream file(filename.c_str());
-  if (!file.good())
-    throw "Could not open file for reading";
-  Load(file, map);
-  file.close();
+    DebugLog("Loading %s using %s", filename.c_str(), name.c_str());
+    // Checking to see if the file can be loaded to.
+    std::ifstream file(filename.c_str());
+    if (!file.good())
+        throw "Could not open file for reading";
+    Load(file, map);
+    file.close();
 }
 
 void BaseMapHandler::Save(const std::string& filename, const Map& map)
 {
-  DebugLog("Saving %s using %s", filename.c_str(), name.c_str());
-  // Checking to see if the file can be saved to.
-  std::ofstream file(filename.c_str());
-  if (!file.good())
-    throw "Could not open file for writing";
-  Save(file, map);
-  file.close();
+    DebugLog("Saving %s using %s", filename.c_str(), name.c_str());
+    // Checking to see if the file can be saved to.
+    std::ofstream file(filename.c_str());
+    if (!file.good())
+        throw "Could not open file for writing";
+    Save(file, map);
+    file.close();
 }
 
 void BaseMapHandler::Load(std::istream& filename, Map& map)
 {
-  throw "Load is not defined for this handler";
+    throw "Load is not defined for this handler";
 }
 
 void BaseMapHandler::Save(std::ostream& filename, const Map& map)
 {
-  throw "Save is not defined for this handler";
+    throw "Save is not defined for this handler";
 }

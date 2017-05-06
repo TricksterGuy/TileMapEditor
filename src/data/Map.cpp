@@ -27,101 +27,74 @@
 
 using namespace std;
 
-Map::Map(const std::string& _name, const std::string& _filename, uint32_t _width, uint32_t _height,
-         uint32_t _tile_width, uint32_t _tile_height)
-: name(_name), filename(_filename), tile_width(_tile_width), tile_height(_tile_height)
-{
-}
-
 void Map::Clear()
 {
-  for (auto& layer : layers)
-    layer.Clear();
+    for (auto& layer : layers)
+        layer.Clear();
 
-  if (HasCollisionLayer())
-    collision_layer->Clear();
+    if (HasCollisionLayer())
+        collision_layer->Clear();
 }
 
 void Map::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
 {
-  for (auto& layer : layers)
-    layer.Resize(newwidth, newheight, copy);
-  if (collision_layer)
-  {
-    if (collision_layer->GetType() == Collision::PixelBased)
-      collision_layer->Resize(newwidth * tile_width, newheight * tile_height, copy);
-    else
-      collision_layer->Resize(newwidth, newheight, copy);
-  }
+    uint32_t tile_width, tile_height;
+    tileset.GetTileDimensions(tile_width, tile_height);
+    if (collision_layer)
+    {
+        if (collision_layer->GetType() == CollisionLayer::PixelBased)
+            collision_layer->Resize(newwidth * tile_width, newheight * tile_height, copy);
+        else
+            collision_layer->Resize(newwidth, newheight, copy);
+    }
 }
 
 void Map::Shift(int horizontal, int vertical, bool wrap)
 {
-  for (auto& layer : layers)
-    layer.Shift(horizontal, vertical, wrap);
-  if (collision_layer)
-    collision_layer->Shift(horizontal, vertical, wrap);
+    for (auto& layer : layers)
+        layer.Shift(horizontal, vertical, wrap);
+    if (collision_layer)
+        collision_layer->Shift(horizontal, vertical, wrap);
 }
 
 void Map::Add(const Layer& layer)
 {
-  layers.push_back(layer);
+    layers.push_back(layer);
 }
 
 void Map::Add(const Background& back)
 {
-  backgrounds.push_back(back);
-}
-
-void Map::Add(const AnimatedTile& tile)
-{
-  animated_tiles.push_back(tile);
+    backgrounds.push_back(back);
 }
 
 void Map::DeleteLayer(const uint32_t index)
 {
-  layers.erase(layers.begin() + index);
+    layers.erase(layers.begin() + index);
 }
 
 void Map::DeleteBackground(const uint32_t index)
 {
-  backgrounds.erase(backgrounds.begin() + index);
-}
-
-void Map::DeleteAnimatedTile(const uint32_t index)
-{
-  animated_tiles.erase(animated_tiles.begin() + index);
-}
-
-void Map::SetCollisionLayer(CollisionLayer* layer)
-{
-  collision_layer.reset(layer);
-}
-
-void Map::SetTileDimensions(uint32_t width, uint32_t height)
-{
-  tile_width = width;
-  tile_height = height;
+    backgrounds.erase(backgrounds.begin() + index);
 }
 
 uint32_t Map::GetWidth() const
 {
-  uint32_t width = 0;
-  for (const auto& layer : layers)
-  {
-    if (layer.GetWidth() > width)
-      width = layer.GetWidth();
-  }
-  return width;
+    uint32_t width = 0;
+    for (const auto& layer : layers)
+    {
+        if (layer.GetWidth() > width)
+            width = layer.GetWidth();
+    }
+    return width;
 }
 
 uint32_t Map::GetHeight() const
 {
-  uint32_t height = 0;
-  for (const auto& layer : layers)
-  {
-    if (layer.GetHeight() > height)
-      height = layer.GetHeight();
-  }
-  return height;
+    uint32_t height = 0;
+    for (const auto& layer : layers)
+    {
+        if (layer.GetHeight() > height)
+            height = layer.GetHeight();
+    }
+    return height;
 }

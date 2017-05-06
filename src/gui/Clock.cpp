@@ -24,49 +24,49 @@
 
 Clock::Clock(unsigned int rate) : framerate(rate), paused(true), update()
 {
-  update.SetNeedRefresh(true);
+    update.SetNeedRefresh(true);
 }
 
 void Clock::Add(wxView* owner)
 {
-  owners.push_back(owner);
+    owners.push_back(owner);
 }
 
 void Clock::Pause()
 {
-  paused = true;
-  Stop();
+    paused = true;
+    Stop();
 }
 
 bool Clock::IsPaused()
 {
-  return paused;
+    return paused;
 }
 
 void Clock::Run()
 {
-  paused = false;
-  Start(1000 / framerate, wxTIMER_CONTINUOUS);
+    paused = false;
+    Start(1000 / framerate, wxTIMER_CONTINUOUS);
 }
 
 void Clock::Stop()
 {
-  owners.clear();
-  wxTimer::Stop();
+    owners.clear();
+    wxTimer::Stop();
 }
 
 unsigned int Clock::GetFramerate() const
 {
-  return framerate;
+    return framerate;
 }
 
 void Clock::SetFramerate(unsigned int rate)
 {
-  framerate = rate;
+    framerate = rate;
 }
 
 void Clock::Notify()
 {
-  for (const auto& owner : owners)
-    owner->OnUpdate(NULL, &update);
+    for (const auto& owner : owners)
+        owner->OnUpdate(NULL, &update);
 }

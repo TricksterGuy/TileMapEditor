@@ -28,33 +28,32 @@
 
 #include "Background.hpp"
 
-class ParallaxBackground
-{
-  public:
-  /** Creates a ParallaxBackground from the background passed in */
-  ParallaxBackground(const wxString& filename, const Background& background);
-  /** Draws the background onto the screen */
-  void Draw(wxGCDC& dc);
-  /** Updates the background repositioning if necessary
-    * Called every frame
-    */
-  void Update(wxGCDC& dc);
+class ParallaxBackground {
+public:
+    /** Creates a ParallaxBackground from the background passed in */
+    ParallaxBackground(const wxString& filename, const Background& background);
+    /** Draws the background onto the screen */
+    void Draw(wxGCDC& dc);
+    /** Updates the background repositioning if necessary
+      * Called every frame
+      */
+    void Update(wxGCDC& dc);
 
-  private:
-  /**
-    * Loads the image used for the background
-    * The image is assumed to exist in the Resource Pool.
-    */
-  std::string name;
-  std::string filename;
-  int mode;
-  int32_t speedx, speedy;
-  int32_t x, y;
-  DrawAttributes attr;
-  bool needUpdateImage;
-  wxBitmap image;
+private:
+    /**
+      * Loads the image used for the background
+      * The image is assumed to exist in the Resource Pool.
+      */
+    std::string name;
+    std::string filename;
+    int mode;
+    float speedx, speedy;
+    float x, y;
+    DrawAttributes attr;
+    bool needUpdateImage;
+    wxBitmap image;
 
-  void UpdateImage();
+    void UpdateImage();
 };
 
 #endif

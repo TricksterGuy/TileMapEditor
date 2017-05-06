@@ -21,22 +21,22 @@
 #include "PixelBasedCollisionLayer.hpp"
 
 PixelBasedCollisionLayer::PixelBasedCollisionLayer(const std::vector<Rectangle>& rectangles)
-: CollisionLayer(Collision::PixelBased), region(rectangles)
+    : CollisionLayer(CollisionLayer::PixelBased), region(rectangles)
 {
 }
 
-PixelBasedCollisionLayer::PixelBasedCollisionLayer() : CollisionLayer(Collision::PixelBased)
+PixelBasedCollisionLayer::PixelBasedCollisionLayer() : CollisionLayer(CollisionLayer::PixelBased)
 {
 }
 
 bool PixelBasedCollisionLayer::operator==(const PixelBasedCollisionLayer& other) const
 {
-  if (type != other.type)
-    return false;
-  if (region != other.region)
-    return false;
+    if (type != other.type)
+        return false;
+    if (region != other.region)
+        return false;
 
-  return true;
+    return true;
 }
 
 void PixelBasedCollisionLayer::Shift(int horizontal, int vertical, bool wrap)
@@ -48,5 +48,5 @@ void PixelBasedCollisionLayer::Shift(int horizontal, int vertical, bool wrap)
 
 void PixelBasedCollisionLayer::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
 {
-  /// TODO implement
+    /// TODO implement
 }

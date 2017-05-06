@@ -26,47 +26,46 @@
 #include "Map.hpp"
 
 /** Utilities for loading/saving files.*/
-class HandlerUtils
-{
-  public:
-  /** Converts a map to an Magick::Image.
-    * @param map Map object.
-    * @param image Image object to store the result.
-    * @return nonzero on failure 0 on success.
-    */
-  static int MapToImage(const Map& map, Magick::Image& image);
-  /** Converts a layer to an Magick::Image.
-    * @param map Map object.
-    * @param layer Layer object.
-    * @param image Image object to store the result.
-    * @return nonzero on failure 0 on success.
-    */
-  static int LayerToImage(const Map& map, const Layer& layer, Magick::Image& image);
-  /** Loads the map tileset to an Magick::Image.
-    * @param map Map object.
-    * @param image Image object to store the result.
-    * @return nonzero on failure 0 on success.
-    */
-  static int LoadTileset(const Map& map, Magick::Image& image);
-  /** Gets the tiles from the map to Magick::Images.
-    * @param map Map object.
-    * @param tiles Where to store the resulting images.
-    * @return nonzero on failure 0 on success.
-    */
-  static int GetTiles(const Map& map, std::vector<Magick::Image>& tiles);
-  /** Gets the tiles from the map to Magick::Images.
-    * @param map Map object.
-    * @param tileset Preloaded tileset.
-    * @param tiles Where to store the resulting images.
-    * @return nonzero on failure 0 on success.
-    */
-  static int GetTiles(const Map& map, Magick::Image& tileset, std::vector<Magick::Image>& tiles);
+class HandlerUtils {
+public:
+    /** Converts a map to an Magick::Image.
+      * @param map Map object.
+      * @param image Image object to store the result.
+      * @return nonzero on failure 0 on success.
+      */
+    static int MapToImage(const Map& map, Magick::Image& image);
+    /** Converts a layer to an Magick::Image.
+      * @param map Map object.
+      * @param layer Layer object.
+      * @param image Image object to store the result.
+      * @return nonzero on failure 0 on success.
+      */
+    static int LayerToImage(const Map& map, const Layer& layer, Magick::Image& image);
+    /** Loads the map tileset to an Magick::Image.
+      * @param map Map object.
+      * @param image Image object to store the result.
+      * @return nonzero on failure 0 on success.
+      */
+    static int LoadTileset(const Map& map, Magick::Image& image);
+    /** Gets the tiles from the map to Magick::Images.
+      * @param map Map object.
+      * @param tiles Where to store the resulting images.
+      * @return nonzero on failure 0 on success.
+      */
+    static int GetTiles(const Map& map, std::vector<Magick::Image>& tiles);
+    /** Gets the tiles from the map to Magick::Images.
+      * @param map Map object.
+      * @param tileset Preloaded tileset.
+      * @param tiles Where to store the resulting images.
+      * @return nonzero on failure 0 on success.
+      */
+    static int GetTiles(const Map& map, Magick::Image& tileset, std::vector<Magick::Image>& tiles);
 
-  private:
-  static int LayerToImage(const Map& map, const Layer& layer, std::vector<Magick::Image>& tiles, Magick::Image& image);
-  HandlerUtils(){};                              // Private constructor
-  HandlerUtils(const HandlerUtils&);             // Prevent copy-construction
-  HandlerUtils& operator=(const HandlerUtils&);  // Prevent assignment
+private:
+    static int LayerToImage(const Map& map, const Layer& layer, std::vector<Magick::Image>& tiles, Magick::Image& image);
+    HandlerUtils() {};                             // Private constructor
+    HandlerUtils(const HandlerUtils&);             // Prevent copy-construction
+    HandlerUtils& operator=(const HandlerUtils&);  // Prevent assignment
 };
 
 #endif

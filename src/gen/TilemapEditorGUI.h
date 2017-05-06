@@ -41,34 +41,64 @@
 ///////////////////////////////////////////////////////////////////////////////
 class TilemapEditorGUI : public wxDocMDIParentFrame
 {
-	private:
+private:
 
-	protected:
-		wxMenuBar* menubar;
-		wxMenu* fileMenu;
-		wxMenu* menuRecent;
-		wxMenu* editMenu;
-		wxMenu* helpMenu;
-		wxStatusBar* statusBar;
+protected:
+    wxMenuBar* menubar;
+    wxMenu* fileMenu;
+    wxMenu* menuRecent;
+    wxMenu* editMenu;
+    wxMenu* helpMenu;
+    wxStatusBar* statusBar;
 
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnImportText( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnImportXml( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnImport( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnExportText( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnExportXml( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnExportAsImage( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnExportLayersAsImages( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnExport( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
+    // Virtual event handlers, overide them in your derived class
+    virtual void OnClose( wxCloseEvent& event )
+    {
+        event.Skip();
+    }
+    virtual void OnImportText( wxCommandEvent& event )
+    {
+        event.Skip();
+    }
+    virtual void OnImportXml( wxCommandEvent& event )
+    {
+        event.Skip();
+    }
+    virtual void OnImport( wxCommandEvent& event )
+    {
+        event.Skip();
+    }
+    virtual void OnExportText( wxCommandEvent& event )
+    {
+        event.Skip();
+    }
+    virtual void OnExportXml( wxCommandEvent& event )
+    {
+        event.Skip();
+    }
+    virtual void OnExportAsImage( wxCommandEvent& event )
+    {
+        event.Skip();
+    }
+    virtual void OnExportLayersAsImages( wxCommandEvent& event )
+    {
+        event.Skip();
+    }
+    virtual void OnExport( wxCommandEvent& event )
+    {
+        event.Skip();
+    }
+    virtual void OnAbout( wxCommandEvent& event )
+    {
+        event.Skip();
+    }
 
 
-	public:
+public:
 
-		TilemapEditorGUI( wxDocManager* manager, wxFrame* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("TilemapEditor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 481,466 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+    TilemapEditorGUI( wxDocManager* manager, wxFrame* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("TilemapEditor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 481,466 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
-		~TilemapEditorGUI();
+    ~TilemapEditorGUI();
 
 };
 

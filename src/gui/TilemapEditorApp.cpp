@@ -29,29 +29,29 @@ IMPLEMENT_APP(TilemapEditorApp);
 
 bool TilemapEditorApp::OnInit()
 {
-  wxInitAllImageHandlers();
+    wxInitAllImageHandlers();
 
-  MapHandlerManager().Add(new BinaryMapHandler());
-  MapHandlerManager().Add(new TextMapHandler());
-  MapHandlerManager().Add(new ImageMapHandler());
-  MapHandlerManager().Add(new GBAImageHandler());
-  MapHandlerManager().Add(new GBAMapHandler());
-  MapHandlerManager().Add(new XmlMapHandler());
+    MapHandlerManager().Add(new BinaryMapHandler());
+    MapHandlerManager().Add(new TextMapHandler());
+    MapHandlerManager().Add(new ImageMapHandler());
+    MapHandlerManager().Add(new GBAImageHandler());
+    MapHandlerManager().Add(new GBAMapHandler());
+    MapHandlerManager().Add(new XmlMapHandler());
 
-  // Fill in the application information fields before creating wxConfig.
-  SetVendorName("wxWidgets");
-  SetAppName("wx_docview_sample");
-  SetAppDisplayName("wxWidgets DocView Sample");
+    // Fill in the application information fields before creating wxConfig.
+    SetVendorName("wxWidgets");
+    SetAppName("wx_docview_sample");
+    SetAppDisplayName("wxWidgets DocView Sample");
 
-  frame = new TilemapEditorFrame(NULL);
-  SetTopWindow(frame);
-  frame->Centre();
-  frame->Show();
+    frame = new TilemapEditorFrame(NULL);
+    SetTopWindow(frame);
+    frame->Centre();
+    frame->Show();
 
-  return true;
+    return true;
 }
 
 wxFrame* TilemapEditorApp::CreateChildFrame(wxView* view)
 {
-  return frame->CreateChildFrame(view);
+    return frame->CreateChildFrame(view);
 }

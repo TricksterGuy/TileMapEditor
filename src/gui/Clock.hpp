@@ -32,28 +32,27 @@
   * This class is a clock that runs code to update views contents based on a framerate.
   * When creating an instance of this class be sure to call run after creating one.
   */
-class Clock : public wxTimer
-{
-  public:
-  Clock(unsigned int rate = 1);
+class Clock : public wxTimer {
+public:
+    Clock(unsigned int rate = 1);
 
-  void Add(wxView* owner);
-  void Remove(wxView* owner);
-  void Pause();
-  void Run();
-  void Stop();
-  bool IsPaused();
+    void Add(wxView* owner);
+    void Remove(wxView* owner);
+    void Pause();
+    void Run();
+    void Stop();
+    bool IsPaused();
 
-  unsigned int GetFramerate() const;
-  void SetFramerate(unsigned int rate);
+    unsigned int GetFramerate() const;
+    void SetFramerate(unsigned int rate);
 
-  virtual void Notify();
+    virtual void Notify();
 
-  private:
-  unsigned int framerate;
-  bool paused;
-  std::vector<wxView*> owners;
-  MapViewUpdate update;
+private:
+    unsigned int framerate;
+    bool paused;
+    std::vector<wxView*> owners;
+    MapViewUpdate update;
 };
 
 #endif

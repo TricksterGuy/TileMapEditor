@@ -27,24 +27,24 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class GridSizeGUI
 ///////////////////////////////////////////////////////////////////////////////
-class GridSizeGUI : public wxDialog 
+class GridSizeGUI : public wxDialog
 {
-	private:
-	
-	protected:
-		wxStaticText* m_staticText1;
-		wxSpinCtrl* gridSizeX;
-		wxStaticText* m_staticText2;
-		wxSpinCtrl* gridSizeY;
-		
-		wxButton* m_button1;
-		wxButton* m_button2;
-	
-	public:
-		
-		GridSizeGUI( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Grid Size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 158,114 ), long style = wxDEFAULT_DIALOG_STYLE );
-		~GridSizeGUI();
-	
+private:
+
+protected:
+    wxStaticText* m_staticText1;
+    wxSpinCtrl* gridSizeX;
+    wxStaticText* m_staticText2;
+    wxSpinCtrl* gridSizeY;
+
+    wxButton* m_button1;
+    wxButton* m_button2;
+
+public:
+
+    GridSizeGUI( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Grid Size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 158,114 ), long style = wxDEFAULT_DIALOG_STYLE );
+    ~GridSizeGUI();
+
 };
 
 #endif //__GridSizeGUI__

@@ -22,12 +22,12 @@
 
 MapCanvas::MapCanvas(wxView* wxview, wxWindow* Parent, wxWindowID Id, const wxPoint& Position, const wxSize& Size,
                      long Style)
-: wxScrolledCanvas(Parent ? Parent : view->GetFrame(), Id, Position, Size, Style), view(wxview)
+    : wxScrolledCanvas(Parent ? Parent : view->GetFrame(), Id, Position, Size, Style), view(wxview)
 {
 }
 
 void MapCanvas::OnDraw(wxDC& dc)
 {
-  if (view)
-    view->OnDraw(&dc);
+    if (view)
+        view->OnDraw(&dc);
 }

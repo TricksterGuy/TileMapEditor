@@ -33,20 +33,23 @@
 ///////////////////////////////////////////////////////////////////////////////
 class MapNotebookPanel : public wxPanel
 {
-	private:
+private:
 
-	protected:
-		wxFlatNotebook* docNotebook;
-		wxPanel* startPage;
+protected:
+    wxFlatNotebook* docNotebook;
+    wxPanel* startPage;
 
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnClosePage( wxFlatNotebookEvent& event ) { event.Skip(); }
+    // Virtual event handlers, overide them in your derived class
+    virtual void OnClosePage( wxFlatNotebookEvent& event )
+    {
+        event.Skip();
+    }
 
 
-	public:
+public:
 
-		MapNotebookPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
-		~MapNotebookPanel();
+    MapNotebookPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL );
+    ~MapNotebookPanel();
 
 };
 

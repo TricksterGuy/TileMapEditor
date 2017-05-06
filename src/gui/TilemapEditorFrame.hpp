@@ -31,27 +31,26 @@
 /**
   *  Represents the main class of the application
   */
-class TilemapEditorFrame : public wxDocManager, public TilemapEditorGUI
-{
-  public:
-  TilemapEditorFrame(wxFrame* frame);
-  ~TilemapEditorFrame();
-  wxFrame* CreateChildFrame(wxView* doc);
+class TilemapEditorFrame : public wxDocManager, public TilemapEditorGUI {
+public:
+    TilemapEditorFrame(wxFrame* frame);
+    ~TilemapEditorFrame();
+    wxFrame* CreateChildFrame(wxView* doc);
 
-  private:
-  // File Menu
-  virtual void OnImportText(wxCommandEvent& event);
-  virtual void OnImportXml(wxCommandEvent& event);
-  virtual void OnImport(wxCommandEvent& event);
-  virtual void OnExportText(wxCommandEvent& event);
-  virtual void OnExportXml(wxCommandEvent& event);
-  virtual void OnExportAsImage(wxCommandEvent& event);
-  virtual void OnExportLayersAsImages(wxCommandEvent& event);
-  virtual void OnExport(wxCommandEvent& event);
-  virtual void OnClose(wxCloseEvent& event);
-  // Help menu
-  virtual void OnAbout(wxCommandEvent& event);
-  Clock clock;
+private:
+    // File Menu
+    virtual void OnImportText(wxCommandEvent& event);
+    virtual void OnImportXml(wxCommandEvent& event);
+    virtual void OnImport(wxCommandEvent& event);
+    virtual void OnExportText(wxCommandEvent& event);
+    virtual void OnExportXml(wxCommandEvent& event);
+    virtual void OnExportAsImage(wxCommandEvent& event);
+    virtual void OnExportLayersAsImages(wxCommandEvent& event);
+    virtual void OnExport(wxCommandEvent& event);
+    virtual void OnClose(wxCloseEvent& event);
+    // Help menu
+    virtual void OnAbout(wxCommandEvent& event);
+    Clock clock;
 };
 
 #endif

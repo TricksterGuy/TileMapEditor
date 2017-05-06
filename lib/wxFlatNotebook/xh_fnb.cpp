@@ -16,7 +16,7 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+#pragma hdrstop
 #endif
 
 #if wxUSE_XRC
@@ -31,7 +31,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxFlatNotebookXmlHandler, wxXmlResourceHandler)
 
 wxFlatNotebookXmlHandler::wxFlatNotebookXmlHandler()
-: wxXmlResourceHandler(), m_isInside(false), m_notebook(NULL)
+    : wxXmlResourceHandler(), m_isInside(false), m_notebook(NULL)
 {
     XRC_ADD_STYLE(wxFNB_DEFAULT_STYLE);
     XRC_ADD_STYLE(wxFNB_VC71);
@@ -74,7 +74,7 @@ wxObject *wxFlatNotebookXmlHandler::DoCreateResource()
             if (wnd)
             {
                 m_notebook->AddPage(wnd, GetText(wxT("label")),
-                                         GetBool(wxT("selected")));
+                                    GetBool(wxT("selected")));
                 if ( HasParam(wxT("bitmap")) )
                 {
                     wxBitmap bmp = GetBitmap(wxT("bitmap"), wxART_OTHER);

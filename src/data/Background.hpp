@@ -40,52 +40,50 @@
   */
 class Background : public DrawAttributes
 {
-  public:
-  /** Controls how the background moves */
-  enum ScrollMode
-  {
-    /** Stationary background does not move at all */
-    Stationary = 0,
-    /** Scrolls with the camera */
-    Camera = 1,
-    /** Automatically scrolling background */
-    Autoscroll = 2,
-  };
-  /** Controls how the background is drawn */
-  enum DrawMode
-  {
-    /** Drawn once */
-    Once = 0,
-    /** Drawn repeatedly to fill the view */
-    Repeating = 4
-  };
+public:
+    /** Controls how the background moves */
+    enum ScrollMode
+    {
+        /** Stationary background does not move at all */
+        Stationary = 0,
+        /** Scrolls with the camera */
+        Camera = 1,
+        /** Automatically scrolling background */
+        Autoscroll = 2,
+    };
+    /** Controls how the background is drawn */
+    enum DrawMode
+    {
+        /** Drawn once */
+        Once = 0,
+        /** Drawn repeatedly to fill the view */
+        Repeating = 4
+    };
 
-  /** Creates a new Background.
-    * @param name Name of the background.
-    * @param filename Name of the image file to use.
-    * @param mode Background mode.
-    * @param x Horizontal speed.
-    * @param y Vertical speed.
-    */
-  Background(const std::string& name = "", const std::string& filename = "", uint32_t mode = 0, int32_t x = 0,
-             int32_t y = 0, const DrawAttributes& attr = DrawAttributes(-1));
+    /** Creates a new Background.
+      * @param name Name of the background.
+      * @param filename Name of the image file to use.
+      * @param mode Background mode.
+      * @param x Horizontal speed.
+      * @param y Vertical speed.
+      */
+    Background(const std::string& name = "", const std::string& filename = "", uint32_t mode = 0, float x = 0, float y = 0, const DrawAttributes& attr = DrawAttributes(-1));
 
-  const std::string& GetName() const { return name; }
-  const std::string& GetFilename() const { return filename; }
-  uint32_t GetMode() const { return mode; }
-  void SetName(const std::string& _name) { name = _name; }
-  void SetFilename(const std::string& _filename) { filename = _filename; }
-  void SetMode(uint32_t _mode) { mode = _mode; }
-  int32_t GetSpeedX() const { return speed_x; }
-  int32_t GetSpeedY() const { return speed_y; }
-  void GetSpeed(int32_t& x, int32_t& y) const;
-  void SetSpeed(int32_t x, int32_t y);
+    const std::string& GetName() const { return name; }
+    const std::string& GetFilename() const { return filename; }
+    uint32_t GetMode() const { return mode; }
+    void GetSpeed(float& x, float& y) const;
 
-  private:
-  std::string name;
-  std::string filename;
-  uint32_t mode;
-  int32_t speed_x, speed_y;
+    void SetName(const std::string& _name) { name = _name; }
+    void SetFilename(const std::string& _filename) { filename = _filename; }
+    void SetMode(uint32_t _mode) { mode = _mode; }
+    void SetSpeed(float x, float y);
+
+private:
+    std::string name;
+    std::string filename;
+    uint32_t mode;
+    float speed_x, speed_y;
 };
 
 #endif

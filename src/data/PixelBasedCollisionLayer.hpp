@@ -32,30 +32,30 @@
   */
 class PixelBasedCollisionLayer : public CollisionLayer
 {
-  public:
-  /** Creates a collision layer with a predefined set of collision rectangles. */
-  PixelBasedCollisionLayer(const std::vector<Rectangle>& rectangles);
-  /** Creates an empty collision layer that is pixel based */
-  PixelBasedCollisionLayer();
-  bool operator==(const PixelBasedCollisionLayer& other) const;
-  bool operator!=(const PixelBasedCollisionLayer& other) const { return !(*this == other); }
+public:
+    /** Creates a collision layer with a predefined set of collision rectangles. */
+    PixelBasedCollisionLayer(const std::vector<Rectangle>& rectangles);
+    /** Creates an empty collision layer that is pixel based */
+    PixelBasedCollisionLayer();
+    bool operator==(const PixelBasedCollisionLayer& other) const;
+    bool operator!=(const PixelBasedCollisionLayer& other) const { return !(*this == other); }
 
-  /** @see CollisionLayer::clear */
-  virtual void Clear() { region.Clear(); }
-  /** @see CollisionLayer::shift */
-  virtual void Shift(int horizontal, int vertical, bool wrap = false);
-  /** @see CollisionLayer::resize */
-  virtual void Resize(uint32_t width, uint32_t height, bool copy = true);
+    /** @see CollisionLayer::clear */
+    virtual void Clear() { region.Clear(); }
+    /** @see CollisionLayer::shift */
+    virtual void Shift(int horizontal, int vertical, bool wrap = false);
+    /** @see CollisionLayer::resize */
+    virtual void Resize(uint32_t width, uint32_t height, bool copy = true);
 
-  const Region& GetData() const { return region; }
+    const Region& GetData() const { return region; }
 
-  void Add(const Rectangle& rectangle) { region.Add(rectangle); }
-  void Xor(const Rectangle& rectangle) { region.Xor(rectangle); }
-  void Subtract(const Rectangle& rectangle) { region.Subtract(rectangle); }
-  void Intersect(const Rectangle& rectangle) { region.Intersect(rectangle); }
+    void Add(const Rectangle& rectangle) { region.Add(rectangle); }
+    void Xor(const Rectangle& rectangle) { region.Xor(rectangle); }
+    void Subtract(const Rectangle& rectangle) { region.Subtract(rectangle); }
+    void Intersect(const Rectangle& rectangle) { region.Intersect(rectangle); }
 
-  protected:
-  Region region;
+protected:
+    Region region;
 };
 
 #endif

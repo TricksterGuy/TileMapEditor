@@ -7,18 +7,18 @@
 
 struct Global
 {
-  Global() : test_log("test.log")
-  {
-    boost::unit_test::unit_test_log.set_stream(test_log);
-    logger->SetLogLevel(LogLevel::VERBOSE);
-  }
+    Global() : test_log("test.log")
+    {
+        boost::unit_test::unit_test_log.set_stream(test_log);
+        logger->SetLogLevel(LogLevel::VERBOSE);
+    }
 
-  ~Global()
-  {
-    boost::unit_test::unit_test_log.set_stream(std::cout);
-  }
+    ~Global()
+    {
+        boost::unit_test::unit_test_log.set_stream(std::cout);
+    }
 
-  std::ofstream test_log;
+    std::ofstream test_log;
 };
 
 BOOST_GLOBAL_FIXTURE(Global);

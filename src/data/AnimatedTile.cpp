@@ -21,57 +21,57 @@
 #include "AnimatedTile.hpp"
 
 AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times)
-: name(_name), delay(_delay), type(_type), times(_times)
+    : name(_name), delay(_delay), type(_type), times(_times)
 {
 }
 
 AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times,
                            const std::vector<int32_t>& _frames)
-: name(_name), delay(_delay), type(_type), times(_times), frames(_frames)
+    : name(_name), delay(_delay), type(_type), times(_times), frames(_frames)
 {
 }
 
 void AnimatedTile::Add(int32_t frame)
 {
-  frames.push_back(frame);
+    frames.push_back(frame);
 }
 
 int32_t AnimatedTile::GetCurrentFrame(int clock) const
 {
-  int timestep = clock / delay;
-  unsigned int numFrames = frames.size();
-  int frame;
-  int constrained, decrease;
+    int timestep = clock / delay;
+    unsigned int numFrames = frames.size();
+    int frame;
+    int constrained, decrease;
 
-  switch (type)
-  {
+    switch (type)
+    {
     case Animation::Normal:
-      frame = timestep % numFrames;
-      break;
+        frame = timestep % numFrames;
+        break;
     case Animation::Reverse:
-      frame = numFrames - 1 - (timestep % numFrames);
-      break;
+        frame = numFrames - 1 - (timestep % numFrames);
+        break;
     case Animation::Ping:
-      constrained = timestep % (numFrames * 2 - 2);
-      decrease = constrained / numFrames;
-      frame = constrained % numFrames;
-      if (decrease)
-        frame = numFrames - 2 - frame;
-      break;
+        constrained = timestep % (numFrames * 2 - 2);
+        decrease = constrained / numFrames;
+        frame = constrained % numFrames;
+        if (decrease)
+            frame = numFrames - 2 - frame;
+        break;
     case Animation::PingReverse:
-      constrained = timestep % (numFrames * 2 - 2);
-      decrease = constrained / numFrames;
-      frame = constrained % numFrames;
-      if (decrease)
-        frame = numFrames - 2 - frame;
-      frame = numFrames - 1 - frame;
-      break;
+        constrained = timestep % (numFrames * 2 - 2);
+        decrease = constrained / numFrames;
+        frame = constrained % numFrames;
+        if (decrease)
+            frame = numFrames - 2 - frame;
+        frame = numFrames - 1 - frame;
+        break;
     case Animation::Random:
-      frame = rand() % numFrames;
-      break;
+        frame = rand() % numFrames;
+        break;
     default:
-      frame = -1;
-  }
+        frame = -1;
+    }
 
-  return frames[frame];
+    return frames[frame];
 }

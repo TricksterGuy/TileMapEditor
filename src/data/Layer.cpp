@@ -24,99 +24,99 @@
 
 Layer::Layer(const std::string& _name, uint32_t _width, uint32_t _height, const std::vector<int32_t>& _data,
              const DrawAttributes& attr)
-: DrawAttributes(attr), name(_name), width(_width), height(_height), data(_data)
+    : DrawAttributes(attr), name(_name), width(_width), height(_height), data(_data)
 {
 }
 
 Layer::Layer(const std::string& _name, uint32_t _width, uint32_t _height, const int32_t* _data,
              const DrawAttributes& attr)
-: DrawAttributes(attr), name(_name), width(_width), height(_height), data(_data, _data + width * height)
+    : DrawAttributes(attr), name(_name), width(_width), height(_height), data(_data, _data + width * height)
 {
 }
 
 Layer::Layer(const std::string& _name, uint32_t _width, uint32_t _height, const DrawAttributes& attr)
-: DrawAttributes(attr), name(_name), width(_width), height(_height), data(width * height, -1)
+    : DrawAttributes(attr), name(_name), width(_width), height(_height), data(width * height, -1)
 {
 }
 
 void Layer::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
 {
-  if (newwidth == width && newheight == height)
-    return;
+    if (newwidth == width && newheight == height)
+        return;
 
-  if (copy)
-  {
-    std::vector<int32_t> newdata = data;
-    data.clear();
-    data.reserve(width * height);
-
-    uint32_t minw = newwidth > width ? width : newwidth;
-    uint32_t minh = newheight > height ? height : newheight;
-    int32_t excessx = (int32_t)(newwidth - width);
-    int32_t excessy = (int32_t)(newheight - height);
-
-    for (uint32_t i = 0; i < minh; i++)
+    if (copy)
     {
-      data.insert(data.begin() + i * newwidth, newdata.begin() + i * width, newdata.begin() + i * width + minw);
-      if (newwidth > width)
-        data.insert(data.begin() + i * newwidth + width, -1, excessx);
+        std::vector<int32_t> newdata = data;
+        data.clear();
+        data.reserve(width * height);
+
+        uint32_t minw = newwidth > width ? width : newwidth;
+        uint32_t minh = newheight > height ? height : newheight;
+        int32_t excessx = (int32_t)(newwidth - width);
+        int32_t excessy = (int32_t)(newheight - height);
+
+        for (uint32_t i = 0; i < minh; i++)
+        {
+            data.insert(data.begin() + i * newwidth, newdata.begin() + i * width, newdata.begin() + i * width + minw);
+            if (newwidth > width)
+                data.insert(data.begin() + i * newwidth + width, -1, excessx);
+        }
+
+        if (newheight > height)
+            data.insert(data.begin() + minh * newwidth, -1, newwidth * excessy);
+    }
+    else
+    {
+        data.assign(newwidth * newheight, -1);
     }
 
-    if (newheight > height)
-      data.insert(data.begin() + minh * newwidth, -1, newwidth * excessy);
-  }
-  else
-  {
-    data.assign(newwidth * newheight, -1);
-  }
-
-  width = newwidth;
-  height = newheight;
+    width = newwidth;
+    height = newheight;
 }
 
 void Layer::Shift(int32_t horizontal, int32_t vertical, bool wrap)
 {
-  int32_t* newdata = new int32_t[width * height];
-  int32_t* olddata = data.data();
+    int32_t* newdata = new int32_t[width * height];
+    int32_t* olddata = data.data();
 
-  if (!wrap)
-    memset(newdata, 0xFF, sizeof(int32_t) * width * height);
+    if (!wrap)
+        memset(newdata, 0xFF, sizeof(int32_t) * width * height);
 
-  // TODO Make more efficient
-  if (wrap)
-  {
-    for (uint32_t i = 0; i < height; i++)
+    // TODO Make more efficient
+    if (wrap)
     {
-      for (uint32_t j = 0; j < width; j++)
-      {
-        int sx = (j - horizontal) % width;
-        int sy = (i - vertical) % height;
-        if (sx < 0)
-          sx += width;
-        if (sy < 0)
-          sy += height;
-        newdata[i * width + j] = olddata[sy * width + sx];
-      }
+        for (uint32_t i = 0; i < height; i++)
+        {
+            for (uint32_t j = 0; j < width; j++)
+            {
+                int sx = (j - horizontal) % width;
+                int sy = (i - vertical) % height;
+                if (sx < 0)
+                    sx += width;
+                if (sy < 0)
+                    sy += height;
+                newdata[i * width + j] = olddata[sy * width + sx];
+            }
+        }
     }
-  }
-  else
-  {
-    for (uint32_t i = 0; i < height; i++)
+    else
     {
-      for (uint32_t j = 0; j < width; j++)
-      {
-        if (i - vertical < 0 || i - vertical >= height || j - horizontal < 0 || j - horizontal >= width)
-          continue;
-        newdata[i * width + j] = olddata[(i - vertical) * width + (j - horizontal)];
-      }
+        for (uint32_t i = 0; i < height; i++)
+        {
+            for (uint32_t j = 0; j < width; j++)
+            {
+                if (i - vertical < 0 || i - vertical >= height || j - horizontal < 0 || j - horizontal >= width)
+                    continue;
+                newdata[i * width + j] = olddata[(i - vertical) * width + (j - horizontal)];
+            }
+        }
     }
-  }
 
-  data.assign(newdata, newdata + width * height);
-  delete[] newdata;
+    data.assign(newdata, newdata + width * height);
+    delete[] newdata;
 }
 
 void Layer::Clear()
 {
-  data.assign(width * height, -1);
+    data.assign(width * height, -1);
 }
