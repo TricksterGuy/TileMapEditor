@@ -101,13 +101,18 @@ BOOST_AUTO_TEST_CASE(TextMapHandlerLoad)
         return;
     }
 
-    BOOST_REQUIRE_EQUAL(map.GetName(), "HELLO WORLD");
-    BOOST_REQUIRE_EQUAL(map.GetFilename(), "011-PortTown01.png");
-    BOOST_REQUIRE_EQUAL(map.GetTileWidth(), 32);
-    BOOST_REQUIRE_EQUAL(map.GetTileHeight(), 32);
-    BOOST_REQUIRE_EQUAL(map.GetNumLayers(), 1);
-    BOOST_REQUIRE_EQUAL(map.GetNumAnimatedTiles(), 2);
-    BOOST_REQUIRE_EQUAL(map.GetNumBackgrounds(), 1);
+    BOOST_CHECK_EQUAL(map.GetName(), "HELLO WORLD");
+    const Tileset& tileset = map.GetTileset();
+    uint32_t tile_width, tile_height;
+    tileset.GetTileDimensions(tile_width, tile_height);
+    const std::vector<AnimatedTile>& animated_tiles = tileset.GetAnimatedTiles();
+    BOOST_CHECK_EQUAL(tileset.GetFilename(), "011-PortTown01.png");
+    BOOST_CHECK_EQUAL(tile_width, 32);
+    BOOST_CHECK_EQUAL(tile_height, 32);
+    BOOST_CHECK_EQUAL(animated_tiles.size(), 2);
+
+    BOOST_CHECK_EQUAL(map.GetNumLayers(), 1);
+    BOOST_CHECK_EQUAL(map.GetNumBackgrounds(), 1);
     BOOST_REQUIRE(map.HasCollisionLayer());
 
     Layer& layer = map.GetLayer(0);
@@ -115,66 +120,77 @@ BOOST_AUTO_TEST_CASE(TextMapHandlerLoad)
     std::vector<int32_t> actualData = layer.GetData();
     std::vector<int32_t> expectedData = {50, 70, 70, 60};
 
-    BOOST_REQUIRE_EQUAL(layer.GetName(), "A");
-    BOOST_REQUIRE_EQUAL(layer.GetWidth(), 2);
-    BOOST_REQUIRE_EQUAL(layer.GetHeight(), 2);
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(actualData.begin(), actualData.end(), expectedData.begin(), expectedData.end());
-    BOOST_REQUIRE_EQUAL(attr->GetX(), 32);
-    BOOST_REQUIRE_EQUAL(attr->GetY(), 24);
-    BOOST_REQUIRE_EQUAL(attr->GetOriginX(), 10);
-    BOOST_REQUIRE_EQUAL(attr->GetOriginY(), 12);
-    BOOST_REQUIRE_EQUAL(attr->GetScaleX(), 3.0f);
-    BOOST_REQUIRE_EQUAL(attr->GetScaleY(), 5.0f);
-    BOOST_REQUIRE_EQUAL(attr->GetRotation(), 92.0f);
-    BOOST_REQUIRE_EQUAL(attr->GetOpacity(), 50.0f);
-    BOOST_REQUIRE_EQUAL(attr->GetBlendMode(), 0);
-    BOOST_REQUIRE_EQUAL(attr->GetBlendColor(), (uint32_t)0xFEFDFCFA);
-    BOOST_REQUIRE_EQUAL(attr->GetDepth(), 0);
+    BOOST_CHECK_EQUAL(layer.GetName(), "A");
+    BOOST_CHECK_EQUAL(layer.GetWidth(), 2);
+    BOOST_CHECK_EQUAL(layer.GetHeight(), 2);
+    BOOST_CHECK_EQUAL_COLLECTIONS(actualData.begin(), actualData.end(), expectedData.begin(), expectedData.end());
+
+    int32_t x, y;
+    int32_t ox, oy;
+    float sx, sy;
+    attr->GetPosition(x, y);
+    attr->GetOrigin(ox, oy);
+    attr->GetScale(sx, sy);
+    BOOST_CHECK_EQUAL(x, 32);
+    BOOST_CHECK_EQUAL(y, 24);
+    BOOST_CHECK_EQUAL(ox, 10);
+    BOOST_CHECK_EQUAL(oy, 12);
+    BOOST_CHECK_EQUAL(sx, 3.0f);
+    BOOST_CHECK_EQUAL(sy, 5.0f);
+    BOOST_CHECK_EQUAL(attr->GetRotation(), 92.0f);
+    BOOST_CHECK_EQUAL(attr->GetOpacity(), 50.0f);
+    BOOST_CHECK_EQUAL(attr->GetBlendMode(), 0);
+    BOOST_CHECK_EQUAL(attr->GetBlendColor(), (uint32_t)0xFEFDFCFA);
+    BOOST_CHECK_EQUAL(attr->GetDepth(), 0);
 
     Background& background = map.GetBackground(0);
     attr = dynamic_cast<DrawAttributes*>(&background);
-    BOOST_REQUIRE_EQUAL(background.GetName(), "B");
-    BOOST_REQUIRE_EQUAL(background.GetFilename(), "003-StarlitSky01.png");
-    BOOST_REQUIRE_EQUAL(background.GetMode(), 6);
-    BOOST_REQUIRE_EQUAL(background.GetSpeedX(), 2);
-    BOOST_REQUIRE_EQUAL(background.GetSpeedY(), 4);
-    BOOST_REQUIRE_EQUAL(attr->GetX(), 1);
-    BOOST_REQUIRE_EQUAL(attr->GetY(), 2);
-    BOOST_REQUIRE_EQUAL(attr->GetOriginX(), 3);
-    BOOST_REQUIRE_EQUAL(attr->GetOriginY(), 4);
-    BOOST_REQUIRE_EQUAL(attr->GetScaleX(), 5.0f);
-    BOOST_REQUIRE_EQUAL(attr->GetScaleY(), 6.0f);
-    BOOST_REQUIRE_EQUAL(attr->GetRotation(), 7.0f);
-    BOOST_REQUIRE_EQUAL(attr->GetOpacity(), 8.0f);
-    BOOST_REQUIRE_EQUAL(attr->GetBlendMode(), 9);
-    BOOST_REQUIRE_EQUAL(attr->GetBlendColor(), (uint32_t)0x0A0B0C0D);
-    BOOST_REQUIRE_EQUAL(attr->GetDepth(), 1);
+    BOOST_CHECK_EQUAL(background.GetName(), "B");
+    BOOST_CHECK_EQUAL(background.GetFilename(), "003-StarlitSky01.png");
+    BOOST_CHECK_EQUAL(background.GetMode(), 6);
+    background.GetSpeed(sx, sy);
+    BOOST_CHECK_EQUAL(sx, 2);
+    BOOST_CHECK_EQUAL(sy, 4);
+    attr->GetPosition(x, y);
+    attr->GetOrigin(ox, oy);
+    attr->GetScale(sx, sy);
+    BOOST_CHECK_EQUAL(x, 1);
+    BOOST_CHECK_EQUAL(y, 2);
+    BOOST_CHECK_EQUAL(ox, 3);
+    BOOST_CHECK_EQUAL(oy, 4);
+    BOOST_CHECK_EQUAL(sx, 5.0f);
+    BOOST_CHECK_EQUAL(sy, 6.0f);
+    BOOST_CHECK_EQUAL(attr->GetRotation(), 7.0f);
+    BOOST_CHECK_EQUAL(attr->GetOpacity(), 8.0f);
+    BOOST_CHECK_EQUAL(attr->GetBlendMode(), 9);
+    BOOST_CHECK_EQUAL(attr->GetBlendColor(), (uint32_t)0x0A0B0C0D);
+    BOOST_CHECK_EQUAL(attr->GetDepth(), 1);
 
-    AnimatedTile& at1 = map.GetAnimatedTile(0);
-    AnimatedTile& at2 = map.GetAnimatedTile(1);
+    const AnimatedTile& at1 = animated_tiles[0];
+    const AnimatedTile& at2 = animated_tiles[1];
     const std::vector<int32_t>& actualFramesAt1 = at1.GetFrames();
     const std::vector<int32_t>& actualFramesAt2 = at2.GetFrames();
     std::vector<int32_t> expectedFramesAt1 = {0, 1, 2, 3, 4, 5};
     std::vector<int32_t> expectedFramesAt2 = {61, 62, 63, 64, 65};
-    BOOST_REQUIRE_EQUAL(at1.GetName(), "Water");
-    BOOST_REQUIRE_EQUAL(at1.GetDelay(), 3);
-    BOOST_REQUIRE_EQUAL(at1.GetType(), 0);
-    BOOST_REQUIRE_EQUAL(at1.GetTimes(), -1);
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(actualFramesAt1.begin(), actualFramesAt1.end(), expectedFramesAt1.begin(),
-                                    expectedFramesAt1.end());
-    BOOST_REQUIRE_EQUAL(at2.GetName(), "Waterfall");
-    BOOST_REQUIRE_EQUAL(at2.GetDelay(), 1);
-    BOOST_REQUIRE_EQUAL(at2.GetType(), 1);
-    BOOST_REQUIRE_EQUAL(at2.GetTimes(), -1);
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(actualFramesAt2.begin(), actualFramesAt2.end(), expectedFramesAt2.begin(),
-                                    expectedFramesAt2.end());
+    BOOST_CHECK_EQUAL(at1.GetName(), "Water");
+    BOOST_CHECK_EQUAL(at1.GetDelay(), 3);
+    BOOST_CHECK_EQUAL(at1.GetType(), 0);
+    BOOST_CHECK_EQUAL(at1.GetTimes(), -1);
+    BOOST_CHECK_EQUAL_COLLECTIONS(actualFramesAt1.begin(), actualFramesAt1.end(), expectedFramesAt1.begin(),
+                                  expectedFramesAt1.end());
+    BOOST_CHECK_EQUAL(at2.GetName(), "Waterfall");
+    BOOST_CHECK_EQUAL(at2.GetDelay(), 1);
+    BOOST_CHECK_EQUAL(at2.GetType(), 1);
+    BOOST_CHECK_EQUAL(at2.GetTimes(), -1);
+    BOOST_CHECK_EQUAL_COLLECTIONS(actualFramesAt2.begin(), actualFramesAt2.end(), expectedFramesAt2.begin(),
+                                  expectedFramesAt2.end());
 
     TileBasedCollisionLayer* clayer = dynamic_cast<TileBasedCollisionLayer*>(map.GetCollisionLayer());
     actualData = clayer->GetData();
     expectedData = {1, 0, 1, 1};
-    BOOST_REQUIRE_EQUAL(clayer->GetWidth(), 2);
-    BOOST_REQUIRE_EQUAL(clayer->GetHeight(), 2);
-    BOOST_REQUIRE_EQUAL_COLLECTIONS(actualData.begin(), actualData.end(), expectedData.begin(), expectedData.end());
+    BOOST_CHECK_EQUAL(clayer->GetWidth(), 2);
+    BOOST_CHECK_EQUAL(clayer->GetHeight(), 2);
+    BOOST_CHECK_EQUAL_COLLECTIONS(actualData.begin(), actualData.end(), expectedData.begin(), expectedData.end());
 }
 
 BOOST_AUTO_TEST_CASE(TextMapHandlerSave)
@@ -206,6 +222,6 @@ BOOST_AUTO_TEST_CASE(TextMapHandlerSave)
         trim(actualLine);
         trim(expectedLine);
 
-        BOOST_REQUIRE_EQUAL(expectedLine, actualLine);
+        BOOST_CHECK_EQUAL(expectedLine, actualLine);
     }
 }

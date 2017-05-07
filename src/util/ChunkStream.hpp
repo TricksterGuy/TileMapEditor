@@ -49,6 +49,7 @@ public:
     void SetWidth(uint32_t _width) { width = _width; }
     const std::string& Name() const { return name; }
     uint32_t Size() const { return size; }
+    uint32_t ConsumedSize() const { return consumed_size; }
     uint32_t Flags() const { return flags; }
     uint32_t Width() const { return width; }
     bool Ok() const { return !stream.fail() && consumed_size == size; }
@@ -122,7 +123,6 @@ ChunkStreamReader& operator>>(ChunkStreamReader& cs, std::vector<VecType>& vec)
 
     if (cs.Flags() & ChunkStreamReader::READ_VECTOR_SIZES)
     {
-
         cs >> size;
         VerboseLog("Reading number of elements for vector got: %zd", size);
     }
@@ -137,6 +137,10 @@ ChunkStreamReader& operator>>(ChunkStreamReader& cs, std::vector<VecType>& vec)
         cs >> el;
         vec[i] = el;
     }
+
+    if (cs.ConsumedSize() > cs.Size())
+        DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", cs.Name().c_str(), cs.ConsumedSize(), cs.Size());
+
     return cs;
 }
 

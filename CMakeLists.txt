@@ -14,7 +14,7 @@ if(NOT CMAKE_CXX_FLAGS MATCHES "-std=(c|gnu)\\+\\+11")
 endif()
 
 # Additional debug flags
-set(CMAKE_CXX_FLAGS_DEBUG "-g -pg -fprofile-arcs -ftest-coverage --coverage")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -pg -fprofile-arcs -ftest-coverage --coverage -DDEBUG")
 # Install directories
 set(CMAKE_INSTALL_LIBDIR lib CACHE STRING "where to install libraries/plugins")
 set(CMAKE_INSTALL_BINDIR bin CACHE STRING "where to install programs")
@@ -168,22 +168,22 @@ target_link_libraries(
 
 add_executable(
     TileMapEditorTest
-    #src/testing/BasicHandlersTest.cpp
+    src/testing/BasicHandlersTest.cpp
     src/testing/GlobalTest.cpp
-    #src/testing/LayerTest.cpp
-    #src/testing/MapTest.cpp
-    #src/testing/RegionTest.cpp
-    #src/testing/TextMapHandlerTest.cpp
-    #src/testing/TestUtil.cpp
+    src/testing/LayerTest.cpp
+    src/testing/MapTest.cpp
+    src/testing/RegionTest.cpp
+    src/testing/TextMapHandlerTest.cpp
+    src/testing/TestUtil.cpp
     #src/testing/XmlMapHandlerTest.cpp
     src/testing/ChunkStreamTest.cpp
 )
 
 target_link_libraries(
     TileMapEditorTest
-    #handlers
+    handlers
     util
-    #map
+    map
 	${wxWidgets_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}

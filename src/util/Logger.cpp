@@ -28,15 +28,15 @@ inline const char* GetLogAbbrev(LogLevel level)
 {
     switch(level)
     {
-    case LogLevel::FATAL:
+    case LogLevel::FATAL_LEVEL:
         return "F";
-    case LogLevel::DEBUG:
+    case LogLevel::DEBUG_LEVEL:
         return "D";
-    case LogLevel::WARNING:
+    case LogLevel::WARNING_LEVEL:
         return "W";
-    case LogLevel::INFO:
+    case LogLevel::INFO_LEVEL:
         return "I";
-    case LogLevel::VERBOSE:
+    case LogLevel::VERBOSE_LEVEL:
         return "V";
     default:
         return "?";
@@ -48,15 +48,15 @@ inline const char* GetLogColor(LogLevel level)
 #ifndef _WIN32
     switch(level)
     {
-    case LogLevel::FATAL:
+    case LogLevel::FATAL_LEVEL:
         return "\033[1;31m";
-    case LogLevel::DEBUG:
+    case LogLevel::DEBUG_LEVEL:
         return "\033[1;33m";
-    case LogLevel::WARNING:
+    case LogLevel::WARNING_LEVEL:
         return "\033[1;33m";
-    case LogLevel::INFO:
+    case LogLevel::INFO_LEVEL:
         return "";
-    case LogLevel::VERBOSE:
+    case LogLevel::VERBOSE_LEVEL:
         return "\033[2;34m";
     default:
         return "";
@@ -94,7 +94,7 @@ void Logger::DoLog(LogLevel level, const char* format, va_list ap)
     char buffer[1024];
     vsnprintf(buffer, 1024, format, ap);
     (*out) << buffer << std::endl;
-    if (level == LogLevel::FATAL) exit(EXIT_FAILURE);
+    if (level == LogLevel::FATAL_LEVEL) exit(EXIT_FAILURE);
 }
 
 EventLog::EventLog(const char* function) : func(function), startTime(std::chrono::system_clock::now())

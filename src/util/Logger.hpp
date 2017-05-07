@@ -26,36 +26,33 @@
 #include <memory>
 #include <chrono>
 
-enum class LogLevel {
-    FATAL = 0,   // printed and stops program
-    DEBUG = 1,
-    WARNING = 2,
-    INFO = 3,
-    VERBOSE = 4,
+enum class LogLevel
+{
+    FATAL_LEVEL = 0,   // printed and stops program
+    DEBUG_LEVEL = 1,
+    WARNING_LEVEL = 2,
+    INFO_LEVEL = 3,
+    VERBOSE_LEVEL = 4,
 };
 
-class AbstractLogger {
+class AbstractLogger
+{
 public:
-    AbstractLogger(std::ostream* target = &std::cout) : out(target), log_level(LogLevel::VERBOSE), log_time(true) {}
+    AbstractLogger(std::ostream* target = &std::cout) : out(target), log_level(LogLevel::VERBOSE_LEVEL), log_time(true) {}
     virtual ~AbstractLogger() {}
     virtual void Log(LogLevel level, const char* format, va_list ap);
     virtual void DoLog(LogLevel level, const char* format, va_list ap) {}
-    void SetLogTarget(std::ostream* stream) {
-        out = stream;
-    }
-    void SetLogLevel(LogLevel level) {
-        log_level = level;
-    }
-    void SetLogTime(bool logging_time) {
-        log_time = logging_time;
-    }
+    void SetLogTarget(std::ostream* stream) { out = stream; }
+    void SetLogLevel(LogLevel level) { log_level = level; }
+    void SetLogTime(bool logging_time) { log_time = logging_time; }
 protected:
     std::ostream* out;
     LogLevel log_level;
     bool log_time;
 };
 
-class Logger : public AbstractLogger {
+class Logger : public AbstractLogger
+{
 public:
     virtual void DoLog(LogLevel level, const char* format, va_list ap);
 };
@@ -64,54 +61,72 @@ extern std::unique_ptr<AbstractLogger> logger;
 
 void SetLogger(AbstractLogger* logobj);
 
-static inline void Log(LogLevel level, const char* format, ...) {
+static inline void Log(LogLevel level, const char* format, ...)
+{
     va_list argptr;
     va_start(argptr, format);
     logger->Log(level, format, argptr);
     va_end(argptr);
 }
 
-static inline void Log(LogLevel level, const char* format, va_list arg) {
+static inline void Log(LogLevel level, const char* format, va_list arg)
+{
     logger->Log(level, format, arg);
 }
 
-static inline void FatalLog(const char* format, ...) {
+static inline void DebugFatalLog(const char* format, ...)
+{
+#ifdef DEBUG
     va_list argptr;
     va_start(argptr, format);
-    Log(LogLevel::FATAL, format, argptr);
+    Log(LogLevel::FATAL_LEVEL, format, argptr);
+    va_end(argptr);
+#endif
+}
+
+static inline void FatalLog(const char* format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+    Log(LogLevel::FATAL_LEVEL, format, argptr);
     va_end(argptr);
 }
 
-static inline void DebugLog(const char* format, ...) {
+static inline void DebugLog(const char* format, ...)
+{
     va_list argptr;
     va_start(argptr, format);
-    Log(LogLevel::DEBUG, format, argptr);
+    Log(LogLevel::DEBUG_LEVEL, format, argptr);
     va_end(argptr);
 }
 
-static inline void WarnLog(const char* format, ...) {
+static inline void WarnLog(const char* format, ...)
+{
     va_list argptr;
     va_start(argptr, format);
-    Log(LogLevel::WARNING, format, argptr);
+    Log(LogLevel::WARNING_LEVEL, format, argptr);
     va_end(argptr);
 }
 
-static inline void InfoLog(const char* format, ...) {
+static inline void InfoLog(const char* format, ...)
+{
     va_list argptr;
     va_start(argptr, format);
-    Log(LogLevel::INFO, format, argptr);
+    Log(LogLevel::INFO_LEVEL, format, argptr);
     va_end(argptr);
 }
 
-static inline void VerboseLog(const char* format, ...) {
+static inline void VerboseLog(const char* format, ...)
+{
     va_list argptr;
     va_start(argptr, format);
-    Log(LogLevel::VERBOSE, format, argptr);
+    Log(LogLevel::VERBOSE_LEVEL, format, argptr);
     va_end(argptr);
 }
 
 /** Object that only exists to print out start and end of event call in a function */
-class EventLog {
+class EventLog
+{
 public:
     EventLog(const char* function);
     ~EventLog();

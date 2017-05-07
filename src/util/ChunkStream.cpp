@@ -25,6 +25,8 @@ ChunkStreamReader& ChunkStreamReader::operator>>(bool& val)
     stream.read(reinterpret_cast<char*>(&val), sizeof(val));
     VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
+    if (consumed_size > size)
+        DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
     return *this;
 }
 
@@ -33,6 +35,8 @@ ChunkStreamReader& ChunkStreamReader::operator>>(char& val)
     stream.read(&val, sizeof(val));
     VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
+    if (consumed_size > size)
+        DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
     return *this;
 }
 
@@ -41,6 +45,8 @@ ChunkStreamReader& ChunkStreamReader::operator>>(unsigned char& val)
     stream.read(reinterpret_cast<char*>(&val), sizeof(val));
     VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
+    if (consumed_size > size)
+        DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
     return *this;
 }
 
@@ -50,6 +56,8 @@ ChunkStreamReader& ChunkStreamReader::operator>>(short& val)
     val = ntohs(val);
     VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
+    if (consumed_size > size)
+        DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
     return *this;
 }
 
@@ -59,6 +67,8 @@ ChunkStreamReader& ChunkStreamReader::operator>>(unsigned short& val)
     val = ntohs(val);
     VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
+    if (consumed_size > size)
+        DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
     return *this;
 }
 
@@ -68,6 +78,8 @@ ChunkStreamReader& ChunkStreamReader::operator>>(int& val)
     val = ntohl(val);
     VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
+    if (consumed_size > size)
+        DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
     return *this;
 }
 
@@ -77,6 +89,8 @@ ChunkStreamReader& ChunkStreamReader::operator>>(unsigned int& val)
     val = ntohl(val);
     VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
+    if (consumed_size > size)
+        DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
     return *this;
 }
 
@@ -93,6 +107,8 @@ ChunkStreamReader& ChunkStreamReader::operator>>(float& val)
     val = convert.f;
     VerboseLog("Reading %.8f size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
+    if (consumed_size > size)
+        DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
     return *this;
 }
 
@@ -112,6 +128,8 @@ ChunkStreamReader& ChunkStreamReader::operator>>(std::string& val)
     VerboseLog("Reading %s size: %zd bytes", val.c_str(), effSize);
     consumed_size += effSize;
     width = 0;
+    if (consumed_size > size)
+        DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
     return *this;
 }
 
