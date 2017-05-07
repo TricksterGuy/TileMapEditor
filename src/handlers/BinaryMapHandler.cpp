@@ -317,6 +317,7 @@ void BinaryMapHandler::ReadLYRS(ChunkStreamReader& lyrs, Map& map)
 
     uint32_t num_layers;
 
+    lyrs >> set_flags(ChunkStreamReader::NO_READ_VECTOR_SIZES | ChunkStreamReader::READ_STRING_SIZES);
     lyrs >> num_layers;
     for (uint32_t i = 0; i < num_layers; i++)
     {
@@ -331,7 +332,7 @@ void BinaryMapHandler::ReadLYRS(ChunkStreamReader& lyrs, Map& map)
         lyrs >> height;
         ReadDrawAttributes(lyrs, &attrs);
         data.resize(width * height);
-        lyrs >> set_flags(ChunkStreamReader::NO_READ_SIZES) >> data;
+        lyrs >> data;
 
         map.Add(Layer(name, width, height, data, attrs));
     }
@@ -343,7 +344,7 @@ void BinaryMapHandler::ReadLYRS(ChunkStreamReader& lyrs, Map& map)
 void BinaryMapHandler::WriteLYRS(std::ostream& file, const Map& map)
 {
     EventLog l(__func__);
-    ChunkStreamWriter lyrs("LYRS");
+    ChunkStreamWriter lyrs("LYRS", ChunkStreamWriter::NO_WRITE_VECTOR_SIZES | ChunkStreamWriter::WRITE_STRING_SIZES);
 
     lyrs << map.GetNumLayers();
     for (const auto& layer : map.GetLayers())
@@ -422,10 +423,12 @@ void BinaryMapHandler::ReadMTCL(ChunkStreamReader& mtcl, Map& map)
     uint32_t height;
     std::vector<int32_t> data;
 
+    mtcl >> set_flags(ChunkStreamReader::NO_READ_SIZES);
+
     mtcl >> width;
     mtcl >> height;
     data.resize(width * height);
-    mtcl >> set_flags(ChunkStreamReader::NO_READ_SIZES) >> data;
+    mtcl >> data;
     map.SetCollisionLayer(new TileBasedCollisionLayer(width, height, data));
 
     if (!mtcl.Ok())
@@ -435,7 +438,7 @@ void BinaryMapHandler::ReadMTCL(ChunkStreamReader& mtcl, Map& map)
 void BinaryMapHandler::WriteMTCL(std::ostream& file, const Map& map)
 {
     EventLog l(__func__);
-    ChunkStreamWriter mtcl("MTCL");
+    ChunkStreamWriter mtcl("MTCL", ChunkStreamWriter::NO_WRITE_SIZES);
 
     TileBasedCollisionLayer* layer = dynamic_cast<TileBasedCollisionLayer*>(map.GetCollisionLayer());
     mtcl << layer->GetWidth();
@@ -455,10 +458,12 @@ void BinaryMapHandler::ReadMDCL(ChunkStreamReader& mdcl, Map& map)
     uint32_t height;
     std::vector<int32_t> data;
 
+    mdcl >> set_flags(ChunkStreamReader::NO_READ_SIZES);
+
     mdcl >> width;
     mdcl >> height;
     data.resize(width * height);
-    mdcl >> set_flags(ChunkStreamReader::NO_READ_SIZES) >> data;
+    mdcl >> data;
     map.SetCollisionLayer(new TileBasedCollisionLayer(width, height, data));
 
     if (!mdcl.Ok())
@@ -608,7 +613,7 @@ void BinaryMapHandler::ReadANIM(ChunkStreamReader& anim, Map& map)
 void BinaryMapHandler::WriteANIM(std::ostream& file, const Map& map)
 {
     EventLog l(__func__);
-    ChunkStreamWriter anim("ANIM");
+    ChunkStreamWriter anim("ANIM", ChunkStreamWriter::WRITE_SIZES);
 
     const Tileset& tileset = map.GetTileset();
     const std::vector<AnimatedTile>& animated_tiles = tileset.GetAnimatedTiles();
@@ -621,7 +626,6 @@ void BinaryMapHandler::WriteANIM(std::ostream& file, const Map& map)
         anim << tile.GetDelay();
         anim << tile.GetType();
         anim << tile.GetTimes();
-        anim << tile.GetNumFrames();
         anim << tile.GetFrames();
     }
 

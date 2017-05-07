@@ -72,20 +72,12 @@ BOOST_AUTO_TEST_CASE(TestSaveFail)
 {
     Map map;
 
-    try
-    {
-        MapHandlerManager().Save("testout3.ZZYNAS", map);
-        BOOST_FAIL("");
-    }
-    catch (const char* s)
-    {
-    }
+    BOOST_CHECK_THROW(MapHandlerManager().Save("testout3.ZZYNAS", map), const char*);
 }
 
 BOOST_AUTO_TEST_CASE(TestLoadFail)
 {
     Map map;
 
-    MapHandlerManager().Load("testout3.ZZYNAS", map);
-    MapHandlerManager().Load("testout4.map", map);
+    BOOST_CHECK_THROW(MapHandlerManager().Load("testout3.ZZYNAS", map), const char*);
 }

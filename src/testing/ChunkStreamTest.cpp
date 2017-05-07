@@ -48,6 +48,18 @@ BOOST_FIXTURE_TEST_CASE(TestAddString, ChunkStreamTest)
     BOOST_CHECK_EQUAL(str, expected);
 }
 
+BOOST_FIXTURE_TEST_CASE(TestAddEmptyString, ChunkStreamTest)
+{
+    cs << "";
+
+    BOOST_CHECK_EQUAL(cs.Size(), 4);
+
+    std::string str = cs.Data();
+    std::string expected("\000\000\000\000", 4);
+    BOOST_CHECK_EQUAL(str.size(), 4);
+    BOOST_CHECK_EQUAL(str, expected);
+}
+
 BOOST_FIXTURE_TEST_CASE(TestAddStringPartial, ChunkStreamTest)
 {
     cs << set_width(5) << "HELLO WORLD";
@@ -205,6 +217,17 @@ BOOST_FIXTURE_TEST_CASE(TestReadChars, ChunkStreamTest)
     BOOST_CHECK_EQUAL(c, 'n');
     csr >> c;
     BOOST_CHECK_EQUAL(c, 't');
+    BOOST_CHECK(csr.Ok());
+}
+
+BOOST_FIXTURE_TEST_CASE(TestReadEmptyString, ChunkStreamTest)
+{
+    std::stringstream stream(std::string("TEST\000\000\000\004" "\000\000\000\000", 8 + 4));
+    ChunkStreamReader csr(stream, 4);
+
+    std::string hello = "X";
+    csr >> hello;
+    BOOST_CHECK_EQUAL(hello, "");
     BOOST_CHECK(csr.Ok());
 }
 

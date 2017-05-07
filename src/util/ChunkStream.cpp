@@ -17,13 +17,12 @@ ChunkStreamReader::ChunkStreamReader(std::istream& _stream, uint32_t size_name, 
     name.assign(chunk_name, size_name);
     stream.read(reinterpret_cast<char*>(&size), sizeof(uint32_t));
     size = ntohl(size);
-    VerboseLog("Read chunk %s size %zd", name.c_str(), size);
 }
 
 ChunkStreamReader& ChunkStreamReader::operator>>(bool& val)
 {
     stream.read(reinterpret_cast<char*>(&val), sizeof(val));
-    VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Reading %x size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
     if (consumed_size > size)
         DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
@@ -33,7 +32,7 @@ ChunkStreamReader& ChunkStreamReader::operator>>(bool& val)
 ChunkStreamReader& ChunkStreamReader::operator>>(char& val)
 {
     stream.read(&val, sizeof(val));
-    VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Reading %x size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
     if (consumed_size > size)
         DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
@@ -43,7 +42,7 @@ ChunkStreamReader& ChunkStreamReader::operator>>(char& val)
 ChunkStreamReader& ChunkStreamReader::operator>>(unsigned char& val)
 {
     stream.read(reinterpret_cast<char*>(&val), sizeof(val));
-    VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Reading %x size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
     if (consumed_size > size)
         DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
@@ -54,7 +53,7 @@ ChunkStreamReader& ChunkStreamReader::operator>>(short& val)
 {
     stream.read(reinterpret_cast<char*>(&val), sizeof(val));
     val = ntohs(val);
-    VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Reading %x size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
     if (consumed_size > size)
         DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
@@ -65,7 +64,7 @@ ChunkStreamReader& ChunkStreamReader::operator>>(unsigned short& val)
 {
     stream.read(reinterpret_cast<char*>(&val), sizeof(val));
     val = ntohs(val);
-    VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Reading %x size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
     if (consumed_size > size)
         DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
@@ -76,7 +75,7 @@ ChunkStreamReader& ChunkStreamReader::operator>>(int& val)
 {
     stream.read(reinterpret_cast<char*>(&val), sizeof(val));
     val = ntohl(val);
-    VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Reading %x size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
     if (consumed_size > size)
         DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
@@ -87,7 +86,7 @@ ChunkStreamReader& ChunkStreamReader::operator>>(unsigned int& val)
 {
     stream.read(reinterpret_cast<char*>(&val), sizeof(val));
     val = ntohl(val);
-    VerboseLog("Reading %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Reading %x size: %zd bytes", val, sizeof(val));
     consumed_size += sizeof(val);
     if (consumed_size > size)
         DebugFatalLog("Read past end of chunk %s %zd bytes read out of %zd", name.c_str(), consumed_size, size);
@@ -140,7 +139,7 @@ ChunkStreamReader& ChunkStreamReader::operator>>(ChunkStreamReader& (*pf)(ChunkS
 
 ChunkStreamWriter& ChunkStreamWriter::operator<<(bool val)
 {
-    VerboseLog("Writing %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Writing %x size: %zd bytes", val, sizeof(val));
     size += sizeof(val);
     out.write(reinterpret_cast<char*>(&val), sizeof(val));
     return *this;
@@ -148,7 +147,7 @@ ChunkStreamWriter& ChunkStreamWriter::operator<<(bool val)
 
 ChunkStreamWriter& ChunkStreamWriter::operator<<(char val)
 {
-    VerboseLog("Writing %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Writing %x size: %zd bytes", val, sizeof(val));
     size += sizeof(val);
     out.write(reinterpret_cast<char*>(&val), sizeof(val));
     return *this;
@@ -156,7 +155,7 @@ ChunkStreamWriter& ChunkStreamWriter::operator<<(char val)
 
 ChunkStreamWriter& ChunkStreamWriter::operator<<(unsigned char val)
 {
-    VerboseLog("Writing %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Writing %x size: %zd bytes", val, sizeof(val));
     size += sizeof(val);
     out.write(reinterpret_cast<char*>(&val), sizeof(val));
     return *this;
@@ -164,7 +163,7 @@ ChunkStreamWriter& ChunkStreamWriter::operator<<(unsigned char val)
 
 ChunkStreamWriter& ChunkStreamWriter::operator<<(short val)
 {
-    VerboseLog("Writing %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Writing %x size: %zd bytes", val, sizeof(val));
     size += sizeof(val);
     val = htons(val);
     out.write(reinterpret_cast<char*>(&val), sizeof(val));
@@ -173,7 +172,7 @@ ChunkStreamWriter& ChunkStreamWriter::operator<<(short val)
 
 ChunkStreamWriter& ChunkStreamWriter::operator<<(unsigned short val)
 {
-    VerboseLog("Writing %zd size: %zd bytes", val, sizeof(val));
+    VerboseLog("Writing %x size: %zd bytes", val, sizeof(val));
     size += sizeof(val);
     val = htons(val);
     out.write(reinterpret_cast<char*>(&val), sizeof(val));
@@ -182,7 +181,7 @@ ChunkStreamWriter& ChunkStreamWriter::operator<<(unsigned short val)
 
 ChunkStreamWriter& ChunkStreamWriter::operator<<(int val)
 {
-    VerboseLog("Writing %d size: %zd bytes", val, sizeof(val));
+    VerboseLog("Writing %x size: %zd bytes", val, sizeof(val));
     size += sizeof(val);
     val = htonl(val);
     out.write(reinterpret_cast<char*>(&val), sizeof(val));
@@ -191,7 +190,7 @@ ChunkStreamWriter& ChunkStreamWriter::operator<<(int val)
 
 ChunkStreamWriter& ChunkStreamWriter::operator<<(unsigned int val)
 {
-    VerboseLog("Writing %zd size: %zd bytes", val, sizeof(val));
+    VerboseLog("Writing %x size: %zd bytes", val, sizeof(val));
     size += sizeof(val);
     val = htonl(val);
     out.write(reinterpret_cast<char*>(&val), sizeof(val));
