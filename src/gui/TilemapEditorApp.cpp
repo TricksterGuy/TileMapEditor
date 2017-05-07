@@ -32,7 +32,7 @@ bool TilemapEditorApp::OnInit()
     wxInitAllImageHandlers();
 
     MapHandlerManager().Add(new BinaryMapHandler());
-    //MapHandlerManager().Add(new TextMapHandler());
+    MapHandlerManager().Add(new TextMapHandler());
     //MapHandlerManager().Add(new ImageMapHandler());
     //MapHandlerManager().Add(new GBAImageHandler());
     //MapHandlerManager().Add(new GBAMapHandler());

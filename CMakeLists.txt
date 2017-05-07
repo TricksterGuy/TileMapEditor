@@ -81,7 +81,7 @@ set(SRC_HANDLERS
     #src/handlers/HandlerUtils.cpp
     #src/handlers/ImageMapHandler.cpp
     src/handlers/MapHandlerManager.cpp
-    #src/handlers/TextMapHandler.cpp
+    src/handlers/TextMapHandler.cpp
     #src/handlers/XmlMapHandler.cpp
 )
 

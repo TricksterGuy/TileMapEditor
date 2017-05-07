@@ -26,13 +26,14 @@
 class Tileset {
 public:
     Tileset(const std::string& filename = "", uint32_t tile_width = MIN_TILE_SIZE, uint32_t tile_height = MIN_TILE_SIZE);
+    void Add(const AnimatedTile& tile);
     void SetFilename(const std::string& _filename) { filename = _filename; }
     void SetTileDimensions(uint32_t tile_width, uint32_t tile_height);
     void SetAnimatedTiles(const std::vector<AnimatedTile>& tiles) { animated_tiles = tiles; }
     const std::string& GetFilename() const { return filename; }
     void GetTileDimensions(uint32_t& tile_width, uint32_t& tile_height) const;
     const std::vector<AnimatedTile>& GetAnimatedTiles() const { return animated_tiles; }
-    static constexpr uint32_t MIN_TILE_SIZE = 4;
+    static constexpr uint32_t MIN_TILE_SIZE = 8;
     static constexpr uint32_t MAX_TILE_SIZE = 256;
 private:
     std::string filename;

@@ -26,6 +26,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include "Logger.hpp"
 
 class set_flags;
 class set_width;
@@ -120,11 +121,16 @@ ChunkStreamReader& operator>>(ChunkStreamReader& cs, std::vector<VecType>& vec)
     uint32_t size;
 
     if (cs.Flags() & ChunkStreamReader::READ_VECTOR_SIZES)
+    {
+
         cs >> size;
+        VerboseLog("Reading number of elements for vector got: %zd", size);
+    }
     else
         size = vec.size();
 
     vec.resize(size);
+    VerboseLog("Reading %zd elements for vector", size);
     VecType el;
     for (uint32_t i = 0; i < size; i++)
     {

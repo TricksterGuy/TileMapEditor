@@ -1,6 +1,6 @@
 #include "ChunkStream.hpp"
 #include <cstring>
-#include "Logger.hpp"
+
 #ifdef LINUX
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -100,7 +100,10 @@ ChunkStreamReader& ChunkStreamReader::operator>>(std::string& val)
 {
     uint32_t effSize = width;
     if (flags & ChunkStreamReader::READ_STRING_SIZES && width == 0)
+    {
         (*this) >> effSize;
+        VerboseLog("Reading size for string got: %zd", effSize);
+    }
 
     char data[effSize];
     stream.read(data, effSize);

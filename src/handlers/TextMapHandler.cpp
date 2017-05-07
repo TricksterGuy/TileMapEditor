@@ -30,6 +30,29 @@
 #include "Scanner.hpp"
 #include "TileBasedCollisionLayer.hpp"
 
+namespace
+{
+void WriteDrawAttributes(std::ostream& file, const DrawAttributes* attr)
+{
+    int32_t x, y;
+    attr->GetPosition(x, y);
+    file << "position: " << x << " " << y << "\n";
+
+    int32_t ox, oy;
+    attr->GetOrigin(ox, oy);
+    file << "origin: " << ox << " " << oy << "\n";
+
+    float sx, sy;
+    attr->GetScale(sx, sy);
+    file << "scale: " << sx << " " << sy << "\n";
+
+    file << "rotation: " << attr->GetRotation() << "\n";
+    file << "opacity: " << attr->GetOpacity() << "\n";
+    file << "blend_mode: " << attr->GetBlendMode() << "\n";
+    file << "blend_color: " << std::uppercase << std::hex << attr->GetBlendColor() << std::dec << std::nouppercase << "\n";
+    file << "priority: " << attr->GetDepth() << "\n";
+}
+}
 
 TextMapHandler::TextMapHandler() : BaseMapHandler("Text Format", "txt", "Export the map as a text file")
 {
@@ -105,16 +128,15 @@ void TextMapHandler::ReadProperties(std::istream& file, Map& map)
         std::getline(file, line);
     }
 
-    if (tile_width < MIN_TILE_SIZE || tile_width > MAX_TILE_SIZE || tile_height < MIN_TILE_SIZE ||
-            tile_height > MAX_TILE_SIZE)
+    if (tile_width < Tileset::MIN_TILE_SIZE || tile_width > Tileset::MAX_TILE_SIZE || tile_height < Tileset::MIN_TILE_SIZE ||
+            tile_height > Tileset::MAX_TILE_SIZE)
         WarnLog("tile dimensions (%d, %d) are outside bounds clipping", tile_width, tile_width);
 
-    tile_width = std::min(MAX_TILE_SIZE, std::max(MIN_TILE_SIZE, tile_width));
-    tile_height = std::min(MAX_TILE_SIZE, std::max(MIN_TILE_SIZE, tile_height));
+    tile_width = std::min(Tileset::MAX_TILE_SIZE, std::max(Tileset::MIN_TILE_SIZE, tile_width));
+    tile_height = std::min(Tileset::MAX_TILE_SIZE, std::max(Tileset::MIN_TILE_SIZE, tile_height));
 
-    map.SetTileDimensions(tile_width, tile_height);
     map.SetName(name);
-    map.SetFilename(tileset);
+    map.SetTileset(Tileset(tileset, tile_width, tile_height));
     DebugLog("Done Reading Properties");
 }
 
@@ -233,7 +255,7 @@ void TextMapHandler::ReadLayers(std::istream& file, Map& map)
         }
 
         if (data.size() != width * height)
-            throw "Incorrect number of tile entries for layer";
+            WarnLog("Incorrect number of tile entries for layer %s got %d expected %d", name.c_str(), data.size(), width * height);
 
         Layer layer(name, width, height, data, attr);
         map.Add(layer);
@@ -357,8 +379,7 @@ void TextMapHandler::ReadBackgrounds(std::istream& file, Map& map)
             std::getline(file, line);
         }
 
-        Background back(name, filename, mode, speedx, speedy, attr);
-        map.Add(back);
+        map.Add(Background(name, filename, mode, speedx, speedy, attr));
 
         std::getline(file, line);
     }
@@ -424,8 +445,7 @@ void TextMapHandler::ReadAnimations(std::istream& file, Map& map)
             }
             std::getline(file, line);
         }
-        AnimatedTile tile(name, delay, (Animation::Type)type, times, frames);
-        map.Add(tile);
+        map.Add(AnimatedTile(name, delay, (Animation::Type)type, times, frames));
 
         std::getline(file, line);
     }
@@ -483,7 +503,7 @@ void TextMapHandler::ReadCollision(std::istream& file, Map& map)
     }
 
     if (data.size() != width * height)
-        throw "Incorrect number of tile entries for collision layer";
+        WarnLog("Incorrect number of tile entries for collision layer got %d expected %d", data.size(), width * height);
 
     CollisionLayer* layer = new TileBasedCollisionLayer(width, height, data);
     map.SetCollisionLayer(layer);
@@ -494,100 +514,61 @@ void TextMapHandler::ReadCollision(std::istream& file, Map& map)
 
 void TextMapHandler::Save(std::ostream& file, const Map& map)
 {
-    // Takes the map dimensions, tile dimensions, name, filename, and layer count and writes it to the file.
+    const Tileset& tileset = map.GetTileset();
+    uint32_t tile_width, tile_height;
+    tileset.GetTileDimensions(tile_width, tile_height);
+
     file << "Properties\n";
     file << "name: " << map.GetName() << "\n";
-    file << "tileset: " << map.GetFilename() << "\n";
-    file << "tile_dimensions: " << map.GetTileWidth() << " " << map.GetTileHeight() << "\n\n";
+    file << "tileset: " << tileset.GetFilename() << "\n";
+    file << "tile_dimensions: " << tile_width << " " << tile_height << "\n\n";
 
-    // Sets all the layer data for each layer.
     file << "Layers\n";
-    for (unsigned int k = 0; k < map.GetNumLayers(); k++)
+    for (const auto& layer : map.GetLayers())
     {
-        const Layer& layer = map.GetLayer(k);
         file << "name: " << layer.GetName() << "\n";
-
-        int32_t x, y;
-        layer.GetPosition(x, y);
-        file << "position: " << x << " " << y << "\n";
-
-        int32_t ox, oy;
-        layer.GetOrigin(ox, oy);
-        file << "origin: " << ox << " " << oy << "\n";
-
-        float sx, sy;
-        layer.GetScale(sx, sy);
-        file << "scale: " << sx << " " << sy << "\n";
-
-        file << "rotation: " << layer.GetRotation() << "\n";
-        file << "opacity: " << layer.GetOpacity() << "\n";
-        file << "blend_mode: " << layer.GetBlendMode() << "\n";
-        file << "blend_color: " << std::uppercase << std::hex << layer.GetBlendColor() << std::dec << std::nouppercase
-             << "\n";
-        file << "priority: " << layer.GetDepth() << "\n";
-
         file << "dimensions: " << layer.GetWidth() << " " << layer.GetHeight() << "\n";
+        WriteDrawAttributes(file, &layer);
+
         for (unsigned int i = 0; i < layer.GetHeight(); i++)
         {
             file << "data: ";
             for (unsigned int j = 0; j < layer.GetWidth(); j++)
-            {
                 file << layer[i * layer.GetWidth() + j] << " ";
-            }
             file << "\n";
         }
         file << "\n";
     }
     file << "\n";
-    // Sets all the background data for each background.
-    if (map.GetNumBackgrounds() > 0)
+
+    const std::vector<Background>& backgrounds = map.GetBackgrounds();
+    if (!backgrounds.empty())
         file << "Backgrounds\n";
-    for (unsigned int k = 0; k < map.GetNumBackgrounds(); k++)
+    for (const auto& background : backgrounds)
     {
-        const Background& background = map.GetBackground(k);
-        int32_t spx, spy;
+        float spx, spy;
         background.GetSpeed(spx, spy);
         file << "name: " << background.GetName() << "\n";
         file << "filename: " << background.GetFilename() << "\n";
         file << "mode: " << background.GetMode() << "\n";
         file << "speed: " << spx << " " << spy << "\n";
-
-        int32_t x, y;
-        background.GetPosition(x, y);
-        file << "position: " << x << " " << y << "\n";
-
-        int32_t ox, oy;
-        background.GetOrigin(ox, oy);
-        file << "origin: " << ox << " " << oy << "\n";
-
-        float sx, sy;
-        background.GetScale(sx, sy);
-        file << "scale: " << sx << " " << sy << "\n";
-
-        file << "rotation: " << background.GetRotation() << "\n";
-        file << "opacity: " << background.GetOpacity() << "\n";
-        file << "blend_mode: " << background.GetBlendMode() << "\n";
-        file << "blend_color: " << std::uppercase << std::hex << background.GetBlendColor() << std::dec << std::nouppercase
-             << "\n";
-        file << "priority: " << background.GetDepth() << "\n\n";
+        WriteDrawAttributes(file, &background);
     }
     file << "\n";
 
-    if (map.GetNumAnimatedTiles() > 0)
+    const std::vector<AnimatedTile>& animated_tiles = tileset.GetAnimatedTiles();
+    if (!animated_tiles.empty())
         file << "Animations\n";
-    for (unsigned int k = 0; k < map.GetNumAnimatedTiles(); k++)
+    for (const auto& tile : animated_tiles)
     {
-        const AnimatedTile& tile = map.GetAnimatedTile(k);
         const std::vector<int32_t>& frames = tile.GetFrames();
         file << "name: " << tile.GetName() << "\n";
         file << "delay: " << tile.GetDelay() << "\n";
         file << "type: " << tile.GetType() << "\n";
         file << "times: " << tile.GetTimes() << "\n";
         file << "frames: ";
-        for (int32_t element : frames)
-        {
+        for (const auto& element : frames)
             file << element << " ";
-        }
         file << "\n\n";
     }
     file << "\n";
@@ -603,10 +584,7 @@ void TextMapHandler::Save(std::ostream& file, const Map& map)
         {
             file << "data: ";
             for (unsigned int j = 0; j < collLayer->GetWidth(); j++)
-            {
-                int32_t tile = collMap[i * collLayer->GetWidth() + j];
-                file << tile << " ";
-            }
+                file << collMap[i * collLayer->GetWidth() + j] << " ";
             file << "\n";
         }
         file << "\n";

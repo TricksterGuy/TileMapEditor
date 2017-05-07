@@ -143,7 +143,7 @@ void BinaryMapHandler::Load(std::istream& file, Map& map)
         ChunkStreamReader csr(file, 4);
         std::string chunkname = csr.Name();
         uint32_t size = csr.Size();
-        VerboseLog("Read chunk name %s size %zd", chunkname, size);
+        VerboseLog("Read chunk name %s size %zd", chunkname.c_str(), size);
 
         unsigned int start = file.tellg();
 
@@ -169,7 +169,7 @@ void BinaryMapHandler::Load(std::istream& file, Map& map)
             ReadTPCI(csr, map);
         else if (chunkname == "ANIM")
             ReadANIM(csr, map);
-        else if (chunkname == "EOM")
+        else if (chunkname == std::string("EOM\0", 4))
             break;
         else
         {
@@ -331,7 +331,7 @@ void BinaryMapHandler::ReadLYRS(ChunkStreamReader& lyrs, Map& map)
         lyrs >> height;
         ReadDrawAttributes(lyrs, &attrs);
         data.resize(width * height);
-        lyrs >> data;
+        lyrs >> set_flags(ChunkStreamReader::NO_READ_SIZES) >> data;
 
         map.Add(Layer(name, width, height, data, attrs));
     }
@@ -425,7 +425,7 @@ void BinaryMapHandler::ReadMTCL(ChunkStreamReader& mtcl, Map& map)
     mtcl >> width;
     mtcl >> height;
     data.resize(width * height);
-    mtcl >> data;
+    mtcl >> set_flags(ChunkStreamReader::NO_READ_SIZES) >> data;
     map.SetCollisionLayer(new TileBasedCollisionLayer(width, height, data));
 
     if (!mtcl.Ok())
@@ -458,7 +458,7 @@ void BinaryMapHandler::ReadMDCL(ChunkStreamReader& mdcl, Map& map)
     mdcl >> width;
     mdcl >> height;
     data.resize(width * height);
-    mdcl >> data;
+    mdcl >> set_flags(ChunkStreamReader::NO_READ_SIZES) >> data;
     map.SetCollisionLayer(new TileBasedCollisionLayer(width, height, data));
 
     if (!mdcl.Ok())
@@ -587,15 +587,12 @@ void BinaryMapHandler::ReadANIM(ChunkStreamReader& anim, Map& map)
         int32_t delay;
         int32_t type;
         int32_t times;
-        uint32_t num_frames;
         std::vector<int32_t> frames;
 
         anim >> name;
         anim >> delay;
         anim >> type;
         anim >> times;
-        anim >> num_frames;
-        frames.resize(num_frames);
         anim >> frames;
 
         tiles.emplace_back(name, delay, (Animation::Type)type, times, frames);
