@@ -48,22 +48,21 @@ void Layer::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
     {
         std::vector<int32_t> newdata = data;
         data.clear();
-        data.reserve(width * height);
+        data.reserve(newwidth * newheight);
 
-        uint32_t minw = newwidth > width ? width : newwidth;
-        uint32_t minh = newheight > height ? height : newheight;
+        uint32_t minw = std::min(newwidth, width);
+        uint32_t minh = std::min(newheight, height);
         int32_t excessx = (int32_t)(newwidth - width);
         int32_t excessy = (int32_t)(newheight - height);
 
         for (uint32_t i = 0; i < minh; i++)
         {
-            data.insert(data.begin() + i * newwidth, newdata.begin() + i * width, newdata.begin() + i * width + minw);
-            if (newwidth > width)
-                data.insert(data.begin() + i * newwidth + width, -1, excessx);
+            data.insert(data.end(), newdata.begin() + i * width, newdata.begin() + i * width + minw);
+            if (excessx > 0)
+                data.insert(data.end(), excessx, -1);
         }
-
-        if (newheight > height)
-            data.insert(data.begin() + minh * newwidth, -1, newwidth * excessy);
+        if (excessy > 0)
+            data.insert(data.end(), newwidth * excessy, -1);
     }
     else
     {

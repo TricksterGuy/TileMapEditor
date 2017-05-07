@@ -6,25 +6,22 @@ struct LayerTest
 {
     Layer layer;
 
-    LayerTest()
+    LayerTest() : layer("", 5, 5)
     {
-        BOOST_TEST_MESSAGE("setup fixture");
-        layer.Resize(5, 5);
     }
 
     ~LayerTest()
     {
-        BOOST_TEST_MESSAGE("teardown fixture");
     }
 };
 
 BOOST_FIXTURE_TEST_CASE(TestLayerResize1, LayerTest)
 {
     layer[24] = 78;  // Layer[4, 4]
-    layer.Resize(50, 50);
-    BOOST_CHECK_EQUAL(layer[4 * 50 + 4], 78);
-    BOOST_CHECK_EQUAL(layer.GetWidth(), 50);
-    BOOST_CHECK_EQUAL(layer.GetHeight(), 50);
+    layer.Resize(10, 10);
+    BOOST_CHECK_EQUAL(layer[4 * 10 + 4], 78);
+    BOOST_CHECK_EQUAL(layer.GetWidth(), 10);
+    BOOST_CHECK_EQUAL(layer.GetHeight(), 10);
 }
 
 BOOST_FIXTURE_TEST_CASE(TestLayerResize2, LayerTest)
