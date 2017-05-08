@@ -82,7 +82,7 @@ set(SRC_HANDLERS
     #src/handlers/ImageMapHandler.cpp
     src/handlers/MapHandlerManager.cpp
     src/handlers/TextMapHandler.cpp
-    #src/handlers/XmlMapHandler.cpp
+    src/handlers/XmlMapHandler.cpp
 )
 
 set(SRC_UTIL
@@ -171,11 +171,11 @@ add_executable(
     src/testing/BasicHandlersTest.cpp
     src/testing/GlobalTest.cpp
     src/testing/LayerTest.cpp
-    src/testing/MapTest.cpp
+    #src/testing/MapTest.cpp
     src/testing/RegionTest.cpp
-    #src/testing/TextMapHandlerTest.cpp
+    src/testing/TextMapHandlerTest.cpp
     src/testing/TestUtil.cpp
-    #src/testing/XmlMapHandlerTest.cpp
+    src/testing/XmlMapHandlerTest.cpp
     src/testing/ChunkStreamTest.cpp
 )
 

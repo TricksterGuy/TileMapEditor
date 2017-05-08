@@ -20,15 +20,16 @@ struct MapTest
 
 BOOST_FIXTURE_TEST_CASE(TestMapLoad, MapTest)
 {
-    const Tileset& tileset = map.GetTileset();
-    uint32_t tile_width, tile_height;
-    tileset.GetTileDimensions(tile_width, tile_height);
-
     BOOST_CHECK_EQUAL(map.GetWidth(), 5);
     BOOST_CHECK_EQUAL(map.GetHeight(), 5);
     BOOST_CHECK_EQUAL(map.GetName(), "My Map");
     BOOST_CHECK_EQUAL(map.GetNumLayers(),  1);
     BOOST_CHECK_EQUAL(map.GetNumBackgrounds(), 0);
+
+
+    const Tileset& tileset = map.GetTileset();
+    uint32_t tile_width, tile_height;
+    tileset.GetTileDimensions(tile_width, tile_height);
     BOOST_CHECK_EQUAL(tileset.GetFilename(), "011-PortTown01.png");
     BOOST_CHECK_EQUAL(tile_width, 32);
     BOOST_CHECK_EQUAL(tile_height, 32);
@@ -58,9 +59,6 @@ BOOST_FIXTURE_TEST_CASE(TestMapSaveBinary, MapTest)
 BOOST_FIXTURE_TEST_CASE(TestMapSaveText, MapTest)
 {
     Map map2;
-    const Tileset& tileset = map2.GetTileset();
-    uint32_t tile_width, tile_height;
-    tileset.GetTileDimensions(tile_width, tile_height);
 
     MapHandlerManager().Save("testout.txt", map);
     MapHandlerManager().Load("testout.txt", map2);
@@ -70,6 +68,11 @@ BOOST_FIXTURE_TEST_CASE(TestMapSaveText, MapTest)
     BOOST_CHECK_EQUAL(map2.GetName(), "My Map");
     BOOST_CHECK_EQUAL(map2.GetNumLayers(), 1);
     BOOST_CHECK_EQUAL(map2.GetNumBackgrounds(), 0);
+
+
+    const Tileset& tileset = map2.GetTileset();
+    uint32_t tile_width, tile_height;
+    tileset.GetTileDimensions(tile_width, tile_height);
     BOOST_CHECK_EQUAL(tileset.GetFilename(), "011-PortTown01.png");
     BOOST_CHECK_EQUAL(tile_width, 32);
     BOOST_CHECK_EQUAL(tile_height, 32);

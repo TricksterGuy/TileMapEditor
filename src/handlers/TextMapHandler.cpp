@@ -553,6 +553,7 @@ void TextMapHandler::Save(std::ostream& file, const Map& map)
         file << "mode: " << background.GetMode() << "\n";
         file << "speed: " << spx << " " << spy << "\n";
         WriteDrawAttributes(file, &background);
+        file << "\n";
     }
     file << "\n";
 
