@@ -63,7 +63,7 @@ const char binary_data[] = {
 "EOM\000\000\000\000\000"
 };
 
-const std::string map_data_binary_file(binary_data, sizeof(binary_data));
+const std::string map_data_binary_file(binary_data, sizeof(binary_data)-1);
 
 BOOST_AUTO_TEST_CASE(BinaryMapHandlerLoad)
 {
