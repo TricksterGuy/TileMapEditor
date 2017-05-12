@@ -80,8 +80,6 @@
 		<Unit filename="src/handlers/BaseMapHandler.hpp" />
 		<Unit filename="src/handlers/BinaryMapHandler.cpp" />
 		<Unit filename="src/handlers/BinaryMapHandler.hpp" />
-		<Unit filename="src/handlers/ChunkStream.cpp" />
-		<Unit filename="src/handlers/ChunkStream.hpp" />
 		<Unit filename="src/handlers/GBAImageHandler.cpp" />
 		<Unit filename="src/handlers/GBAImageHandler.hpp" />
 		<Unit filename="src/handlers/GBAMapHandler.cpp" />
@@ -98,6 +96,7 @@
 		<Unit filename="src/handlers/XmlMapHandler.cpp" />
 		<Unit filename="src/handlers/XmlMapHandler.hpp" />
 		<Unit filename="src/testing/BasicHandlersTest.cpp" />
+		<Unit filename="src/testing/BinaryMapHandlerTest.cpp" />
 		<Unit filename="src/testing/ChunkStreamTest.cpp" />
 		<Unit filename="src/testing/GlobalTest.cpp" />
 		<Unit filename="src/testing/LayerTest.cpp" />

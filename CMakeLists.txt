@@ -173,6 +173,7 @@ add_executable(
     src/testing/LayerTest.cpp
     #src/testing/MapTest.cpp
     src/testing/RegionTest.cpp
+    src/testing/BinaryMapHandlerTest.cpp
     src/testing/TextMapHandlerTest.cpp
     src/testing/TestUtil.cpp
     src/testing/XmlMapHandlerTest.cpp
