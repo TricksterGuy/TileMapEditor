@@ -219,7 +219,7 @@ void BinaryMapHandler::Save(std::ostream& file, const Map& map)
         WriteANIM(file, map);
 
     // Write EOM chunk
-    char eom[4] = "EOM";
+    char eom[4] = {'E', 'O', 'M', 0};
     uint32_t size = 0;
 
     file.write(eom, sizeof(char) * 4);
