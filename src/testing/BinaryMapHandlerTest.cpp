@@ -1,4 +1,3 @@
-
 /******************************************************************************************************
  * TileMapEditor
  * Copyright (C) 2015 Brandon Whitehead (tricksterguy87[AT]gmail[DOT]com)
@@ -19,16 +18,12 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/auto_unit_test.hpp>
 #include <sstream>
-#include "Logger.hpp"
 #include "Map.hpp"
-#include "TestUtil.hpp"
 #include "BinaryMapHandler.hpp"
 #include "TileBasedCollisionLayer.hpp"
-#include <fstream>
 
 const char binary_data[] = {
 "HEAD\x00\x00\x00\x10"
@@ -63,7 +58,8 @@ const char binary_data[] = {
 "EOM\x00\x00\x00\x00\x00"
 };
 
-const std::string map_data_binary_file(binary_data, sizeof(binary_data)-1);
+// without the final nul terminator byte that is added to string literals
+const std::string map_data_binary_file(binary_data, sizeof(binary_data) - 1);
 
 BOOST_AUTO_TEST_CASE(BinaryMapHandlerLoad)
 {
@@ -181,12 +177,10 @@ BOOST_AUTO_TEST_CASE(BinaryMapHandlerSave)
 
     std::stringstream file(map_data_binary_file);
     std::stringstream out;
-    std::ofstream out_file("haha.map", std::ios::binary);
     try
     {
         handler.Load(file, map);
         handler.Save(out, map);
-        handler.Save(out_file, map);
     }
     catch (const char* s)
     {

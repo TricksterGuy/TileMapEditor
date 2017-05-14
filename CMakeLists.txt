@@ -4,6 +4,9 @@ if(CMAKE_VERSION VERSION_EQUAL 3.0 OR CMAKE_VERSION VERSION_GREATER 3.0)
     cmake_policy(SET CMP0042 NEW)
 endif()
 project (tilemapeditor)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+include(CodeCoverage)
 include(FindPkgConfig)
 
 
@@ -13,8 +16,6 @@ if(NOT CMAKE_CXX_FLAGS MATCHES "-std=(c|gnu)\\+\\+11")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11" CACHE STRING "Flags used by the compiler during all build types." FORCE)
 endif()
 
-# Additional debug flags
-set(CMAKE_CXX_FLAGS_DEBUG "-g -pg -fprofile-arcs -ftest-coverage --coverage -DDEBUG")
 # Install directories
 set(CMAKE_INSTALL_LIBDIR lib CACHE STRING "where to install libraries/plugins")
 set(CMAKE_INSTALL_BINDIR bin CACHE STRING "where to install programs")
@@ -33,7 +34,10 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
-    set(CMAKE_EXE_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_COVERAGE} -DDEBUG")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_COVERAGE}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_EXE_LINKER_FLAGS_COVERAGE}")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS_COVERAGE}")
 endif(CMAKE_BUILD_TYPE MATCHES "Debug")
 
 add_definitions(-DPREFIX=${CMAKE_INSTALL_PREFIX})
@@ -168,6 +172,7 @@ target_link_libraries(
 
 add_executable(
     TileMapEditorTest
+    src/testing/AnimatedTileTest.cpp
     src/testing/BasicHandlersTest.cpp
     src/testing/GlobalTest.cpp
     src/testing/LayerTest.cpp
@@ -188,6 +193,12 @@ target_link_libraries(
 	${wxWidgets_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+)
+
+SETUP_TARGET_FOR_COVERAGE(
+    TileMapEditorTestCoverage
+    TileMapEditorTest
+    coverage
 )
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tilemapeditor DESTINATION bin)

@@ -80,6 +80,7 @@ public:
     int32_t At(uint32_t index) const { return data[index]; }
 
     void SetName(const std::string& _name) { name = _name; }
+    void SetData(const std::vector<int32_t>& _data) { data = _data; }
     void Set(uint32_t x, uint32_t y, int32_t value) { Set(y * width + x, value);}
     void Set(uint32_t index, int32_t value) { data[index] = value; }
 

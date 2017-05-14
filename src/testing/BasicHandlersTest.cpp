@@ -1,10 +1,10 @@
+#define BOOST_TEST_DYN_LINK
 #include <boost/test/auto_unit_test.hpp>
 #include "MapHandlerManager.hpp"
 #include "MapHandlerManager.hpp"
 #include "BinaryMapHandler.hpp"
 #include "TextMapHandler.hpp"
 #include "ImageMapHandler.hpp"
-
 
 BOOST_AUTO_TEST_CASE(TestFindHandler)
 {

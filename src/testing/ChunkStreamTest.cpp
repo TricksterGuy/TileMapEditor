@@ -1,20 +1,14 @@
-//#define BOOST_TEST_MODULE Map
+#define BOOST_TEST_DYN_LINK
 #include <boost/test/auto_unit_test.hpp>
 #include "ChunkStream.hpp"
-
 
 struct ChunkStreamTest
 {
     ChunkStreamWriter cs;
     uint32_t header_size;
 
-    ChunkStreamTest() : cs("TEST"), header_size(cs.Size())
-    {
-    }
-
-    ~ChunkStreamTest()
-    {
-    }
+    ChunkStreamTest() : cs("TEST"), header_size(cs.Size()) {}
+    ~ChunkStreamTest() {}
 };
 
 BOOST_FIXTURE_TEST_CASE(TestNoDataSize, ChunkStreamTest)

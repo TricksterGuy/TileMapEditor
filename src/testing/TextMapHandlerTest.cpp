@@ -18,7 +18,6 @@
  *
  * 3. This notice may not be removed or altered from any source distribution.
  ******************************************************************************************************/
-
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/auto_unit_test.hpp>
 #include <sstream>
