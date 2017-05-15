@@ -29,7 +29,7 @@ BaseMapHandler::BaseMapHandler(const std::string& _name, const std::string& _ext
     : name(_name), extension(_extension), description(_description), readable(_readable), writeable(_writeable),
       alternatives(_alternatives)
 {
-    DebugLog("Init %s %s handles: %s", name.c_str(), description.c_str(), extension.c_str());
+    VerboseLog("Init %s %s handles: %s", name.c_str(), description.c_str(), extension.c_str());
 }
 
 int BaseMapHandler::Init()
@@ -39,7 +39,7 @@ int BaseMapHandler::Init()
 
 void BaseMapHandler::Load(const std::string& filename, Map& map)
 {
-    DebugLog("Loading %s using %s", filename.c_str(), name.c_str());
+    VerboseLog("Loading %s using %s", filename.c_str(), name.c_str());
     // Checking to see if the file can be loaded to.
     std::ifstream file(filename.c_str());
     if (!file.good())
@@ -50,7 +50,7 @@ void BaseMapHandler::Load(const std::string& filename, Map& map)
 
 void BaseMapHandler::Save(const std::string& filename, const Map& map)
 {
-    DebugLog("Saving %s using %s", filename.c_str(), name.c_str());
+    VerboseLog("Saving %s using %s", filename.c_str(), name.c_str());
     // Checking to see if the file can be saved to.
     std::ofstream file(filename.c_str());
     if (!file.good())

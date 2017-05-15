@@ -38,7 +38,7 @@ enum class LogLevel
 class AbstractLogger
 {
 public:
-    AbstractLogger(std::ostream* target = &std::cout) : out(target), log_level(LogLevel::VERBOSE_LEVEL), log_time(true) {}
+    AbstractLogger(std::ostream* target = &std::cout) : out(target), log_level(LogLevel::INFO_LEVEL), log_time(true) {}
     virtual ~AbstractLogger() {}
     virtual void Log(LogLevel level, const char* format, va_list ap);
     virtual void DoLog(LogLevel level, const char* format, va_list ap) {}

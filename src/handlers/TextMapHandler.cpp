@@ -63,7 +63,7 @@ void TextMapHandler::Load(std::istream& file, Map& map)
     std::string line;
     std::getline(file, line);
 
-    DebugLog("%s Read line %s", __func__, line.c_str());
+    VerboseLog("%s Read line %s", __func__, line.c_str());
     if (line == "Properties")
         ReadProperties(file, map);
     else
@@ -71,7 +71,7 @@ void TextMapHandler::Load(std::istream& file, Map& map)
 
     while (std::getline(file, line))
     {
-        DebugLog("%s Read line %s", __func__, line.c_str());
+        VerboseLog("%s Read line %s", __func__, line.c_str());
         if (line == "Layers")
             ReadLayers(file, map);
         else if (line == "Backgrounds")
@@ -83,12 +83,12 @@ void TextMapHandler::Load(std::istream& file, Map& map)
         else if (!line.empty())
             throw "Unknown type found in file line: " + line;
     }
-    DebugLog("Done Loading");
+    VerboseLog("Done Loading");
 }
 
 void TextMapHandler::ReadProperties(std::istream& file, Map& map)
 {
-    DebugLog("Reading Properties");
+    VerboseLog("Reading Properties");
     std::string line;
     std::string name;
     std::string tileset;
@@ -97,7 +97,7 @@ void TextMapHandler::ReadProperties(std::istream& file, Map& map)
     std::getline(file, line);
     while (!line.empty())
     {
-        DebugLog("%s Read line %s", __func__, line.c_str());
+        VerboseLog("%s Read line %s", __func__, line.c_str());
         std::string property;
         Scanner scanner(line);
 
@@ -137,17 +137,17 @@ void TextMapHandler::ReadProperties(std::istream& file, Map& map)
 
     map.SetName(name);
     map.SetTileset(Tileset(tileset, tile_width, tile_height));
-    DebugLog("Done Reading Properties");
+    VerboseLog("Done Reading Properties");
 }
 
 void TextMapHandler::ReadLayers(std::istream& file, Map& map)
 {
-    DebugLog("Reading Layers");
+    VerboseLog("Reading Layers");
     std::string line;
     std::getline(file, line);
     while (!line.empty())
     {
-        DebugLog("Reading a layer");
+        VerboseLog("Reading a layer");
         std::string name;
         DrawAttributes attr;
         uint32_t width = 0, height = 0;
@@ -155,7 +155,7 @@ void TextMapHandler::ReadLayers(std::istream& file, Map& map)
 
         while (!line.empty())
         {
-            DebugLog("%s Read line %s", __func__, line.c_str());
+            VerboseLog("%s Read line %s", __func__, line.c_str());
             std::string property;
             Scanner scanner(line);
 
@@ -262,17 +262,17 @@ void TextMapHandler::ReadLayers(std::istream& file, Map& map)
 
         std::getline(file, line);
     }
-    DebugLog("Done Reading Layers");
+    VerboseLog("Done Reading Layers");
 }
 
 void TextMapHandler::ReadBackgrounds(std::istream& file, Map& map)
 {
-    DebugLog("Reading Backgrounds");
+    VerboseLog("Reading Backgrounds");
     std::string line;
     std::getline(file, line);
     while (!line.empty())
     {
-        DebugLog("Reading a background");
+        VerboseLog("Reading a background");
         std::string name;
         std::string filename;
         int32_t mode = 0;
@@ -281,7 +281,7 @@ void TextMapHandler::ReadBackgrounds(std::istream& file, Map& map)
 
         while (!line.empty())
         {
-            DebugLog("%s Read line %s", __func__, line.c_str());
+            VerboseLog("%s Read line %s", __func__, line.c_str());
             std::string property;
             Scanner scanner(line);
 
@@ -383,17 +383,17 @@ void TextMapHandler::ReadBackgrounds(std::istream& file, Map& map)
 
         std::getline(file, line);
     }
-    DebugLog("Done Reading Backgrounds");
+    VerboseLog("Done Reading Backgrounds");
 }
 
 void TextMapHandler::ReadAnimations(std::istream& file, Map& map)
 {
-    DebugLog("Reading Animations");
+    VerboseLog("Reading Animations");
     std::string line;
     std::getline(file, line);
     while (!line.empty())
     {
-        DebugLog("Reading an Animation");
+        VerboseLog("Reading an Animation");
         std::string name;
         int32_t delay;
         int32_t type;
@@ -402,7 +402,7 @@ void TextMapHandler::ReadAnimations(std::istream& file, Map& map)
 
         while (!line.empty())
         {
-            DebugLog("%s Read line %s", __func__, line.c_str());
+            VerboseLog("%s Read line %s", __func__, line.c_str());
             std::string property;
             Scanner scanner(line);
 
@@ -449,12 +449,12 @@ void TextMapHandler::ReadAnimations(std::istream& file, Map& map)
 
         std::getline(file, line);
     }
-    DebugLog("Done Reading Animations");
+    VerboseLog("Done Reading Animations");
 }
 
 void TextMapHandler::ReadCollision(std::istream& file, Map& map)
 {
-    DebugLog("Reading Collision Layer");
+    VerboseLog("Reading Collision Layer");
 
     int32_t type = 0;
     uint32_t width = 0, height = 0;
@@ -465,7 +465,7 @@ void TextMapHandler::ReadCollision(std::istream& file, Map& map)
 
     while (!line.empty())
     {
-        DebugLog("%s Read line %s", __func__, line.c_str());
+        VerboseLog("%s Read line %s", __func__, line.c_str());
         std::string property;
         Scanner scanner(line);
 
@@ -509,7 +509,7 @@ void TextMapHandler::ReadCollision(std::istream& file, Map& map)
     map.SetCollisionLayer(layer);
 
     std::getline(file, line);
-    DebugLog("Done Reading Collision Layer");
+    VerboseLog("Done Reading Collision Layer");
 }
 
 void TextMapHandler::Save(std::ostream& file, const Map& map)

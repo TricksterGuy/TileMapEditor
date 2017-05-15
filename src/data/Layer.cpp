@@ -88,13 +88,9 @@ void Layer::Shift(int32_t horizontal, int32_t vertical, bool wrap)
         {
             for (uint32_t j = 0; j < width; j++)
             {
-                int sx = (j - horizontal) % width;
-                int sy = (i - vertical) % height;
-                if (sx < 0)
-                    sx += width;
-                if (sy < 0)
-                    sy += height;
-                newdata[i * width + j] = olddata[sy * width + sx];
+                int sx = (j + horizontal + width) % width;
+                int sy = (i + vertical + height) % height;
+                newdata[sy * width + sx] = olddata[i * width + j];
             }
         }
     }

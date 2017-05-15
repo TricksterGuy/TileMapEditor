@@ -77,8 +77,6 @@ public:
 protected:
     size_t OnSysWrite(const void* buffer, size_t bufsize)
     {
-        VerboseLog("Writing %d bytes", bufsize);
-
         if (stream.bad())
         {
             m_lasterror = wxSTREAM_WRITE_ERROR;
@@ -113,7 +111,7 @@ void XmlMapHandler::Load(std::istream& file, Map& map)
     while ((child = child->GetNext()))
     {
         std::string name = child->GetName().ToStdString();
-        DebugLog("%s Got node %s", __func__, name.c_str());
+        VerboseLog("%s Got node %s", __func__, name.c_str());
 
         if (name == "Layer")
             ReadLayer(child, map);
@@ -156,7 +154,7 @@ void XmlMapHandler::Save(std::ostream& file, const Map& map)
 
 void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
 {
-    DebugLog("Reading Properties");
+    VerboseLog("Reading Properties");
 
     std::string name;
     std::string tileset;
@@ -167,7 +165,7 @@ void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
     {
         std::string property = child->GetName().ToStdString();
         std::string content = child->GetNodeContent().ToStdString();
-        DebugLog("%s Got node %s content %s", __func__, property.c_str(), content.c_str());
+        VerboseLog("%s Got node %s content %s", __func__, property.c_str(), content.c_str());
 
         if (property == "Name")
         {
@@ -190,12 +188,12 @@ void XmlMapHandler::ReadProperties(wxXmlNode* root, Map& map)
 
     map.SetName(name);
     map.SetTileset(Tileset(tileset, tile_width, tile_height));
-    DebugLog("Done Reading Properties");
+    VerboseLog("Done Reading Properties");
 }
 
 void XmlMapHandler::ReadLayer(wxXmlNode* root, Map& map)
 {
-    DebugLog("Reading a Layer");
+    VerboseLog("Reading a Layer");
 
     wxXmlNode* child = root->GetChildren();
     std::string name;
@@ -208,7 +206,7 @@ void XmlMapHandler::ReadLayer(wxXmlNode* root, Map& map)
     {
         std::string property = child->GetName().ToStdString();
         std::string content = child->GetNodeContent().ToStdString();
-        DebugLog("%s Got node %s content %s", __func__, property.c_str(), content.c_str());
+        VerboseLog("%s Got node %s content %s", __func__, property.c_str(), content.c_str());
 
         Scanner scanner(content);
         if (property == "Name")
@@ -307,12 +305,12 @@ void XmlMapHandler::ReadLayer(wxXmlNode* root, Map& map)
 
     map.Add(Layer(name, width, height, data, attr));
 
-    DebugLog("Done Reading Layer");
+    VerboseLog("Done Reading Layer");
 }
 
 void XmlMapHandler::ReadBackground(wxXmlNode* root, Map& map)
 {
-    DebugLog("Reading a background");
+    VerboseLog("Reading a background");
     wxXmlNode* child = root->GetChildren();
 
     std::string name;
@@ -325,7 +323,7 @@ void XmlMapHandler::ReadBackground(wxXmlNode* root, Map& map)
     {
         std::string property = child->GetName().ToStdString();
         std::string content = child->GetNodeContent().ToStdString();
-        DebugLog("%s Got node %s content %s", __func__, property.c_str(), content.c_str());
+        VerboseLog("%s Got node %s content %s", __func__, property.c_str(), content.c_str());
 
         Scanner scanner(content);
         if (property == "Name")
@@ -420,12 +418,12 @@ void XmlMapHandler::ReadBackground(wxXmlNode* root, Map& map)
 
     map.Add(Background(name, filename, mode, speedx, speedy, attr));
 
-    DebugLog("Done Reading a Background");
+    VerboseLog("Done Reading a Background");
 }
 
 void XmlMapHandler::ReadAnimation(wxXmlNode* root, Map& map)
 {
-    DebugLog("Reading an animation");
+    VerboseLog("Reading an animation");
     wxXmlNode* child = root->GetChildren();
 
     std::string name;
@@ -438,7 +436,7 @@ void XmlMapHandler::ReadAnimation(wxXmlNode* root, Map& map)
     {
         std::string property = child->GetName().ToStdString();
         std::string content = child->GetNodeContent().ToStdString();
-        DebugLog("%s Got node %s content %s", __func__, property.c_str(), content.c_str());
+        VerboseLog("%s Got node %s content %s", __func__, property.c_str(), content.c_str());
 
         Scanner scanner(content);
 
@@ -479,12 +477,12 @@ void XmlMapHandler::ReadAnimation(wxXmlNode* root, Map& map)
     }
 
     map.Add(AnimatedTile(name, delay, (Animation::Type)type, times, frames));
-    DebugLog("Done Reading an Animation");
+    VerboseLog("Done Reading an Animation");
 }
 
 void XmlMapHandler::ReadCollision(wxXmlNode* root, Map& map)
 {
-    DebugLog("Reading Collision Layer");
+    VerboseLog("Reading Collision Layer");
     wxXmlNode* child = root->GetChildren();
 
     int32_t type = -1;
@@ -496,7 +494,7 @@ void XmlMapHandler::ReadCollision(wxXmlNode* root, Map& map)
     {
         std::string property = child->GetName().ToStdString();
         std::string content = child->GetNodeContent().ToStdString();
-        DebugLog("%s Got node %s content %s", __func__, property.c_str(), content.c_str());
+        VerboseLog("%s Got node %s content %s", __func__, property.c_str(), content.c_str());
 
         Scanner scanner(content);
         if (property == "Type")
@@ -535,12 +533,12 @@ void XmlMapHandler::ReadCollision(wxXmlNode* root, Map& map)
     TileBasedCollisionLayer* clayer = new TileBasedCollisionLayer(width, height, data);
     map.SetCollisionLayer(clayer);
 
-    DebugLog("Done Reading Collision Layer");
+    VerboseLog("Done Reading Collision Layer");
 }
 
 void XmlMapHandler::WriteProperties(wxXmlNode* root, const Map& map)
 {
-    DebugLog("Writing Properties");
+    VerboseLog("Writing Properties");
     wxXmlNode* properties = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Properties");
     const auto& tileset = map.GetTileset();
     uint32_t tile_width, tile_height;
@@ -555,12 +553,12 @@ void XmlMapHandler::WriteProperties(wxXmlNode* root, const Map& map)
 
     wxXmlNode* name = new wxXmlNode(properties, wxXML_ELEMENT_NODE, "Name");
     new wxXmlNode(name, wxXML_TEXT_NODE, "", map.GetName());
-    DebugLog("Done Writing Properties");
+    VerboseLog("Done Writing Properties");
 }
 
 void XmlMapHandler::WriteLayer(wxXmlNode* root, const Map& map, const Layer& layer)
 {
-    DebugLog("Writing a Layer");
+    VerboseLog("Writing a Layer");
     wxXmlNode* node = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Layer");
 
     wxString layerdata = "\n";
@@ -583,12 +581,12 @@ void XmlMapHandler::WriteLayer(wxXmlNode* root, const Map& map, const Layer& lay
     wxXmlNode* name = new wxXmlNode(node, wxXML_ELEMENT_NODE, "Name");
     new wxXmlNode(name, wxXML_TEXT_NODE, "", layer.GetName());
 
-    DebugLog("Done Writing a Layer");
+    VerboseLog("Done Writing a Layer");
 }
 
 void XmlMapHandler::WriteBackground(wxXmlNode* root, const Map& map, const Background& background)
 {
-    DebugLog("Writing a Background");
+    VerboseLog("Writing a Background");
     float x, y;
     background.GetSpeed(x, y);
 
@@ -607,12 +605,12 @@ void XmlMapHandler::WriteBackground(wxXmlNode* root, const Map& map, const Backg
     wxXmlNode* name = new wxXmlNode(back, wxXML_ELEMENT_NODE, "Name");
     new wxXmlNode(name, wxXML_TEXT_NODE, "", background.GetName());
 
-    DebugLog("Done Writing a Background");
+    VerboseLog("Done Writing a Background");
 }
 
 void XmlMapHandler::WriteAnimation(wxXmlNode* root, const Map& map, const AnimatedTile& animatedTile)
 {
-    DebugLog("Writing an Animation");
+    VerboseLog("Writing an Animation");
     wxXmlNode* animation = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Animation");
 
     wxString frameData = "\n\t\t\t";
@@ -635,12 +633,12 @@ void XmlMapHandler::WriteAnimation(wxXmlNode* root, const Map& map, const Animat
     wxXmlNode* name = new wxXmlNode(animation, wxXML_ELEMENT_NODE, "Name");
     new wxXmlNode(name, wxXML_TEXT_NODE, "", animatedTile.GetName());
 
-    DebugLog("Done Writing an Animation");
+    VerboseLog("Done Writing an Animation");
 }
 
 void XmlMapHandler::WriteCollision(wxXmlNode* root, const Map& map)
 {
-    DebugLog("Writing Collision Layer");
+    VerboseLog("Writing Collision Layer");
     TileBasedCollisionLayer* layer = dynamic_cast<TileBasedCollisionLayer*>(map.GetCollisionLayer());
     wxXmlNode* layern = new wxXmlNode(root, wxXML_ELEMENT_NODE, "Collision");
 
@@ -661,7 +659,7 @@ void XmlMapHandler::WriteCollision(wxXmlNode* root, const Map& map)
     wxXmlNode* type = new wxXmlNode(layern, wxXML_ELEMENT_NODE, "Type");
     new wxXmlNode(type, wxXML_TEXT_NODE, "", wxString::Format("%i", layer->GetType()));
 
-    DebugLog("Done Writing Collision Layer");
+    VerboseLog("Done Writing Collision Layer");
 }
 
 void XmlMapHandler::WriteAttributes(wxXmlNode* root, const DrawAttributes& attr)
@@ -696,5 +694,5 @@ void XmlMapHandler::WriteAttributes(wxXmlNode* root, const DrawAttributes& attr)
     attr.GetPosition(x, y);
     new wxXmlNode(position, wxXML_TEXT_NODE, "", wxString::Format("%i, %i", x, y));
 
-    DebugLog("Done Writing Attributes");
+    VerboseLog("Done Writing Attributes");
 }

@@ -95,6 +95,7 @@
 		<Unit filename="src/handlers/TextMapHandler.hpp" />
 		<Unit filename="src/handlers/XmlMapHandler.cpp" />
 		<Unit filename="src/handlers/XmlMapHandler.hpp" />
+		<Unit filename="src/testing/AnimatedTileTest.cpp" />
 		<Unit filename="src/testing/BasicHandlersTest.cpp" />
 		<Unit filename="src/testing/BinaryMapHandlerTest.cpp" />
 		<Unit filename="src/testing/ChunkStreamTest.cpp" />

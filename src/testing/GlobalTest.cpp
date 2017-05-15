@@ -12,7 +12,7 @@ struct Global
     Global() : test_log("test.log")
     {
         boost::unit_test::unit_test_log.set_stream(test_log);
-        logger->SetLogLevel(LogLevel::VERBOSE_LEVEL);
+        //logger->SetLogLevel(LogLevel::VERBOSE_LEVEL);
 
         MapHandlerManager().Add(new BinaryMapHandler());
         MapHandlerManager().Add(new TextMapHandler());
