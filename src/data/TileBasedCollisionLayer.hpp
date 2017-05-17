@@ -25,12 +25,13 @@
 #include <vector>
 
 #include "CollisionLayer.hpp"
+#include "TiledLayerData.hpp"
 
 /** A collision layer that is tile based.
   * Collision information is defined per tile as either -1 for impassable
   * or 0 for passable.
   */
-class TileBasedCollisionLayer : public CollisionLayer
+class TileBasedCollisionLayer : public CollisionLayer, public TiledLayerData
 {
 public:
     /** Creates a collision layer with specified width, height and data.
@@ -52,29 +53,13 @@ public:
     TileBasedCollisionLayer(int width = 1, int height = 1);
     bool operator==(const TileBasedCollisionLayer& other);
     bool operator!=(const TileBasedCollisionLayer& other) { return !(*this == other); }
-    const int32_t& operator[](const uint32_t index) const { return data[index]; }
-    int32_t& operator[](const uint32_t index) { return data[index]; }
 
-    /** @see CollisionLayer::clear */
-    virtual void Clear();
-    /** @see CollisionLayer::shift */
-    virtual void Shift(int horizontal, int vertical, bool wrap = false);
-    /** @see CollisionLayer::resize */
-    virtual void Resize(uint32_t width, uint32_t height, bool copy = true);
-
-    uint32_t GetWidth() const { return width; }
-    uint32_t GetHeight() const { return height; }
-    const std::vector<int32_t>& GetData() const { return data; }
-    std::vector<int32_t>& GetData() { return data; }
-    int32_t At(uint32_t index) const { return data[index]; }
-    int32_t At(uint32_t x, uint32_t y) const { return At(y * width + x); }
-
-    void Set(uint32_t x, uint32_t y, int32_t value) { Set(y * width + x, value); }
-    void Set(uint32_t index, int32_t value) { data[index] = value; }
-
-protected:
-    uint32_t width, height;
-    std::vector<int32_t> data;
+    /** @see CollisionLayer::Clear */
+    void Clear() { TiledLayerData::Clear(); }
+    /** @see CollisionLayer::Shift */
+    void Shift(int horizontal, int vertical, bool wrap = false) { TiledLayerData::Shift(horizontal, vertical, wrap); }
+    /** @see CollisionLayer::Resize */
+    void Resize(uint32_t width, uint32_t height, bool copy = true) { TiledLayerData::Resize(width, height, copy); }
 };
 
 #endif

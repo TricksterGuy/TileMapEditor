@@ -75,6 +75,7 @@ set(SRC_MAP
     src/data/Region.cpp
     src/data/TileBasedCollisionLayer.cpp
     src/data/Tileset.cpp
+    src/data/TiledLayerData.cpp
 )
 
 set(SRC_HANDLERS
@@ -175,7 +176,7 @@ add_executable(
     src/testing/AnimatedTileTest.cpp
     src/testing/BasicHandlersTest.cpp
     src/testing/GlobalTest.cpp
-    src/testing/LayerTest.cpp
+    src/testing/TiledLayerDataTest.cpp
     #src/testing/MapTest.cpp
     src/testing/RegionTest.cpp
     src/testing/BinaryMapHandlerTest.cpp

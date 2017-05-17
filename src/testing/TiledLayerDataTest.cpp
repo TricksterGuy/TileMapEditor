@@ -1,21 +1,21 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/auto_unit_test.hpp>
-#include "Layer.hpp"
+#include "TiledLayerData.hpp"
 
-struct LayerTest
+struct TiledLayerDataTest
 {
-    Layer layer;
+    TiledLayerData layer;
 
-    LayerTest() : layer("", 5, 5)
+    TiledLayerDataTest() : layer(5, 5)
     {
     }
 
-    ~LayerTest()
+    ~TiledLayerDataTest()
     {
     }
 };
 
-BOOST_FIXTURE_TEST_CASE(TestLayerResize1, LayerTest)
+BOOST_FIXTURE_TEST_CASE(TestLayerResize1, TiledLayerDataTest)
 {
     layer[24] = 78;  // Layer[4, 4]
     layer.Resize(10, 10);
@@ -24,7 +24,7 @@ BOOST_FIXTURE_TEST_CASE(TestLayerResize1, LayerTest)
     BOOST_CHECK_EQUAL(layer.GetHeight(), 10);
 }
 
-BOOST_FIXTURE_TEST_CASE(TestLayerResizeClear, LayerTest)
+BOOST_FIXTURE_TEST_CASE(TestLayerResizeClear, TiledLayerDataTest)
 {
     layer[24] = 78;  // Layer[4, 4]
     layer.Resize(2, 2, false);
@@ -35,7 +35,7 @@ BOOST_FIXTURE_TEST_CASE(TestLayerResizeClear, LayerTest)
     BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(), actual.begin(), actual.end());
 }
 
-BOOST_FIXTURE_TEST_CASE(TestLayerResizeUnchanged, LayerTest)
+BOOST_FIXTURE_TEST_CASE(TestLayerResizeUnchanged, TiledLayerDataTest)
 {
     std::vector<int32_t> expected = {
         6, 3, 12, 33, 93,
@@ -52,7 +52,7 @@ BOOST_FIXTURE_TEST_CASE(TestLayerResizeUnchanged, LayerTest)
     BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(), actual.begin(), actual.end());
 }
 
-BOOST_FIXTURE_TEST_CASE(TestLayerResize2, LayerTest)
+BOOST_FIXTURE_TEST_CASE(TestLayerResize2, TiledLayerDataTest)
 {
     layer[15] = 34;  // Layer[0, 3]
     layer.Resize(1, 25);
@@ -61,7 +61,7 @@ BOOST_FIXTURE_TEST_CASE(TestLayerResize2, LayerTest)
     BOOST_CHECK_EQUAL(layer.GetHeight(), 25);
 }
 
-BOOST_FIXTURE_TEST_CASE(TestLayerClear, LayerTest)
+BOOST_FIXTURE_TEST_CASE(TestLayerClear, TiledLayerDataTest)
 {
     std::vector<int32_t> start = {
         6, 3, 12, 33, 93,
@@ -85,7 +85,7 @@ BOOST_FIXTURE_TEST_CASE(TestLayerClear, LayerTest)
     BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(), actual.begin(), actual.end());
 }
 
-BOOST_FIXTURE_TEST_CASE(TestLayerShift, LayerTest)
+BOOST_FIXTURE_TEST_CASE(TestLayerShift, TiledLayerDataTest)
 {
     std::vector<int32_t> start = {
         6, 3, 12, 33, 93,
@@ -109,7 +109,7 @@ BOOST_FIXTURE_TEST_CASE(TestLayerShift, LayerTest)
     BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(), actual.begin(), actual.end());
 }
 
-BOOST_FIXTURE_TEST_CASE(TestLayerShiftNegative, LayerTest)
+BOOST_FIXTURE_TEST_CASE(TestLayerShiftNegative, TiledLayerDataTest)
 {
     std::vector<int32_t> start = {
         6, 3, 12, 33, 93,
@@ -133,7 +133,7 @@ BOOST_FIXTURE_TEST_CASE(TestLayerShiftNegative, LayerTest)
     BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(), actual.begin(), actual.end());
 }
 
-BOOST_FIXTURE_TEST_CASE(TestLayerShiftWrap1, LayerTest)
+BOOST_FIXTURE_TEST_CASE(TestLayerShiftWrap1, TiledLayerDataTest)
 {
     std::vector<int32_t> start = {
         1, 2, 3,
@@ -154,7 +154,7 @@ BOOST_FIXTURE_TEST_CASE(TestLayerShiftWrap1, LayerTest)
     BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(), actual.begin(), actual.end());
 }
 
-BOOST_FIXTURE_TEST_CASE(TestLayerShiftWrap2, LayerTest)
+BOOST_FIXTURE_TEST_CASE(TestLayerShiftWrap2, TiledLayerDataTest)
 {
     std::vector<int32_t> start = {
         6, 3, 12, 33, 93,
@@ -178,7 +178,7 @@ BOOST_FIXTURE_TEST_CASE(TestLayerShiftWrap2, LayerTest)
     BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(), actual.begin(), actual.end());
 }
 
-BOOST_FIXTURE_TEST_CASE(TestLayerShiftWrapNegative, LayerTest)
+BOOST_FIXTURE_TEST_CASE(TestLayerShiftWrapNegative, TiledLayerDataTest)
 {
     std::vector<int32_t> start = {
         1, 2, 3,
