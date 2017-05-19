@@ -69,11 +69,15 @@ void TiledLayerData::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
 
 void TiledLayerData::Shift(int32_t horizontal, int32_t vertical, bool wrap)
 {
-    int32_t* newdata = new int32_t[width * height];
-    int32_t* olddata = data.data();
+    if (horizontal == 0 && vertical == 0)
+        return;
+
+    std::vector<int32_t> olddata = data;
+    //int32_t* newdata = new int32_t[width * height];
+    //int32_t* olddata = data.data();
 
     if (!wrap)
-        memset(newdata, 0xFF, sizeof(int32_t) * width * height);
+        data.assign(width * height, -1);
 
     if (wrap)
     {
@@ -82,8 +86,8 @@ void TiledLayerData::Shift(int32_t horizontal, int32_t vertical, bool wrap)
         for (uint32_t i = 0; i < height; i++)
         {
             int sy = (i + vertical + height) % height;
-            memcpy(newdata + sy * width + sx, olddata + i * width, cutw * sizeof(int32_t));
-            memcpy(newdata + sy * width, olddata + i * width + cutw, horizontal * sizeof(int32_t));
+            memcpy(data.data() + sy * width + sx, olddata.data() + i * width, cutw * sizeof(int32_t));
+            memcpy(data.data() + sy * width, olddata.data() + i * width + cutw, horizontal * sizeof(int32_t));
         }
     }
     else
@@ -95,14 +99,14 @@ void TiledLayerData::Shift(int32_t horizontal, int32_t vertical, bool wrap)
         {
             int sy = (i + std::abs(vertical)) % height;
             if (horizontal >= 0)
-                memcpy(newdata + sy * width + sx, olddata + i * width, cutw * sizeof(int32_t));
+                memcpy(data.data() + sy * width + sx, olddata.data() + i * width, cutw * sizeof(int32_t));
             else
-                memcpy(newdata + i * width, olddata + sy * width + sx, cutw * sizeof(int32_t));
+                memcpy(data.data() + i * width, olddata.data() + sy * width + sx, cutw * sizeof(int32_t));
         }
     }
 
-    data.assign(newdata, newdata + width * height);
-    delete[] newdata;
+    //data.assign(newdata, newdata + width * height);
+    //delete[] newdata;
 }
 
 void TiledLayerData::Clear()
