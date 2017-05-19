@@ -54,6 +54,8 @@
 		<Unit filename="src/data/Region.hpp" />
 		<Unit filename="src/data/TileBasedCollisionLayer.cpp" />
 		<Unit filename="src/data/TileBasedCollisionLayer.hpp" />
+		<Unit filename="src/data/TiledLayerData.cpp" />
+		<Unit filename="src/data/TiledLayerData.hpp" />
 		<Unit filename="src/data/Tileset.cpp" />
 		<Unit filename="src/data/Tileset.hpp" />
 		<Unit filename="src/gen/MapNotebookGUI.cpp" />
@@ -100,12 +102,12 @@
 		<Unit filename="src/testing/BinaryMapHandlerTest.cpp" />
 		<Unit filename="src/testing/ChunkStreamTest.cpp" />
 		<Unit filename="src/testing/GlobalTest.cpp" />
-		<Unit filename="src/testing/LayerTest.cpp" />
 		<Unit filename="src/testing/MapTest.cpp" />
 		<Unit filename="src/testing/RegionTest.cpp" />
 		<Unit filename="src/testing/TestUtil.cpp" />
 		<Unit filename="src/testing/TestUtil.hpp" />
 		<Unit filename="src/testing/TextMapHandlerTest.cpp" />
+		<Unit filename="src/testing/TiledLayerDataTest.cpp" />
 		<Unit filename="src/testing/XmlMapHandlerTest.cpp" />
 		<Unit filename="src/util/ChunkStream.cpp" />
 		<Unit filename="src/util/ChunkStream.hpp" />

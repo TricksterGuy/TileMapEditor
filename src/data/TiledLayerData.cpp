@@ -78,7 +78,7 @@ void TiledLayerData::Shift(int32_t horizontal, int32_t vertical, bool wrap)
     // TODO Make more efficient
     if (wrap)
     {
-        for (uint32_t i = 0; i < height; i++)
+        /*for (uint32_t i = 0; i < height; i++)
         {
             for (uint32_t j = 0; j < width; j++)
             {
@@ -86,10 +86,19 @@ void TiledLayerData::Shift(int32_t horizontal, int32_t vertical, bool wrap)
                 int sy = (i + vertical + height) % height;
                 newdata[sy * width + sx] = olddata[i * width + j];
             }
+        }*/
+        uint32_t cutw = (width - horizontal) % width;
+        int sx = (horizontal + width) % width;
+        for (uint32_t i = 0; i < height; i++)
+        {
+            int sy = (i + vertical + height) % height;
+            memcpy(newdata + sy * width + sx, olddata + i * width, cutw * sizeof(int32_t));
+            memcpy(newdata + sy * width, olddata + i * width + cutw, horizontal * sizeof(int32_t));
         }
     }
     else
     {
+        uint32_t cuth = (height - vertical) % height;
         for (uint32_t i = 0; i < height; i++)
         {
             for (uint32_t j = 0; j < width; j++)
