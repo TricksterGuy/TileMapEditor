@@ -75,18 +75,8 @@ void TiledLayerData::Shift(int32_t horizontal, int32_t vertical, bool wrap)
     if (!wrap)
         memset(newdata, 0xFF, sizeof(int32_t) * width * height);
 
-    // TODO Make more efficient
     if (wrap)
     {
-        /*for (uint32_t i = 0; i < height; i++)
-        {
-            for (uint32_t j = 0; j < width; j++)
-            {
-                int sx = (j + horizontal + width) % width;
-                int sy = (i + vertical + height) % height;
-                newdata[sy * width + sx] = olddata[i * width + j];
-            }
-        }*/
         uint32_t cutw = (width - horizontal) % width;
         int sx = (horizontal + width) % width;
         for (uint32_t i = 0; i < height; i++)
@@ -98,15 +88,16 @@ void TiledLayerData::Shift(int32_t horizontal, int32_t vertical, bool wrap)
     }
     else
     {
-        uint32_t cuth = (height - vertical) % height;
-        for (uint32_t i = 0; i < height; i++)
+        uint32_t cutw = width - std::abs(horizontal);
+        uint32_t cuth = height - std::abs(vertical);
+        int sx = std::abs(horizontal) % width;
+        for (uint32_t i = 0; i < cuth; i++)
         {
-            for (uint32_t j = 0; j < width; j++)
-            {
-                if (i - vertical < 0 || i - vertical >= height || j - horizontal < 0 || j - horizontal >= width)
-                    continue;
-                newdata[i * width + j] = olddata[(i - vertical) * width + (j - horizontal)];
-            }
+            int sy = (i + std::abs(vertical)) % height;
+            if (horizontal >= 0)
+                memcpy(newdata + sy * width + sx, olddata + i * width, cutw * sizeof(int32_t));
+            else
+                memcpy(newdata + i * width, olddata + sy * width + sx, cutw * sizeof(int32_t));
         }
     }
 
