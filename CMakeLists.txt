@@ -178,7 +178,6 @@ add_executable(
     src/testing/BasicHandlersTest.cpp
     src/testing/GlobalTest.cpp
     src/testing/TiledLayerDataTest.cpp
-    #src/testing/MapTest.cpp
     src/testing/RegionTest.cpp
     src/testing/BinaryMapHandlerTest.cpp
     src/testing/TextMapHandlerTest.cpp

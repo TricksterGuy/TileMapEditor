@@ -73,8 +73,6 @@ void TiledLayerData::Shift(int32_t horizontal, int32_t vertical, bool wrap)
         return;
 
     std::vector<int32_t> olddata = data;
-    //int32_t* newdata = new int32_t[width * height];
-    //int32_t* olddata = data.data();
 
     if (!wrap)
         data.assign(width * height, -1);
@@ -104,9 +102,6 @@ void TiledLayerData::Shift(int32_t horizontal, int32_t vertical, bool wrap)
                 memcpy(data.data() + i * width, olddata.data() + sy * width + sx, cutw * sizeof(int32_t));
         }
     }
-
-    //data.assign(newdata, newdata + width * height);
-    //delete[] newdata;
 }
 
 void TiledLayerData::Clear()
