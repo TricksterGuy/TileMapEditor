@@ -102,7 +102,7 @@
 		<Unit filename="src/testing/BinaryMapHandlerTest.cpp" />
 		<Unit filename="src/testing/ChunkStreamTest.cpp" />
 		<Unit filename="src/testing/GlobalTest.cpp" />
-		<Unit filename="src/testing/MapTest.cpp" />
+		<Unit filename="src/testing/RectangleTest.cpp" />
 		<Unit filename="src/testing/RegionTest.cpp" />
 		<Unit filename="src/testing/TestUtil.cpp" />
 		<Unit filename="src/testing/TestUtil.hpp" />

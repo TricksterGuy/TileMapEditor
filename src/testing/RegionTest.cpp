@@ -24,7 +24,6 @@
 #include "Logger.hpp"
 #include "Region.hpp"
 
-
 BOOST_AUTO_TEST_CASE(RegionSubtract0Formed)
 {
     // DDD

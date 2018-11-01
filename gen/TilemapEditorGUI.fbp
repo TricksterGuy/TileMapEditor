@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="12" />
+    <FileVersion major="1" minor="13" />
     <object class="Project" expanded="1">
-        <property name="class_decoration"></property>
+        <property name="class_decoration" />
         <property name="code_generation">C++</property>
         <property name="disconnect_events">1</property>
         <property name="disconnect_mode">source_name</property>
@@ -16,7 +16,7 @@
         <property name="help_provider">none</property>
         <property name="internationalize">0</property>
         <property name="name">TilemapEditorGUI</property>
-        <property name="namespace"></property>
+        <property name="namespace" />
         <property name="path">../src/gen</property>
         <property name="precompiled_header">#include &quot;wx/wxprec.h&quot;&#x0A;&#x0A;#ifdef __BORLANDC__&#x0A;#pragma hdrstop&#x0A;#endif //__BORLANDC__&#x0A;&#x0A;#ifndef WX_PRECOMP&#x0A;#include &lt;wx/wx.h&gt;&#x0A;#endif //WX_PRECOMP</property>
         <property name="relative_path">1</property>
@@ -29,116 +29,116 @@
         <object class="MDIFrame" expanded="1">
             <property name="aui_managed">0</property>
             <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
-            <property name="bg"></property>
-            <property name="center"></property>
-            <property name="context_help"></property>
+            <property name="bg" />
+            <property name="center" />
+            <property name="context_help" />
             <property name="context_menu">1</property>
             <property name="enabled">1</property>
             <property name="event_handler">impl_virtual</property>
-            <property name="extra_style"></property>
-            <property name="fg"></property>
-            <property name="font"></property>
+            <property name="extra_style" />
+            <property name="fg" />
+            <property name="font" />
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="maximum_size"></property>
-            <property name="minimum_size"></property>
+            <property name="maximum_size" />
+            <property name="minimum_size" />
             <property name="name">TilemapEditorGUI</property>
-            <property name="pos"></property>
+            <property name="pos" />
             <property name="size">481,466</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass">; </property>
             <property name="title">TilemapEditor</property>
-            <property name="tooltip"></property>
-            <property name="window_extra_style"></property>
-            <property name="window_name"></property>
+            <property name="tooltip" />
+            <property name="window_extra_style" />
+            <property name="window_name" />
             <property name="window_style">wxTAB_TRAVERSAL</property>
             <property name="xrc_skip_sizer">1</property>
-            <event name="OnActivate"></event>
-            <event name="OnActivateApp"></event>
-            <event name="OnAuiFindManager"></event>
-            <event name="OnAuiPaneButton"></event>
-            <event name="OnAuiPaneClose"></event>
-            <event name="OnAuiPaneMaximize"></event>
-            <event name="OnAuiPaneRestore"></event>
-            <event name="OnAuiRender"></event>
-            <event name="OnChar"></event>
+            <event name="OnActivate" />
+            <event name="OnActivateApp" />
+            <event name="OnAuiFindManager" />
+            <event name="OnAuiPaneButton" />
+            <event name="OnAuiPaneClose" />
+            <event name="OnAuiPaneMaximize" />
+            <event name="OnAuiPaneRestore" />
+            <event name="OnAuiRender" />
+            <event name="OnChar" />
             <event name="OnClose">OnClose</event>
-            <event name="OnEnterWindow"></event>
-            <event name="OnEraseBackground"></event>
-            <event name="OnHibernate"></event>
-            <event name="OnIconize"></event>
-            <event name="OnIdle"></event>
-            <event name="OnKeyDown"></event>
-            <event name="OnKeyUp"></event>
-            <event name="OnKillFocus"></event>
-            <event name="OnLeaveWindow"></event>
-            <event name="OnLeftDClick"></event>
-            <event name="OnLeftDown"></event>
-            <event name="OnLeftUp"></event>
-            <event name="OnMiddleDClick"></event>
-            <event name="OnMiddleDown"></event>
-            <event name="OnMiddleUp"></event>
-            <event name="OnMotion"></event>
-            <event name="OnMouseEvents"></event>
-            <event name="OnMouseWheel"></event>
-            <event name="OnPaint"></event>
-            <event name="OnRightDClick"></event>
-            <event name="OnRightDown"></event>
-            <event name="OnRightUp"></event>
-            <event name="OnSetFocus"></event>
-            <event name="OnSize"></event>
-            <event name="OnUpdateUI"></event>
+            <event name="OnEnterWindow" />
+            <event name="OnEraseBackground" />
+            <event name="OnHibernate" />
+            <event name="OnIconize" />
+            <event name="OnIdle" />
+            <event name="OnKeyDown" />
+            <event name="OnKeyUp" />
+            <event name="OnKillFocus" />
+            <event name="OnLeaveWindow" />
+            <event name="OnLeftDClick" />
+            <event name="OnLeftDown" />
+            <event name="OnLeftUp" />
+            <event name="OnMiddleDClick" />
+            <event name="OnMiddleDown" />
+            <event name="OnMiddleUp" />
+            <event name="OnMotion" />
+            <event name="OnMouseEvents" />
+            <event name="OnMouseWheel" />
+            <event name="OnPaint" />
+            <event name="OnRightDClick" />
+            <event name="OnRightDown" />
+            <event name="OnRightUp" />
+            <event name="OnSetFocus" />
+            <event name="OnSize" />
+            <event name="OnUpdateUI" />
             <object class="wxMenuBar" expanded="1">
-                <property name="bg"></property>
-                <property name="context_help"></property>
+                <property name="bg" />
+                <property name="context_help" />
                 <property name="context_menu">1</property>
                 <property name="enabled">1</property>
-                <property name="fg"></property>
-                <property name="font"></property>
+                <property name="fg" />
+                <property name="font" />
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="label"></property>
-                <property name="maximum_size"></property>
-                <property name="minimum_size"></property>
+                <property name="label" />
+                <property name="maximum_size" />
+                <property name="minimum_size" />
                 <property name="name">menubar</property>
                 <property name="permission">protected</property>
-                <property name="pos"></property>
-                <property name="size"></property>
-                <property name="style"></property>
-                <property name="subclass"></property>
-                <property name="tooltip"></property>
-                <property name="window_extra_style"></property>
-                <property name="window_name"></property>
-                <property name="window_style"></property>
-                <event name="OnChar"></event>
-                <event name="OnEnterWindow"></event>
-                <event name="OnEraseBackground"></event>
-                <event name="OnKeyDown"></event>
-                <event name="OnKeyUp"></event>
-                <event name="OnKillFocus"></event>
-                <event name="OnLeaveWindow"></event>
-                <event name="OnLeftDClick"></event>
-                <event name="OnLeftDown"></event>
-                <event name="OnLeftUp"></event>
-                <event name="OnMiddleDClick"></event>
-                <event name="OnMiddleDown"></event>
-                <event name="OnMiddleUp"></event>
-                <event name="OnMotion"></event>
-                <event name="OnMouseEvents"></event>
-                <event name="OnMouseWheel"></event>
-                <event name="OnPaint"></event>
-                <event name="OnRightDClick"></event>
-                <event name="OnRightDown"></event>
-                <event name="OnRightUp"></event>
-                <event name="OnSetFocus"></event>
-                <event name="OnSize"></event>
-                <event name="OnUpdateUI"></event>
+                <property name="pos" />
+                <property name="size" />
+                <property name="style" />
+                <property name="subclass" />
+                <property name="tooltip" />
+                <property name="window_extra_style" />
+                <property name="window_name" />
+                <property name="window_style" />
+                <event name="OnChar" />
+                <event name="OnEnterWindow" />
+                <event name="OnEraseBackground" />
+                <event name="OnKeyDown" />
+                <event name="OnKeyUp" />
+                <event name="OnKillFocus" />
+                <event name="OnLeaveWindow" />
+                <event name="OnLeftDClick" />
+                <event name="OnLeftDown" />
+                <event name="OnLeftUp" />
+                <event name="OnMiddleDClick" />
+                <event name="OnMiddleDown" />
+                <event name="OnMiddleUp" />
+                <event name="OnMotion" />
+                <event name="OnMouseEvents" />
+                <event name="OnMouseWheel" />
+                <event name="OnPaint" />
+                <event name="OnRightDClick" />
+                <event name="OnRightDown" />
+                <event name="OnRightUp" />
+                <event name="OnSetFocus" />
+                <event name="OnSize" />
+                <event name="OnUpdateUI" />
                 <object class="wxMenu" expanded="1">
                     <property name="label">&amp;File</property>
                     <property name="name">fileMenu</property>
                     <property name="permission">protected</property>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Creates a new map</property>
@@ -148,12 +148,12 @@
                         <property name="name">fileNew</property>
                         <property name="permission">none</property>
                         <property name="shortcut">Ctrl+N</property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
+                        <property name="unchecked_bitmap" />
+                        <event name="OnMenuSelection" />
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Opens a map from a file</property>
@@ -163,12 +163,12 @@
                         <property name="name">open</property>
                         <property name="permission">none</property>
                         <property name="shortcut">Ctrl+O</property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
+                        <property name="unchecked_bitmap" />
+                        <event name="OnMenuSelection" />
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Saves a map to a file</property>
@@ -178,12 +178,12 @@
                         <property name="name">save</property>
                         <property name="permission">none</property>
                         <property name="shortcut">Ctrl+S</property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
+                        <property name="unchecked_bitmap" />
+                        <event name="OnMenuSelection" />
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Saves map to a new file</property>
@@ -193,16 +193,16 @@
                         <property name="name">saveAs</property>
                         <property name="permission">none</property>
                         <property name="shortcut">F12</property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
+                        <property name="unchecked_bitmap" />
+                        <event name="OnMenuSelection" />
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="separator" expanded="1">
                         <property name="name">m_separator1</property>
                         <property name="permission">none</property>
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Imports a map from text</property>
@@ -211,13 +211,13 @@
                         <property name="label">Import Text</property>
                         <property name="name">importText</property>
                         <property name="permission">none</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
+                        <property name="shortcut" />
+                        <property name="unchecked_bitmap" />
                         <event name="OnMenuSelection">OnImportText</event>
-                        <event name="OnUpdateUI"></event>
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Imports a map from xml</property>
@@ -226,13 +226,13 @@
                         <property name="label">Import XML</property>
                         <property name="name">importXml</property>
                         <property name="permission">none</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
+                        <property name="shortcut" />
+                        <property name="unchecked_bitmap" />
                         <event name="OnMenuSelection">OnImportXml</event>
-                        <event name="OnUpdateUI"></event>
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Imports a map from other format</property>
@@ -241,17 +241,17 @@
                         <property name="label">&amp;Import...</property>
                         <property name="name">import</property>
                         <property name="permission">none</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
+                        <property name="shortcut" />
+                        <property name="unchecked_bitmap" />
                         <event name="OnMenuSelection">OnImport</event>
-                        <event name="OnUpdateUI"></event>
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="separator" expanded="1">
                         <property name="name">m_separator2</property>
                         <property name="permission">none</property>
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Exports a map to text</property>
@@ -260,13 +260,13 @@
                         <property name="label">Export Text</property>
                         <property name="name">exportText</property>
                         <property name="permission">none</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
+                        <property name="shortcut" />
+                        <property name="unchecked_bitmap" />
                         <event name="OnMenuSelection">OnExportText</event>
-                        <event name="OnUpdateUI"></event>
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Exports a map to xml</property>
@@ -275,13 +275,13 @@
                         <property name="label">Export XML</property>
                         <property name="name">exportXml</property>
                         <property name="permission">none</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
+                        <property name="shortcut" />
+                        <property name="unchecked_bitmap" />
                         <event name="OnMenuSelection">OnExportXml</event>
-                        <event name="OnUpdateUI"></event>
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Exports the map as an image</property>
@@ -290,13 +290,13 @@
                         <property name="label">Export As Image</property>
                         <property name="name">exportAsImage</property>
                         <property name="permission">none</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
+                        <property name="shortcut" />
+                        <property name="unchecked_bitmap" />
                         <event name="OnMenuSelection">OnExportAsImage</event>
-                        <event name="OnUpdateUI"></event>
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Exports each layer as an image</property>
@@ -305,13 +305,13 @@
                         <property name="label">Export Layers As Images</property>
                         <property name="name">exportLayersAsImages</property>
                         <property name="permission">none</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
+                        <property name="shortcut" />
+                        <property name="unchecked_bitmap" />
                         <event name="OnMenuSelection">OnExportLayersAsImages</event>
-                        <event name="OnUpdateUI"></event>
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Exports a map to other format</property>
@@ -320,10 +320,10 @@
                         <property name="label">&amp;Export...</property>
                         <property name="name">fileExport</property>
                         <property name="permission">none</property>
-                        <property name="shortcut"></property>
-                        <property name="unchecked_bitmap"></property>
+                        <property name="shortcut" />
+                        <property name="unchecked_bitmap" />
                         <event name="OnMenuSelection">OnExport</event>
-                        <event name="OnUpdateUI"></event>
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="separator" expanded="1">
                         <property name="name">m_separator3</property>
@@ -339,7 +339,7 @@
                         <property name="permission">none</property>
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Quit the application</property>
@@ -349,9 +349,9 @@
                         <property name="name">menuFileQuit</property>
                         <property name="permission">none</property>
                         <property name="shortcut">Alt+F4</property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
+                        <property name="unchecked_bitmap" />
+                        <event name="OnMenuSelection" />
+                        <event name="OnUpdateUI" />
                     </object>
                 </object>
                 <object class="wxMenu" expanded="1">
@@ -359,7 +359,7 @@
                     <property name="name">editMenu</property>
                     <property name="permission">protected</property>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Undos last command</property>
@@ -369,12 +369,12 @@
                         <property name="name">undo</property>
                         <property name="permission">none</property>
                         <property name="shortcut">Ctrl+Z</property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
+                        <property name="unchecked_bitmap" />
+                        <event name="OnMenuSelection" />
+                        <event name="OnUpdateUI" />
                     </object>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Redos last undone command</property>
@@ -384,9 +384,9 @@
                         <property name="name">redo</property>
                         <property name="permission">none</property>
                         <property name="shortcut">Ctrl+Y</property>
-                        <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
-                        <event name="OnUpdateUI"></event>
+                        <property name="unchecked_bitmap" />
+                        <event name="OnMenuSelection" />
+                        <event name="OnUpdateUI" />
                     </object>
                 </object>
                 <object class="wxMenu" expanded="1">
@@ -394,7 +394,7 @@
                     <property name="name">helpMenu</property>
                     <property name="permission">protected</property>
                     <object class="wxMenuItem" expanded="1">
-                        <property name="bitmap"></property>
+                        <property name="bitmap" />
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
                         <property name="help">Show info about this application</property>
@@ -404,57 +404,57 @@
                         <property name="name">menuHelpAbout</property>
                         <property name="permission">none</property>
                         <property name="shortcut">F1</property>
-                        <property name="unchecked_bitmap"></property>
+                        <property name="unchecked_bitmap" />
                         <event name="OnMenuSelection">OnAbout</event>
-                        <event name="OnUpdateUI"></event>
+                        <event name="OnUpdateUI" />
                     </object>
                 </object>
             </object>
             <object class="wxStatusBar" expanded="1">
-                <property name="bg"></property>
-                <property name="context_help"></property>
+                <property name="bg" />
+                <property name="context_help" />
                 <property name="context_menu">1</property>
                 <property name="enabled">1</property>
-                <property name="fg"></property>
+                <property name="fg" />
                 <property name="fields">2</property>
-                <property name="font"></property>
+                <property name="font" />
                 <property name="hidden">0</property>
                 <property name="id">wxID_ANY</property>
-                <property name="maximum_size"></property>
-                <property name="minimum_size"></property>
+                <property name="maximum_size" />
+                <property name="minimum_size" />
                 <property name="name">statusBar</property>
                 <property name="permission">protected</property>
-                <property name="pos"></property>
-                <property name="size"></property>
+                <property name="pos" />
+                <property name="size" />
                 <property name="style">wxST_SIZEGRIP</property>
-                <property name="subclass"></property>
-                <property name="tooltip"></property>
-                <property name="window_extra_style"></property>
-                <property name="window_name"></property>
-                <property name="window_style"></property>
-                <event name="OnChar"></event>
-                <event name="OnEnterWindow"></event>
-                <event name="OnEraseBackground"></event>
-                <event name="OnKeyDown"></event>
-                <event name="OnKeyUp"></event>
-                <event name="OnKillFocus"></event>
-                <event name="OnLeaveWindow"></event>
-                <event name="OnLeftDClick"></event>
-                <event name="OnLeftDown"></event>
-                <event name="OnLeftUp"></event>
-                <event name="OnMiddleDClick"></event>
-                <event name="OnMiddleDown"></event>
-                <event name="OnMiddleUp"></event>
-                <event name="OnMotion"></event>
-                <event name="OnMouseEvents"></event>
-                <event name="OnMouseWheel"></event>
-                <event name="OnPaint"></event>
-                <event name="OnRightDClick"></event>
-                <event name="OnRightDown"></event>
-                <event name="OnRightUp"></event>
-                <event name="OnSetFocus"></event>
-                <event name="OnSize"></event>
-                <event name="OnUpdateUI"></event>
+                <property name="subclass" />
+                <property name="tooltip" />
+                <property name="window_extra_style" />
+                <property name="window_name" />
+                <property name="window_style" />
+                <event name="OnChar" />
+                <event name="OnEnterWindow" />
+                <event name="OnEraseBackground" />
+                <event name="OnKeyDown" />
+                <event name="OnKeyUp" />
+                <event name="OnKillFocus" />
+                <event name="OnLeaveWindow" />
+                <event name="OnLeftDClick" />
+                <event name="OnLeftDown" />
+                <event name="OnLeftUp" />
+                <event name="OnMiddleDClick" />
+                <event name="OnMiddleDown" />
+                <event name="OnMiddleUp" />
+                <event name="OnMotion" />
+                <event name="OnMouseEvents" />
+                <event name="OnMouseWheel" />
+                <event name="OnPaint" />
+                <event name="OnRightDClick" />
+                <event name="OnRightDown" />
+                <event name="OnRightUp" />
+                <event name="OnSetFocus" />
+                <event name="OnSize" />
+                <event name="OnUpdateUI" />
             </object>
         </object>
     </object>
