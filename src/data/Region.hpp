@@ -93,6 +93,8 @@ public:
     void Clear();
 
 private:
+    /** Set of rectangles representing  this region */
+    ///TODO remove mutable, its sorted in the Area function.
     mutable std::vector<Rectangle> rectangles;
     /** Adds a rectangle and minimizes rectangles */
     void DoAdd(const Rectangle& r);

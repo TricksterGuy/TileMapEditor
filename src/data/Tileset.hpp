@@ -23,6 +23,7 @@
 
 #include "AnimatedTile.hpp"
 
+/** This class represents a Tileset for a Map, including the AnimatedTiles */
 class Tileset {
 public:
     Tileset(const std::string& filename = "", uint32_t tile_width = MIN_TILE_SIZE, uint32_t tile_height = MIN_TILE_SIZE);
@@ -33,11 +34,16 @@ public:
     const std::string& GetFilename() const { return filename; }
     void GetTileDimensions(uint32_t& tile_width, uint32_t& tile_height) const;
     const std::vector<AnimatedTile>& GetAnimatedTiles() const { return animated_tiles; }
+    /** Minimum tile size */
     static constexpr uint32_t MIN_TILE_SIZE = 8;
+    /** Maximum tile size */
     static constexpr uint32_t MAX_TILE_SIZE = 256;
 private:
+    /** Image filename for the Tileset */
     std::string filename;
+    /** Tile dimensions */
     uint32_t tile_width, tile_height;
+    /** Animated Tiles composed from tiles in this Tileset */
     std::vector<AnimatedTile> animated_tiles;
 };
 

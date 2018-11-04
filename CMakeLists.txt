@@ -10,6 +10,9 @@ include(CodeCoverage)
 include(EnableProfiling)
 include(FindPkgConfig)
 
+option(ENABLE_TESTING "Build for testing" OFF)
+option(ENABLE_COVERAGE "Build for code coverage analysis" ON)
+
 # Require C++11 build
 if(NOT CMAKE_CXX_FLAGS MATCHES "-std=(c|gnu)\\+\\+11")
     message(STATUS "This project requires C++11. Adding -std=c++11 to CXXFLAGS.")
@@ -48,8 +51,6 @@ add_definitions(-DSO_SUFFIX="${CMAKE_SHARED_LIBRARY_SUFFIX}")
 if(CMAKE_HOST_UNIX)
 add_definitions(-DLINUX)
 endif(CMAKE_HOST_UNIX)
-
-option(TEST_MODE "Build for testing" OFF)
 
 # Source files definition
 set(SRC_TILEMAPEDITOR

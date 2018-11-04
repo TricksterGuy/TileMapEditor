@@ -80,9 +80,13 @@ public:
     void SetSpeed(float x, float y);
 
 private:
+    /** The name of the Background */
     std::string name;
+    /** Filename for the image file to use for the background */
     std::string filename;
+    /** Background draw and scroll mode flags */
     uint32_t mode;
+    /** Speed in horizonal and vertical directions */
     float speed_x, speed_y;
 };
 

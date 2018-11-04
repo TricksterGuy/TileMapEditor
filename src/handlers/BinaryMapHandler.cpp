@@ -600,7 +600,7 @@ void BinaryMapHandler::ReadANIM(ChunkStreamReader& anim, Map& map)
         anim >> times;
         anim >> frames;
 
-        tiles.emplace_back(name, delay, (Animation::Type)type, times, frames);
+        tiles.emplace_back(name, delay, static_cast<AnimatedTile::Type>(type), times, frames);
     }
     Tileset& tileset = map.GetTileset();
     tileset.SetAnimatedTiles(tiles);

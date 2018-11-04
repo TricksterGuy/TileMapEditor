@@ -58,6 +58,7 @@ public:
     void SetName(const std::string& _name) { name = _name; }
 
 protected:
+    /** Name for this layer */
     std::string name;
 };
 

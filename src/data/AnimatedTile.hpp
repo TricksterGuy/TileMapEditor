@@ -25,8 +25,10 @@
 #include <string>
 #include <vector>
 
-namespace Animation
+/** This class represents a special type of tile that will be animated. */
+class AnimatedTile
 {
+public:
     /** Represents how an animation will play through its frames. */
     enum Type
     {
@@ -53,27 +55,22 @@ namespace Animation
         /** Play through the frames randomly. */
         Random = 4
     };
-};
 
-/** This class represents a special type of tile that will be animated. */
-class AnimatedTile
-{
-public:
     /** Creates an animated tile with an empty sequence of frames.
       * @param name Name of the animated tile.
       * @param delay Delay before the frame switches.
-      * @param type Type of animation @see Animation::Type.
+      * @param type Type of animation @see AnimatedTile::Type.
       * @param times Number of times the animation plays through its sequence -1 for infinite.
       */
-    AnimatedTile(const std::string& name = "", int32_t delay = 1, Animation::Type type = Animation::Normal, int32_t times = -1);
+    AnimatedTile(const std::string& name = "", int32_t delay = 1, Type type = Normal, int32_t times = -1);
     /** Creates an animated tile with predefined frames.
       * @param name Name of the animated tile.
       * @param delay Delay before the frame switches.
-      * @param type Type of animation @see Animation::Type.
+      * @param type Type of animation @see AnimatedTile::Type.
       * @param times Number of times the animation plays through its sequence -1 for infinite.
       * @param frames Sequence of frames (tile_ids) to play.
       */
-    AnimatedTile(const std::string& name, int32_t delay, Animation::Type type, int32_t times, const std::vector<int32_t>& frames);
+    AnimatedTile(const std::string& name, int32_t delay, Type type, int32_t times, const std::vector<int32_t>& frames);
 
     int32_t& operator[](const int index) { return frames[index]; }
     const int32_t& operator[](const int index) const { return frames[index]; }
@@ -89,22 +86,27 @@ public:
 
     const std::string& GetName() const { return name; }
     int32_t GetDelay() const { return delay; }
-    Animation::Type GetType() const { return type; }
+    Type GetType() const { return type; }
     int32_t GetTimes() const { return times; }
     const std::vector<int32_t>& GetFrames() const { return frames; }
     uint32_t GetNumFrames() const { return frames.size(); }
 
     void SetName(const std::string& _name) { name = _name; }
     void SetDelay(int32_t _delay) { delay = _delay; }
-    void SetType(Animation::Type _type) { type = _type; }
+    void SetType(Type _type) { type = _type; }
     void SetTimes(int32_t _times) { times = _times; }
     void SetFrames(const std::vector<int32_t>& _frames) { frames = _frames; }
 
 private:
+    /** The name of the AnimatedTile */
     std::string name;
+    /** The delay in frames between tile ids in the AnimatedTile */
     int32_t delay;
-    Animation::Type type;
+    /** The type of animation the AnimatedTile uses */
+    Type type;
+    /** The number of times the AnimatedTile plays through its frames */
     int32_t times;
+    /** Tile ids to play through for the AnimatedTile */
     std::vector<int32_t> frames;
 };
 

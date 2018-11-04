@@ -79,6 +79,7 @@ struct Rectangle
       * @return the area.
       */
     int64_t Area() const;
+    /** Dimensions and Coordinates of the Rectangle */
     int32_t x, y, width, height;
 };
 

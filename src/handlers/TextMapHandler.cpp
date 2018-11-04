@@ -445,7 +445,7 @@ void TextMapHandler::ReadAnimations(std::istream& file, Map& map)
             }
             std::getline(file, line);
         }
-        map.Add(AnimatedTile(name, delay, (Animation::Type)type, times, frames));
+        map.Add(AnimatedTile(name, delay, static_cast<AnimatedTile::Type>(type), times, frames));
 
         std::getline(file, line);
     }

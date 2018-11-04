@@ -53,14 +53,14 @@ void TiledLayerData::Resize(uint32_t newwidth, uint32_t newheight, bool copy)
         {
             data.insert(data.end(), newdata.begin() + i * width, newdata.begin() + i * width + minw);
             if (excessx > 0)
-                data.insert(data.end(), excessx, -1);
+                data.insert(data.end(), excessx, NULL_TILE);
         }
         if (excessy > 0)
-            data.insert(data.end(), newwidth * excessy, -1);
+            data.insert(data.end(), newwidth * excessy, NULL_TILE);
     }
     else
     {
-        data.assign(newwidth * newheight, -1);
+        data.assign(newwidth * newheight, NULL_TILE);
     }
 
     width = newwidth;
@@ -75,7 +75,7 @@ void TiledLayerData::Shift(int32_t horizontal, int32_t vertical, bool wrap)
     std::vector<int32_t> olddata = data;
 
     if (!wrap)
-        data.assign(width * height, -1);
+        data.assign(width * height, NULL_TILE);
 
     if (wrap)
     {
@@ -106,5 +106,5 @@ void TiledLayerData::Shift(int32_t horizontal, int32_t vertical, bool wrap)
 
 void TiledLayerData::Clear()
 {
-    data.assign(width * height, -1);
+    data.assign(width * height, NULL_TILE);
 }

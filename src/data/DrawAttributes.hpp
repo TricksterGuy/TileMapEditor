@@ -47,13 +47,21 @@ public:
     void SetBlendColor(uint32_t color) { blend_color = color; }
 
 protected:
+    /** Depth / Priority of how to draw the object */
     int32_t depth;
+    /** Position of the object */
     int32_t x, y;
+    /** Origin position for rotation */
     int32_t origin_x, origin_y;
+    /** Scaling factors in width and height */
     float scale_x, scale_y;
+    /** Rotation in degrees */
     float rotation;
+    /** Opacity percentage */
     float opacity;
+    /** Blend mode */
     uint32_t blend_mode;
+    /** Blend color for the object */
     uint32_t blend_color;
 };
 

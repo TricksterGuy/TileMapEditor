@@ -20,12 +20,12 @@
  ******************************************************************************************************/
 #include "AnimatedTile.hpp"
 
-AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times)
+AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Type _type, int32_t _times)
     : name(_name), delay(_delay), type(_type), times(_times)
 {
 }
 
-AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Animation::Type _type, int32_t _times,
+AnimatedTile::AnimatedTile(const std::string& _name, int32_t _delay, Type _type, int32_t _times,
                            const std::vector<int32_t>& _frames)
     : name(_name), delay(_delay), type(_type), times(_times), frames(_frames)
 {
@@ -45,32 +45,32 @@ int32_t AnimatedTile::GetCurrentFrame(int clock) const
 
     switch (type)
     {
-    case Animation::Normal:
-        frame = timestep % numFrames;
-        break;
-    case Animation::Reverse:
-        frame = numFrames - 1 - (timestep % numFrames);
-        break;
-    case Animation::Ping:
-        constrained = timestep % (numFrames * 2 - 2);
-        decrease = constrained / numFrames;
-        frame = constrained % numFrames;
-        if (decrease)
-            frame = numFrames - 2 - frame;
-        break;
-    case Animation::PingReverse:
-        constrained = timestep % (numFrames * 2 - 2);
-        decrease = constrained / numFrames;
-        frame = constrained % numFrames;
-        if (decrease)
-            frame = numFrames - 2 - frame;
-        frame = numFrames - 1 - frame;
-        break;
-    case Animation::Random:
-        frame = rand() % numFrames;
-        break;
-    default:
-        frame = -1;
+        case Normal:
+            frame = timestep % numFrames;
+            break;
+        case Reverse:
+            frame = numFrames - 1 - (timestep % numFrames);
+            break;
+        case Ping:
+            constrained = timestep % (numFrames * 2 - 2);
+            decrease = constrained / numFrames;
+            frame = constrained % numFrames;
+            if (decrease)
+                frame = numFrames - 2 - frame;
+            break;
+        case PingReverse:
+            constrained = timestep % (numFrames * 2 - 2);
+            decrease = constrained / numFrames;
+            frame = constrained % numFrames;
+            if (decrease)
+                frame = numFrames - 2 - frame;
+            frame = numFrames - 1 - frame;
+            break;
+        case Random:
+            frame = rand() % numFrames;
+            break;
+        default:
+            frame = -1;
     }
 
     return frames[frame];

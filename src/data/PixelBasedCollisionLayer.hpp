@@ -49,12 +49,17 @@ public:
 
     const Region& GetData() const { return region; }
 
+    /** @see Region::Add */
     void Add(const Rectangle& rectangle) { region.Add(rectangle); }
+    /** @see Region::Xor */
     void Xor(const Rectangle& rectangle) { region.Xor(rectangle); }
+    /** @see Region::Subtract */
     void Subtract(const Rectangle& rectangle) { region.Subtract(rectangle); }
+    /** @see Region::Intersect */
     void Intersect(const Rectangle& rectangle) { region.Intersect(rectangle); }
 
 protected:
+    /** Region backing the PixelBasedCollisionLayer */
     Region region;
 };
 

@@ -61,7 +61,8 @@ bool Region::Contains(const Rectangle& r) const
 
     std::vector<Rectangle> intersect(intersectSet.begin(), intersectSet.end());
     int64_t total = 0;
-    for (const Rectangle& inr : intersect) total += inr.Area();
+    for (const Rectangle& inr : intersect)
+        total += inr.Area();
 
     // If the of the inner rectangles is less than the rectangles area then we know it doesn't cover the rectangle
     if (total < r.Area())
@@ -75,7 +76,7 @@ bool Region::Contains(const Rectangle& r) const
         events.insert(inr.x + inr.width);
     }
 
-    int rptr = 0;
+    unsigned int rptr = 0;
     int lastevent = 0;
     int64_t area = 0;
     std::list<Rectangle> activeSet;
@@ -119,7 +120,7 @@ bool Region::Contains(const Rectangle& r) const
         });
 
         // Enter event add rectangles to active set.
-        while (rptr < (int)intersect.size() && intersect[rptr].x == event)
+        while (rptr < intersect.size() && intersect[rptr].x == event)
         {
             activeSet.push_back(intersect[rptr]);
             rptr++;
@@ -292,7 +293,7 @@ int64_t Region::Area() const
         events.insert(inr.x + inr.width);
     }
 
-    int rptr = 0;
+    unsigned int rptr = 0;
     int lastevent = 0;
     int64_t area = 0;
     std::list<Rectangle> activeSet;
@@ -336,7 +337,7 @@ int64_t Region::Area() const
         });
 
         // Enter event add rectangles to active set.
-        while (rptr < (int)rectangles.size() && rectangles[rptr].x == event)
+        while (rptr < rectangles.size() && rectangles[rptr].x == event)
         {
             activeSet.push_back(rectangles[rptr]);
             rptr++;

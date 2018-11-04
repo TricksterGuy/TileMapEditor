@@ -119,7 +119,6 @@ void MapView::OnUpdate(wxView* sender, wxObject* hint)
 
     const Map& map = GetMap();
 
-
     if (!update || update->GetUpdateBackgrounds() || update->GetUpdateMap())
     {
         // Update Backgrounds
@@ -200,7 +199,7 @@ void MapView::TransformScreenToTile(int x, int y, int& outx, int& outy, bool bou
     }
 }
 
-void MapView::DrawLayer(wxGCDC& dc, const Layer& layer, int sxi, int syi, int sxf, int syf)
+void MapView::DrawLayer(wxGCDC& dc, const Layer& layer, unsigned int sxi, unsigned int syi, unsigned int sxf, unsigned int syf)
 {
     Map& map = GetMap();
     const Tileset& tileset = map.GetTileset();
@@ -225,29 +224,34 @@ void MapView::DrawLayer(wxGCDC& dc, const Layer& layer, int sxi, int syi, int sx
     color = layer.GetBlendColor();
     opacity = layer.GetOpacity();
 
-    for (int i = syi; i <= syf; i++)
+    for (uint32_t i = syi; i <= syf; i++)
     {
-        if ((uint32_t)i >= layer.GetHeight())
+        if (i >= layer.GetHeight())
             break;
-        for (int j = sxi; j <= sxf; j++)
+
+        for (uint32_t j = sxi; j <= sxf; j++)
         {
-            if ((uint32_t)j >= layer.GetWidth())
+            if (j >= layer.GetWidth())
                 break;
+
             int index = i * layer.GetWidth() + j;
             float x = j * tile_width;
             float y = i * tile_height;
 
-            int tile = layer[index];
-            if (tile == -1)
+            uint32_t tile = layer[index];
+            if (tile == TiledLayerData::NULL_TILE)
+            {
                 continue;
-            else if (tile < -1)
+            }
+            else if (tile >> 31)
             {
                 tile &= ~(1 << 31);
-                assert(tile < (int)animated_tiles.size());
-                const AnimatedTile& anim = animated_tiles[tile];
-                tile = anim.GetCurrentFrame(clock);
+                assert(tile < animated_tiles.size());
+
+                tile = animated_tiles[tile].GetCurrentFrame(clock);
             }
-            assert((unsigned int)tile < tiles.size());
+
+            assert(tile < tiles.size());
             wxBitmap& obj = tiles[tile];
             gtx->DrawBitmap(obj, x, y, tile_width, tile_height);
         }

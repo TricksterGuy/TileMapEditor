@@ -50,13 +50,16 @@ public:
 
     /** Clears the map. */
     void Clear();
-    /** Shifts the entire map in any direction a certain number of tiles.
+    /** Shifts the entire map and all layers in any direction a certain number of tiles.
       * @param horizontal amount to move left or right (negative = left).
       * @param vertical amount to move up or down (negative = up).
       * @param wrap if true any rows/columns will wrap around.
       */
     void Shift(int horizontal, int vertical, bool wrap = false);
-    /** Resizes the map to fit the new dimensions.
+    /** Resizes the map's collision layer to fit the new dimensions.
+      *
+      * This only resizes the collision layer.
+      *
       * @param newwidth the new width of the collision layer in tiles.
       * @param newheight the new height of the collision layer in tiles.
       * @param copy if true then don't destroy the layer in the process if false then clear out the layer.
@@ -95,10 +98,15 @@ public:
     void SetBackgrounds(const std::vector<Background>& _backgrounds) { backgrounds = _backgrounds; }
     void SetCollisionLayer(CollisionLayer* layer) { collision_layer.reset(layer); }
 private:
+    /** The name for this map */
     std::string name;
+    /** The tileset this map uses */
     Tileset tileset;
+    /** Set of Layers containing tile data for the map */
     std::vector<Layer> layers;
+    /** Set of Backgrounds for this map */
     std::vector<Background> backgrounds;
+    /** Collision Layer information for the map */
     std::unique_ptr<CollisionLayer> collision_layer;
 };
 #endif

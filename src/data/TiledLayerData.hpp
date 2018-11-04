@@ -79,11 +79,17 @@ public:
     void Set(uint32_t index, int32_t value) { data[index] = value; }
     void Set(uint32_t x, uint32_t y, int32_t value) { Set(y * width + x, value);}
 
+    /** Minimum Size for a Layer */
     static constexpr uint32_t MIN_SIZE = 4;
+    /** Maximum Size for a Layer */
     static constexpr uint32_t MAX_SIZE = 1024;
+    /** Null tile id */
+    static constexpr uint32_t NULL_TILE = 0xFFFFFFFF;
 
 protected:
+    /** Dimensions of this layer */
     uint32_t width, height;
+    /** Tile ids for each location in the layer */
     std::vector<int32_t> data;
 };
 

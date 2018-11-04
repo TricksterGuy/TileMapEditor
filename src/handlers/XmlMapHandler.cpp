@@ -476,7 +476,7 @@ void XmlMapHandler::ReadAnimation(wxXmlNode* root, Map& map)
         child = child->GetNext();
     }
 
-    map.Add(AnimatedTile(name, delay, (Animation::Type)type, times, frames));
+    map.Add(AnimatedTile(name, delay, static_cast<AnimatedTile::Type>(type), times, frames));
     VerboseLog("Done Reading an Animation");
 }
 

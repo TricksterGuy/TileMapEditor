@@ -20,8 +20,6 @@
  ******************************************************************************************************/
 #include "Layer.hpp"
 
-#include <cstring> // for memset
-
 Layer::Layer(const std::string& _name, uint32_t width, uint32_t height, const std::vector<int32_t>& data, const DrawAttributes& attr)
     : DrawAttributes(attr), TiledLayerData(width, height, data), name(_name)
 {

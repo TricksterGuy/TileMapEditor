@@ -63,7 +63,7 @@ public:
 
 private:
     MapCanvas* mapCanvas;
-    void DrawLayer(wxGCDC& dc, const Layer& layer, int sxi, int syi, int sxf, int syf);
+    void DrawLayer(wxGCDC& dc, const Layer& layer, unsigned int sxi, unsigned int syi, unsigned int sxf, unsigned int syf);
     void UpdateTiles();
     unsigned long clock;
     wxBitmap image;

@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(AnimatedTileBasic)
 BOOST_AUTO_TEST_CASE(AnimatedTileBasic2)
 {
     const std::vector<int32_t> frames = {4, 2, 6, 3, 2, 2, 2, 7};
-    AnimatedTile tile("", 1, Animation::Normal, -1, frames);
+    AnimatedTile tile("", 1, AnimatedTile::Normal, -1, frames);
     BOOST_REQUIRE_EQUAL(tile.GetNumFrames(), 8);
     BOOST_CHECK_EQUAL(tile[0], 4);
     BOOST_CHECK_EQUAL(tile[1], 2);
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(AnimatedTileBasic2)
 
 BOOST_AUTO_TEST_CASE(AnimatedTileNormal)
 {
-    AnimatedTile tile("", 1, Animation::Normal, -1, {7, 2, 8, 11, 19});
+    AnimatedTile tile("", 1, AnimatedTile::Normal, -1, {7, 2, 8, 11, 19});
     std::vector<int32_t> actual = ComputeAnimationFrames(tile, 14);
     std::vector<int32_t> expected {7, 2, 8, 11, 19, 7, 2, 8, 11, 19, 7, 2, 8, 11};
 
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE(AnimatedTileNormal)
 
 BOOST_AUTO_TEST_CASE(AnimatedTilePing)
 {
-    AnimatedTile tile("", 1, Animation::Ping, -1, {7, 2, 8, 11, 19});
+    AnimatedTile tile("", 1, AnimatedTile::Ping, -1, {7, 2, 8, 11, 19});
     std::vector<int32_t> actual = ComputeAnimationFrames(tile, 14);
     std::vector<int32_t> expected {7, 2, 8, 11, 19, 11, 8, 2, 7, 2, 8, 11, 19, 11};
 
@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(AnimatedTilePing)
 
 BOOST_AUTO_TEST_CASE(AnimatedTileReverse)
 {
-    AnimatedTile tile("", 1, Animation::Reverse, -1, {7, 2, 8, 11, 19});
+    AnimatedTile tile("", 1, AnimatedTile::Reverse, -1, {7, 2, 8, 11, 19});
     std::vector<int32_t> actual = ComputeAnimationFrames(tile, 14);
     std::vector<int32_t> expected {19, 11, 8, 2, 7, 19, 11, 8, 2, 7, 19, 11, 8, 2};
 
@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(AnimatedTileReverse)
 
 BOOST_AUTO_TEST_CASE(AnimatedTilePingReverse)
 {
-    AnimatedTile tile("", 1, Animation::PingReverse, -1, {7, 2, 8, 11, 19});
+    AnimatedTile tile("", 1, AnimatedTile::PingReverse, -1, {7, 2, 8, 11, 19});
     std::vector<int32_t> actual = ComputeAnimationFrames(tile, 14);
     std::vector<int32_t> expected {19, 11, 8, 2, 7, 2, 8, 11, 19, 11, 8, 2, 7, 2};
 
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(AnimatedTilePingReverse)
 // Not implemented
 /*BOOST_AUTO_TEST_CASE(AnimatedTileNormalTimes)
 {
-    AnimatedTile tile("", 1, Animation::Normal, 2, {7, 2, 8, 11, 19});
+    AnimatedTile tile("", 1, AnimatedTile::Normal, 2, {7, 2, 8, 11, 19});
     std::vector<int32_t> actual = ComputeAnimationFrames(tile, 14);
     std::vector<int32_t> expected {7, 2, 8, 11, 19, 7, 2, 8, 11, 19, 7, 7, 7, 7};
 
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(AnimatedTilePingReverse)
 
 BOOST_AUTO_TEST_CASE(AnimatedTileNormalDelay)
 {
-    AnimatedTile tile("", 2, Animation::Normal, -1, {7, 2, 8, 11, 19});
+    AnimatedTile tile("", 2, AnimatedTile::Normal, -1, {7, 2, 8, 11, 19});
     std::vector<int32_t> actual = ComputeAnimationFrames(tile, 14);
     std::vector<int32_t> expected {7, 7, 2, 2, 8, 8, 11, 11, 19, 19, 7, 7, 2, 2};
 
